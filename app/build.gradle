@@ -21,6 +21,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    //Enable dataBinding - Clase 2 lección 15
+    dataBinding{
+        enabled = true
+    }
 }
 
 dependencies {

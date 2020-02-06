@@ -1,4 +1,4 @@
-package com.teltronic.app112.Screens
+package com.teltronic.app112.screens
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

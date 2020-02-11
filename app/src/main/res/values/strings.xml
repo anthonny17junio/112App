@@ -7,4 +7,7 @@
     <string name="about">About</string>
     <string name="location_title">LOCATION</string>
     <string name="right_icon">Right icon</string>
+    <string name="txt_btn_main_location">Location</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

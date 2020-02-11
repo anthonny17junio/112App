@@ -3,6 +3,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+<!--    <data>-->
+<!--        <variable-->
+<!--            android:name="icon"-->
+<!--            type="com.teltronic.app112.classes."-->
+<!--            />-->
+<!--    </data>-->
     <item
         android:id="@+id/rightIconItem"
         android:enabled="false"

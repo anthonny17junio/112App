@@ -8,4 +8,7 @@
     <string name="about">Acerca de</string>
     <string name="location_title">UBICACIÓN</string>
     <string name="right_icon">Icono derecho</string>
+    <string name="txt_btn_main_location">Ubicación</string>
+
+    <string name="hello_blank_fragment">Hola fragmento vacío</string>
 </resources>

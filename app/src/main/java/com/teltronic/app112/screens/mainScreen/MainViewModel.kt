@@ -1,15 +1,23 @@
 package com.teltronic.app112.screens.mainScreen
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import timber.log.Timber
 
-class MainViewModel:ViewModel() {
+class MainViewModel : ViewModel() {
+    private var _boolNavigateToLocation = MutableLiveData<Boolean>()
+    val boolNavigateToLocation: LiveData<Boolean>
+        get() = _boolNavigateToLocation
+
     init {
-        Timber.i("MainViewModel creado")
+        _boolNavigateToLocation.value = false
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        Timber.i("MainViewModel destruido")
+    fun navigateToLocation() {
+        _boolNavigateToLocation.value = true
+    }
+
+    fun onNavigateToLocationComplete(){
+        _boolNavigateToLocation.value = false
     }
 }

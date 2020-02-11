@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">112App</string>
+
+    <!--TÍTULOS DE LAS PANTALLAS-->
+    <string name="notices_title">NOTICES</string>
+    <string name="location_title">LOCATION</string>
+    <string name="chats_title">CHATS</string>
+
+    <string name="user_profile_title">USER PROFILE</string>
+    <string name="medical_information_title">MEDICAL INFORMATION</string>
+    <string name="configuration_title">CONFIGURATION</string>
+    <string name="about_title">ABOUT</string>
+    <string name="legal_notice_title">LEGAL NOTICE</string>
+
+    <!--OPCIONES DEL MENÚ LATERAL-->
+    <string name="edit_profile">Edit profile</string>
+    <string name="medical_info">Medical information</string>
+    <string name="configuration">Configuration</string>
+    <string name="legal_notice">Legal notice</string>
+    <string name="about">About</string>
+
+    <!--BOTONES DEL MENÚ PRINCIPAL-->
+    <string name="txt_btn_main_notices">Notices</string>
+    <string name="txt_btn_main_location">Location</string>
+    <string name="txt_btn_main_chats">Chats</string>
+
+
+    <!--OTROS-->
+    <string name="right_icon">Right icon</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="txt_call">CALL</string>
+    <string name="txt_message">MESSAGE</string>
+</resources>

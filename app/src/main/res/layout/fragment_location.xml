@@ -4,17 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".screens.location.LocationFragment">
 
+    <data>
+        <variable
+            name="locationViewModel"
+            type="com.teltronic.app112.screens.location.LocationViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/location_title"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="match_parent"/>
 
 </layout>

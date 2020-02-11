@@ -21,14 +21,14 @@ import timber.log.Timber
  */
 class MainFragment : Fragment() {
 
-    private lateinit var viewModel: MainViewModel
     private lateinit var binding: FragmentMainBinding
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+        //Inicializo el binding
         binding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragment_main,
@@ -36,13 +36,16 @@ class MainFragment : Fragment() {
             false
         )
 
+        //Inicializo el viewModel
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
-        binding.mainViewModel = viewModel //Se "une" el layout con esta clase
-        binding.lifecycleOwner = this //Permite que funcione android:text="@{gameViewModel.word}"  --> Para que su ciclo de vida de enlace de datos sea consciente y para que funcione bien con LiveData, debe llamar a binding.setLifecycleOwner
+        //"Uno" el layout con esta clase por medio del binding
+        binding.mainViewModel = viewModel
+        //Para que el ciclo de vida del binding sea sonsistente y funcione bien con LiveData
+        binding.lifecycleOwner = this
 
-        /*Modo 5*/
-        //Configura la navegación
+
+        //Navegación de ubicación
         viewModel.boolNavigateToLocation.observe(this as LifecycleOwner, Observer { goToLocation ->
             if (goToLocation) {
                 val action = MainFragmentDirections.actionMainFragmentToLocationFragment()

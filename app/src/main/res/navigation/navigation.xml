@@ -23,4 +23,29 @@
         android:name="com.teltronic.app112.screens.location.LocationFragment"
         android:label="@string/location_title"
         tools:layout="@layout/fragment_location" />
+    <fragment
+        android:id="@+id/userProfileFragment"
+        android:name="com.teltronic.app112.screens.userProfile.UserProfileFragment"
+        android:label="@string/user_profile_title"
+        tools:layout="@layout/fragment_user_profile" />
+    <fragment
+        android:id="@+id/medicalInfoFragment"
+        android:name="com.teltronic.app112.screens.medicalInfo.MedicalInfoFragment"
+        android:label="@string/medical_information_title"
+        tools:layout="@layout/fragment_medical_info" />
+    <fragment
+        android:id="@+id/configurationFragment"
+        android:name="com.teltronic.app112.screens.configuration.ConfigurationFragment"
+        android:label="@string/configuration_title"
+        tools:layout="@layout/fragment_configuration" />
+    <fragment
+        android:id="@+id/legalNoticeFragment"
+        android:name="com.teltronic.app112.screens.legalNotice.LegalNoticeFragment"
+        android:label="@string/legal_notice_title"
+        tools:layout="@layout/fragment_legal_notice" />
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.teltronic.app112.screens.about.AboutFragment"
+        android:label="@string/about_title"
+        tools:layout="@layout/fragment_about" />
 </navigation>

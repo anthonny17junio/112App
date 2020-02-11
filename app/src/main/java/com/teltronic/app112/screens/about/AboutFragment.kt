@@ -1,4 +1,4 @@
-package com.teltronic.app112.screens.userProfile
+package com.teltronic.app112.screens.about
 
 
 import android.os.Bundle
@@ -8,15 +8,15 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 
 import com.teltronic.app112.R
-import com.teltronic.app112.databinding.FragmentUserProfileBinding
+import com.teltronic.app112.databinding.FragmentAboutBinding
 
 /**
  * A simple [Fragment] subclass.
  */
-class UserProfileFragment : Fragment() {
+class AboutFragment : Fragment() {
 
-    private lateinit var binding: FragmentUserProfileBinding
-    private lateinit var viewModel: UserProfileViewModel
+    private lateinit var binding: FragmentAboutBinding
+    private lateinit var viewModel: AboutViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,16 +25,15 @@ class UserProfileFragment : Fragment() {
         //Inicializo el binding
         binding = DataBindingUtil.inflate(
             inflater,
-            R.layout.fragment_user_profile,
+            R.layout.fragment_about,
             container,
             false
         )
-
         //Inicializo el viewModel
-        viewModel = ViewModelProvider(this).get(UserProfileViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(AboutViewModel::class.java)
 
         //"Uno" el layout con esta clase por medio del binding
-        binding.userProfileViewModel = viewModel
+        binding.aboutViewModel = viewModel
         //Para que el ciclo de vida del binding sea sonsistente y funcione bien con LiveData
         binding.lifecycleOwner = this
 
@@ -49,6 +48,6 @@ class UserProfileFragment : Fragment() {
         inflater: MenuInflater
     ) { //Habilita el icono de la derecha
         super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.edit_profile_screen_right_menu, menu)
+        inflater.inflate(R.menu.about_screen_right_menu, menu)
     }
 }

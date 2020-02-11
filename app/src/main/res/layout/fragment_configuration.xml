@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".screens.userProfile.UserProfileFragment">
+    tools:context=".screens.configuration.ConfigurationFragment">
 
     <data>
         <variable
-            name="userProfileViewModel"
-            type="com.teltronic.app112.screens.userProfile.UserProfileViewModel" />
+            name="configurationViewModel"
+            type="com.teltronic.app112.screens.configuration.ConfigurationViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <!-- TODO: Update blank fragment layout -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"

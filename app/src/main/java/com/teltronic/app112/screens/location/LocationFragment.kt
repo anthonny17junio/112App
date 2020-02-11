@@ -21,19 +21,26 @@ class LocationFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        //Inicializo el binding
         val binding: FragmentLocationBinding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragment_location,
             container,
             false
         )
-//        viewModel = ViewModelProviders.of(this).get(LocationViewModel::class.java) //Antes
+        //Inicializo el viewModel
         viewModel = ViewModelProvider(this).get(LocationViewModel::class.java) //Ahora
+
+        //"Uno" el layout con esta clase por medio del binding
+        binding.locationViewModel = viewModel
+        //Para que el ciclo de vida del binding sea sonsistente y funcione bien con LiveData
+        binding.lifecycleOwner = this
 
         setHasOptionsMenu(true) //Habilita el icono de la derecha
         return binding.root
     }
 
+    //Inicia el menú de la derecha (en este caso solo es un icono)
     override fun onCreateOptionsMenu(
         menu: Menu,
         inflater: MenuInflater

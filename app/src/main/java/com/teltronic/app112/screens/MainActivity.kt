@@ -44,6 +44,7 @@ class MainActivity : AppCompatActivity() {
         NavigationUI.setupWithNavController(binding.lateralMenu, navController)
     }
 
+    //Habilita el back button
     override fun onSupportNavigateUp(): Boolean {
         val navController = this.findNavController(R.id.myNavHostFragment)
         return NavigationUI.navigateUp(navController, drawerLayout)
@@ -60,11 +61,11 @@ class MainActivity : AppCompatActivity() {
 
     //Al presionar otra vez el icono del menú se cierra (solo si está abierto)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (this.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+        return if (this.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             this.drawerLayout.closeDrawer(GravityCompat.START)
-            return true
+            true
         } else {
-            return super.onOptionsItemSelected(item)
+            super.onOptionsItemSelected(item)
         }
     }
 }

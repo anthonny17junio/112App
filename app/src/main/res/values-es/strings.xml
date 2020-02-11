@@ -26,6 +26,10 @@
     <string name="txt_btn_main_location">Ubicación</string>
     <string name="txt_btn_main_chats">Chats</string>
 
+
+    <!--OTROS-->
     <string name="right_icon">Icono derecho</string>
     <string name="hello_blank_fragment">Hola fragmento vacío</string>
+    <string name="txt_call">LLAMAR</string>
+    <string name="txt_message">MENSAJE</string>
 </resources>

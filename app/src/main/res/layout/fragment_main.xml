@@ -28,20 +28,106 @@
             app:layout_constraintStart_toStartOf="@+id/btnLocation"
             app:layout_constraintTop_toBottomOf="@+id/btnLocation" />
 
+        <TextView
+            android:id="@+id/txtBtnNotices"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/txt_btn_main_notices"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/btnNotices"
+            app:layout_constraintStart_toStartOf="@+id/btnNotices"
+            app:layout_constraintTop_toBottomOf="@+id/btnNotices" />
+
+        <TextView
+            android:id="@+id/txtBtnChats"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/txt_btn_main_chats"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/btnChats"
+            app:layout_constraintStart_toStartOf="@+id/btnChats"
+            app:layout_constraintTop_toBottomOf="@+id/btnChats" />
+
         <ImageButton
             android:id="@+id/btnLocation"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_marginStart="32dp"
+            android:layout_width="125dp"
+            android:layout_height="125dp"
             android:layout_marginTop="70dp"
-            android:background="@color/colorPrimary"
+            android:layout_marginEnd="32dp"
+            android:background="@color/colorPrimaryDark"
             android:contentDescription="@string/location_title"
             android:onClick="@{()->mainViewModel.navigateToLocation()}"
             android:padding="20dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_location_on_white"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btnNotices"
+            android:layout_width="125dp"
+            android:layout_height="125dp"
+            android:layout_marginStart="32dp"
+            android:background="@color/colorPrimaryDark"
+            android:contentDescription="@string/location_title"
+            android:onClick="@{()->mainViewModel.navigateToLocation()}"
+            android:padding="20dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_notices_white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btnLocation" />
+
+        <ImageButton
+            android:id="@+id/btnChats"
+            android:layout_width="125dp"
+            android:layout_height="125dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="50dp"
+            android:background="@color/colorPrimaryDark"
+            android:contentDescription="@string/location_title"
+            android:onClick="@{()->mainViewModel.navigateToLocation()}"
+            android:padding="20dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_chats_white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtBtnNotices" />
+
+        <Button
+            android:id="@+id/btnChat"
+            android:layout_width="125dp"
+            android:layout_height="65dp"
+            android:layout_marginBottom="32dp"
+            android:background="@color/colorPrimary"
+            android:drawableStart="@drawable/ic_text_message"
+
+            android:paddingStart="20dp"
+            android:paddingEnd="2dp"
+            android:text="@string/txt_message"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/btnChats"
+            app:layout_constraintStart_toStartOf="@+id/btnChats" />
+
+        <Button
+            android:id="@+id/btnCall"
+            android:layout_width="125dp"
+            android:layout_height="65dp"
+            android:layout_marginBottom="32dp"
+            android:background="@color/colorPrimary"
+            android:drawableStart="@drawable/ic_call_white"
+            android:paddingStart="20dp"
+            android:paddingEnd="2dp"
+            android:text="@string/txt_call"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/btnLocation"
+            app:layout_constraintStart_toStartOf="@+id/btnLocation" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

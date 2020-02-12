@@ -28,6 +28,9 @@ class MainViewModel : ViewModel() {
     val boolNavigateToNewChat: LiveData<Boolean>
         get() = _boolNavigateToNewChat
 
+    private var _boolMakeCall = MutableLiveData<Boolean>()
+    val boolMakeCall: LiveData<Boolean>
+        get() = _boolMakeCall
 
     //INIT
     //****************************************************
@@ -36,6 +39,7 @@ class MainViewModel : ViewModel() {
         _boolNavigateToLocation.value = false
         _boolNavigateToChats.value = false
         _boolNavigateToNewChat.value = false
+        _boolMakeCall.value = false
     }
 
     //FUNCTIONS
@@ -74,6 +78,15 @@ class MainViewModel : ViewModel() {
 
     fun navigateToNewChatComplete() {
         _boolNavigateToNewChat.value = false
+    }
+
+    //Make call
+    fun makeCall() {
+        _boolMakeCall.value = true
+    }
+
+    fun makeBoolCallComplete() {
+        _boolMakeCall.value = false
     }
 
 }

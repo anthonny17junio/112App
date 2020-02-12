@@ -9,6 +9,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.teltronic.app112.R
+import com.teltronic.app112.classes.Phone
 import com.teltronic.app112.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -18,15 +19,20 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //Inicializo el binding
         binding = DataBindingUtil.setContentView(
             this,
             R.layout.activity_main
         )
 
+        configureLateralMenu()
+    }
+
+    //Menú lateral
+    private fun configureLateralMenu() {
         drawerLayout = binding.drawerLayout
         val navController = this.findNavController(R.id.myNavHostFragment)
         NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
-
 
         //Para evitar que se abra el menú en otras pantallas que no sea la principal
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
@@ -46,7 +52,7 @@ class MainActivity : AppCompatActivity() {
         return NavigationUI.navigateUp(navController, drawerLayout)
     }
 
-    //Al presionar el botón back cierra el menú (solo si está abierto)
+    //Al presionar back button cierra el menú (solo si está abierto)
     override fun onBackPressed() {
         if (this.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             this.drawerLayout.closeDrawer(GravityCompat.START)
@@ -64,5 +70,15 @@ class MainActivity : AppCompatActivity() {
             super.onOptionsItemSelected(item)
         }
     }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        Phone.makeActionRequestPermissionsResult(this,requestCode,grantResults)
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
 }
 

@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 
 import com.teltronic.app112.R
+import com.teltronic.app112.classes.Phone
 import com.teltronic.app112.databinding.FragmentMainBinding
 
 /**
@@ -32,21 +33,39 @@ class MainFragment : Fragment() {
             container,
             false
         )
-
         //Inicializo el viewModel
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
+        configNavigationsObservers()
+        configCallButtonObserver()
         //"Uno" el layout con esta clase por medio del binding
         binding.mainViewModel = viewModel
-        //Para que el ciclo de vida del binding sea sonsistente y funcione bien con LiveData
+        //Para que el ciclo de vida del binding sea consistente y funcione bien con LiveData
         binding.lifecycleOwner = this
 
-
-        configNavigations()
         return binding.root
     }
 
-    private fun configNavigations() {
+    private fun configCallButtonObserver() {
+        viewModel.boolMakeCall.observe(
+            this as LifecycleOwner,
+            Observer { shouldCall ->
+                if (shouldCall) {
+                    viewModel.makeBoolCallComplete()
+                    Phone.makeCall(activity!!)
+                }
+            }
+        )
+    }
+
+    private fun configNavigationsObservers() {
+        configNavigateToNoticesObserver()
+        configNavigateToLocationObserver()
+        configNavigateToChatsObserver()
+        configNavigateToNewChatObserver()
+    }
+
+    private fun configNavigateToNoticesObserver() {
         //Listener a navegación de avisos (notices)
         viewModel.boolNavigateToNotices.observe(
             this as LifecycleOwner,
@@ -58,7 +77,9 @@ class MainFragment : Fragment() {
                     viewModel.onNavigateToNoticesComplete()
                 }
             })
+    }
 
+    private fun configNavigateToLocationObserver() {
         //Listener a navegación de ubicación(location)
         viewModel.boolNavigateToLocation.observe(
             this as LifecycleOwner,
@@ -70,7 +91,9 @@ class MainFragment : Fragment() {
                     viewModel.onNavigateToLocationComplete()
                 }
             })
+    }
 
+    private fun configNavigateToChatsObserver() {
         //Listener a navegación de chats
         viewModel.boolNavigateToChats.observe(
             this as LifecycleOwner,
@@ -81,7 +104,9 @@ class MainFragment : Fragment() {
                     viewModel.navigateToChatsComplete()
                 }
             })
+    }
 
+    private fun configNavigateToNewChatObserver() {
         //Listener a navegación de nuevo mensaje
         viewModel.boolNavigateToNewChat.observe(
             this as LifecycleOwner,
@@ -94,4 +119,5 @@ class MainFragment : Fragment() {
                 }
             })
     }
+
 }

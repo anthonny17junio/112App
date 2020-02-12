@@ -27,6 +27,8 @@
     <string name="txt_btn_main_location">Ubicación</string>
     <string name="txt_btn_main_chats">Chats</string>
 
+    <!--MENSAJES DE PERMISOS-->
+    <string name="txt_permission_call">Por favor, acepta los permisos para realizar la llamada</string>
 
     <!--OTROS-->
     <string name="right_icon">Icono derecho</string>

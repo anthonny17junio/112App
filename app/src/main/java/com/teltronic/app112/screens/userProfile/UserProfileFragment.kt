@@ -35,7 +35,7 @@ class UserProfileFragment : Fragment() {
 
         //"Uno" el layout con esta clase por medio del binding
         binding.userProfileViewModel = viewModel
-        //Para que el ciclo de vida del binding sea sonsistente y funcione bien con LiveData
+        //Para que el ciclo de vida del binding sea consistente y funcione bien con LiveData
         binding.lifecycleOwner = this
 
         setHasOptionsMenu(true) //Habilita el icono de la derecha

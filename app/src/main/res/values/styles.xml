@@ -9,5 +9,19 @@
         <item name="android:fontFamily">@font/nimbus_font</item>
     </style>
 
+    <style name="btnPrimaryRed">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingEnd">2dp</item>
+        <item name="android:background">@drawable/red_rounded_button</item>
+    </style>
+
+    <style name="btnMainIconButtons">
+        <item name="android:background">@color/colorPrimaryDark</item>
+        <item name="android:layout_width">125dp</item>
+        <item name="android:layout_height">125dp</item>
+        <item name="android:padding">20dp</item>
+        <item name="android:scaleType">fitCenter</item>
+    </style>
 
 </resources>

@@ -26,6 +26,9 @@
     <string name="txt_btn_main_chats">Chats</string>
 
 
+    <!--MENSAJES DE PERMISOS-->
+    <string name="txt_permission_call">Please, accept the permissions to make the call</string>
+
     <!--OTROS-->
     <string name="right_icon">Right icon</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>

@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--OTROS-->
     <string name="app_name">112App</string>
+    <string name="right_icon">Icono derecho</string>
+    <string name="hello_blank_fragment">Hola fragmento vacío</string>
+    <string name="txt_call">LLAMAR</string>
+    <string name="txt_message">MENSAJE</string>
 
     <!--TÍTULOS DE LAS PANTALLAS-->
     <string name="notices_title">AVISOS</string>
@@ -30,9 +35,13 @@
     <!--MENSAJES DE PERMISOS-->
     <string name="txt_permission_call">Por favor, acepta los permisos para realizar la llamada</string>
 
-    <!--OTROS-->
-    <string name="right_icon">Icono derecho</string>
-    <string name="hello_blank_fragment">Hola fragmento vacío</string>
-    <string name="txt_call">LLAMAR</string>
-    <string name="txt_message">MENSAJE</string>
+    <!--CONTENT DESCRIPTION IMAGES-->
+    <string name="content_description_logo112">Imagen logo 112</string>
+
+    <!--SCREEN ACERCA DE-->
+    <string name="version_label_about">Versión</string>
+    <string name="developed_label_about">Desarrollado por:</string>
+    <string name="contact_label_about">Contacto</string>
+    <string name="copyright_text">© 2020 Todos los derechos reservados</string>
+
 </resources>

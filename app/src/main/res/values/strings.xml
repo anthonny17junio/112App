@@ -1,5 +1,10 @@
 <resources>
+    <!--OTROS-->
     <string name="app_name">112App</string>
+    <string name="right_icon">Right icon</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="txt_call">CALL</string>
+    <string name="txt_message">MESSAGE</string>
 
     <!--TÍTULOS DE LAS PANTALLAS-->
     <string name="notices_title">NOTICES</string>
@@ -29,9 +34,19 @@
     <!--MENSAJES DE PERMISOS-->
     <string name="txt_permission_call">Please, accept the permissions to make the call</string>
 
-    <!--OTROS-->
-    <string name="right_icon">Right icon</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="txt_call">CALL</string>
-    <string name="txt_message">MESSAGE</string>
+    <!--CONTENT DESCRIPTION IMAGES-->
+    <string name="content_description_logo112">Logo 112 image</string>
+
+    <!--SCREEN ACERCA DE-->
+    <string name="version_label_about">Version</string>
+    <string name="number_version_text_about" translatable="false">1.0</string>
+    <string name="version_text_about" translatable="false">(A15D39)</string>
+    <string name="developed_label_about">Developed by:</string>
+    <string name="developed_text_about" translatable="false">Teltronic S.A.U.</string>
+    <string name="contact_label_about">Contact</string>
+    <string name="contact_text_about" translatable="false">practicas.aplicaciones@teltronic.es</string>
+    <string name="url_about" translatable="false">www.teltronic.es</string>
+    <string name="copyright_label" translatable="false">Copyright:</string>
+    <string name="copyright_text">© 2020 All rights reserved</string>
+
 </resources>

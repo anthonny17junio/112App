@@ -1,22 +1,22 @@
-package com.teltronic.app112.screens.location
+package com.teltronic.app112.screens.chats
 
 
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 
 import com.teltronic.app112.R
-import com.teltronic.app112.databinding.FragmentLocationBinding
+import com.teltronic.app112.databinding.FragmentChatsBinding
 
 /**
  * A simple [Fragment] subclass.
  */
-class LocationFragment : Fragment() {
+class ChatsFragment : Fragment() {
 
-    private lateinit var binding: FragmentLocationBinding
-    private lateinit var viewModel: LocationViewModel
+    private lateinit var binding: FragmentChatsBinding
+    private lateinit var viewModel: ChatsViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,19 +25,20 @@ class LocationFragment : Fragment() {
         //Inicializo el binding
         binding = DataBindingUtil.inflate(
             inflater,
-            R.layout.fragment_location,
+            R.layout.fragment_chats,
             container,
             false
         )
         //Inicializo el viewModel
-        viewModel = ViewModelProvider(this).get(LocationViewModel::class.java) //Ahora
+        viewModel = ViewModelProvider(this).get(ChatsViewModel::class.java)
 
         //"Uno" el layout con esta clase por medio del binding
-        binding.locationViewModel = viewModel
+        binding.chatsViewModel = viewModel
         //Para que el ciclo de vida del binding sea sonsistente y funcione bien con LiveData
         binding.lifecycleOwner = this
 
         setHasOptionsMenu(true) //Habilita el icono de la derecha
+        //Retorno el binding root (no el inflater)
         return binding.root
     }
 
@@ -47,6 +48,6 @@ class LocationFragment : Fragment() {
         inflater: MenuInflater
     ) { //Habilita el icono de la derecha
         super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.location_screen_right_menu, menu)
+        inflater.inflate(R.menu.chats_right_menu, menu)
     }
 }

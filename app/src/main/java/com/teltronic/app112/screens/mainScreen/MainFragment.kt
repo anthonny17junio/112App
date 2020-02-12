@@ -42,38 +42,56 @@ class MainFragment : Fragment() {
         binding.lifecycleOwner = this
 
 
-        //Navegación de ubicación
-        viewModel.boolNavigateToLocation.observe(this as LifecycleOwner, Observer { goToLocation ->
-            if (goToLocation) {
-                val action = MainFragmentDirections.actionMainFragmentToLocationFragment()
-                findNavController().navigate(action)
-                viewModel.onNavigateToLocationComplete()
-            }
-        })
+        configNavigations()
         return binding.root
     }
 
-}
+    private fun configNavigations() {
+        //Listener a navegación de avisos (notices)
+        viewModel.boolNavigateToNotices.observe(
+            this as LifecycleOwner,
+            Observer { shouldNavigate ->
+                if (shouldNavigate) {
+                    val actionNavigate =
+                        MainFragmentDirections.actionMainFragmentToNoticesFragment()
+                    findNavController().navigate(actionNavigate)
+                    viewModel.onNavigateToNoticesComplete()
+                }
+            })
 
+        //Listener a navegación de ubicación(location)
+        viewModel.boolNavigateToLocation.observe(
+            this as LifecycleOwner,
+            Observer { shouldNavigate ->
+                if (shouldNavigate) {
+                    val actionNavigate =
+                        MainFragmentDirections.actionMainFragmentToLocationFragment()
+                    findNavController().navigate(actionNavigate)
+                    viewModel.onNavigateToLocationComplete()
+                }
+            })
 
-/*MODO 1*/
-/*
-binding.btnBorrar.setOnClickListener { view ->
-    Navigation.findNavController(view).navigate(R.id.action_mainFragment_to_locationFragment)
+        //Listener a navegación de chats
+        viewModel.boolNavigateToChats.observe(
+            this as LifecycleOwner,
+            Observer { shouldNavigate ->
+                if (shouldNavigate) {
+                    val actionNavigate = MainFragmentDirections.actionMainFragmentToChatsFragment()
+                    findNavController().navigate(actionNavigate)
+                    viewModel.navigateToChatsComplete()
+                }
+            })
+
+        //Listener a navegación de nuevo mensaje
+        viewModel.boolNavigateToNewChat.observe(
+            this as LifecycleOwner,
+            Observer { shouldNavigate ->
+                if (shouldNavigate) {
+                    val actionNavigate =
+                        MainFragmentDirections.actionMainFragmentToNewChatFragment()
+                    findNavController().navigate(actionNavigate)
+                    viewModel.navigateToNewChatComplete()
+                }
+            })
+    }
 }
-*/
-//MODO 2
-/*
-binding.btnBorrar.setOnClickListener { view ->
-    view.findNavController().navigate(R.id.action_mainFragment_to_locationFragment)
-}
-*/
-//MODO 3
-/*binding.btnBorrar.setOnClickListener(
-    Navigation.createNavigateOnClickListener(R.id.action_mainFragment_to_locationFragment)
-)*/
-//Módo 4
-/*binding.btnLocation.setOnClickListener { view ->
-    view.findNavController()
-        .navigate(MainFragmentDirections.actionMainFragmentToLocationFragment())
-}*/

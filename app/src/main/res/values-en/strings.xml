@@ -5,6 +5,7 @@
     <string name="notices_title">NOTICES</string>
     <string name="location_title">LOCATION</string>
     <string name="chats_title">CHATS</string>
+    <string name="new_chat_title">NEW CHAT</string>
 
     <string name="user_profile_title">USER PROFILE</string>
     <string name="medical_information_title">MEDICAL INFORMATION</string>

@@ -6,6 +6,7 @@
     <string name="notices_title">AVISOS</string>
     <string name="location_title">UBICACIÓN</string>
     <string name="chats_title">CHATS</string>
+    <string name="new_chat_title">NUEVO CHAT</string>
 
     <string name="user_profile_title">PERFIL DE USUARIO</string>
     <string name="medical_information_title">INFORMACIÓN MÉDICA</string>

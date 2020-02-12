@@ -17,12 +17,41 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_noticesFragment"
+            app:destination="@id/noticesFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_chatsFragment"
+            app:destination="@id/chatsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_newChatFragment"
+            app:destination="@id/newChatFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/locationFragment"
         android:name="com.teltronic.app112.screens.location.LocationFragment"
         android:label="@string/location_title"
-        tools:layout="@layout/fragment_location" />
+        tools:layout="@layout/fragment_location">
+        <action
+            android:id="@+id/action_locationFragment_to_newChatFragment"
+            app:destination="@id/newChatFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
     <fragment
         android:id="@+id/userProfileFragment"
         android:name="com.teltronic.app112.screens.userProfile.UserProfileFragment"
@@ -48,4 +77,19 @@
         android:name="com.teltronic.app112.screens.about.AboutFragment"
         android:label="@string/about_title"
         tools:layout="@layout/fragment_about" />
+    <fragment
+        android:id="@+id/noticesFragment"
+        android:name="com.teltronic.app112.screens.notices.NoticesFragment"
+        android:label="@string/notices_title"
+        tools:layout="@layout/fragment_notices" />
+    <fragment
+        android:id="@+id/chatsFragment"
+        android:name="com.teltronic.app112.screens.chats.ChatsFragment"
+        android:label="@string/chats_title"
+        tools:layout="@layout/fragment_chats" />
+    <fragment
+        android:id="@+id/newChatFragment"
+        android:name="com.teltronic.app112.screens.newChat.NewChatFragment"
+        android:label="@string/new_chat_title"
+        tools:layout="@layout/fragment_new_chat" />
 </navigation>

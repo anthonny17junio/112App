@@ -5,6 +5,7 @@
     <string name="right_icon">Icono derecho</string>
     <string name="hello_blank_fragment">Hola fragmento vacío</string>
     <string name="txt_call">LLAMAR</string>
+    <string name="txt_save">GUARDAR</string>
     <string name="txt_message">MENSAJE</string>
 
     <!--TÍTULOS DE LAS PANTALLAS-->

@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?><!--Si no se pone este layout no se genera la clase FragmentMainBinding para usarla en MainFragment.kt-->
+<?xml version="1.0" encoding="utf-8"?>
+<!--Si no se pone este layout no se genera la clase FragmentMainBinding para usarla en MainFragment.kt-->
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".screens.mainScreen.MainFragment">
 
     <data>
-
         <variable
             name="mainViewModel"
             type="com.teltronic.app112.screens.mainScreen.MainViewModel" />

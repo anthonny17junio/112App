@@ -3,14 +3,18 @@ package com.teltronic.app112.screens
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.ImageView
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
-import com.teltronic.app112.R
 import com.teltronic.app112.classes.Phone
 import com.teltronic.app112.databinding.ActivityMainBinding
+import androidx.navigation.NavController
+import com.teltronic.app112.R
+import com.teltronic.app112.screens.mainScreen.MainFragmentDirections
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,7 +28,6 @@ class MainActivity : AppCompatActivity() {
             this,
             R.layout.activity_main
         )
-
         configureLateralMenu()
     }
 
@@ -44,6 +47,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         NavigationUI.setupWithNavController(binding.lateralMenu, navController)
+        configureOnClickImageProfileLateralMenu(navController)
     }
 
     //Habilita el back button
@@ -54,8 +58,9 @@ class MainActivity : AppCompatActivity() {
 
     //Al presionar back button cierra el menú (solo si está abierto)
     override fun onBackPressed() {
-        if (this.drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            this.drawerLayout.closeDrawer(GravityCompat.START)
+        val drawer = this.drawerLayout
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
         }
@@ -63,21 +68,34 @@ class MainActivity : AppCompatActivity() {
 
     //Al presionar otra vez el icono del menú se cierra (solo si está abierto)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return if (this.drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            this.drawerLayout.closeDrawer(GravityCompat.START)
+        val drawer = this.drawerLayout
+        return if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START)
             true
         } else {
             super.onOptionsItemSelected(item)
         }
     }
 
+    //Al conceder o no persmisos se ejecuta esta función
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        Phone.makeActionRequestPermissionsResult(this,requestCode,grantResults)
+        Phone.makeActionRequestPermissionsResult(this, requestCode, grantResults)
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    //Configura el onClick de la foto de perfil del header del menú lateral
+    private fun configureOnClickImageProfileLateralMenu(navController: NavController) {
+        val imgProfileLateralMenu =
+            binding.lateralMenu.getHeaderView(0).findViewById<ImageView>(R.id.img_profile)
+        imgProfileLateralMenu.setOnClickListener {
+            val actionNavigate =
+                MainFragmentDirections.actionMainFragmentToUserProfileFragment()
+            navController.navigate(actionNavigate)
+        }
     }
 
 }

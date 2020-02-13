@@ -89,8 +89,8 @@ class MainActivity : AppCompatActivity() {
 
     //Configura el onClick de la foto de perfil del header del menú lateral
     private fun configureOnClickImageProfileLateralMenu(navController: NavController) {
-        val imgProfileLateralMenu =
-            binding.lateralMenu.getHeaderView(0).findViewById<ImageView>(R.id.img_profile)
+        val imgProfileLateralMenu: ImageView =
+            binding.lateralMenu.getHeaderView(0).findViewById(R.id.img_profile)
         imgProfileLateralMenu.setOnClickListener {
             val actionNavigate =
                 MainFragmentDirections.actionMainFragmentToUserProfileFragment()

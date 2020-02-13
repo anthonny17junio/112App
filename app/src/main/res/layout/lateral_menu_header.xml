@@ -10,9 +10,9 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/img_profile"
-        android:layout_width="104dp"
-        android:layout_height="119dp"
-        android:src="@raw/empty_avatar"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@mipmap/empty_avatar"
         app:layout_constraintBottom_toTopOf="@+id/txtName"
         app:layout_constraintDimensionRatio="1.0"
         app:layout_constraintEnd_toEndOf="parent"

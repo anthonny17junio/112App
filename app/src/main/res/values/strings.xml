@@ -41,7 +41,7 @@
     <!--MENSAJES DE PERMISOS-->
     <string name="txt_permission_call">Please, accept the permissions to make the call</string>
 
-    <!--CONTENT DESCRIPTION IMAGES-->
+    <!--LATERAL MENU-->
     <string name="content_description_logo112">Logo 112 image</string>
 
     <!--SCREEN ACERCA DE-->
@@ -65,4 +65,16 @@
     <string name="phone1_legal" translatable="false">+34 976 46 56 56</string>
     <string name="phone2_legal" translatable="false">+34 976 46 57 20</string>
 
+    <!--SCREEN USER PROFILE-->
+    <string name="title_full_name">Full name</string>
+    <string name="title_dni_passport">DNI / Passport</string>
+    <string name="title_phone">Phone number</string>
+    <string name="title_birthday">Birthday</string>
+    <string name="title_sex">Sex</string>
+    <string name="content_description_change_user_picture">Change user picture</string>
+    <string name="hint_full_name">Insert your name…</string>
+    <string name="hint_dni_passport">Insert your dni or passport…</string>
+    <string name="hint_phone_number">Insert your phone number…</string>
+    <string name="hint_birthday">Insert your birthday…</string>
+    <string name="hint_sex">Insert your sex…</string>
 </resources>

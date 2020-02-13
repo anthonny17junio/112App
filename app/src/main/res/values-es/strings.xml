@@ -36,7 +36,7 @@
     <!--MENSAJES DE PERMISOS-->
     <string name="txt_permission_call">Por favor, acepta los permisos para realizar la llamada</string>
 
-    <!--CONTENT DESCRIPTION IMAGES-->
+    <!--LATERAL MENU-->
     <string name="content_description_logo112">Imagen logo 112</string>
 
     <!--SCREEN ACERCA DE-->
@@ -48,5 +48,18 @@
     <!--SCREEN LEGAL-->
     <string name="title_contact_legal">CONTACTO LEGAL</string>
     <string name="address3_legal">ESPAÑA</string>
+
+    <!--SCREEN USER PROFILE-->
+    <string name="title_full_name">Nombre y apellidos</string>
+    <string name="title_dni_passport">DNI / Pasaporte</string>
+    <string name="title_phone">Teléfono</string>
+    <string name="title_birthday">Fecha de nacimiento</string>
+    <string name="title_sex">Sexo</string>
+    <string name="content_description_change_user_picture">Cambiar foto de perfil de usuario</string>
+    <string name="hint_full_name">Introduce tu nombre y apellidos</string>
+    <string name="hint_dni_passport">Introduce tu DNI o pasaporte…</string>
+    <string name="hint_phone_number">Introduce tu número de teléfono…</string>
+    <string name="hint_birthday">Introduce tu cumpleaños…</string>
+    <string name="hint_sex">Introduce tu sexo…</string>
 
 </resources>

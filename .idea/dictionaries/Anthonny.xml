@@ -2,6 +2,7 @@
   <dictionary name="Anthonny">
     <words>
       <w>abierto</w>
+      <w>acerca</w>
       <w>ahora</w>
       <w>avisos</w>
       <w>bien</w>
@@ -12,8 +13,13 @@
       <w>ciclo</w>
       <w>cierra</w>
       <w>clase</w>
+      <w>comprobar</w>
+      <w>compruebo</w>
       <w>consistente</w>
+      <w>contacto</w>
+      <w>debe</w>
       <w>derecha</w>
+      <w>españa</w>
       <w>este</w>
       <w>está</w>
       <w>evitar</w>
@@ -24,28 +30,41 @@
       <w>inicia</w>
       <w>inicializo</w>
       <w>lección</w>
+      <w>llamada</w>
+      <w>malpica</w>
       <w>medio</w>
       <w>mensaje</w>
+      <w>mensajes</w>
       <w>menú</w>
       <w>modo</w>
       <w>módo</w>
       <w>navegación</w>
       <w>navigations</w>
       <w>nuevo</w>
+      <w>oeste</w>
       <w>opciones</w>
       <w>otra</w>
       <w>otras</w>
       <w>otros</w>
       <w>pantallas</w>
+      <w>permisos</w>
+      <w>pido</w>
+      <w>polígono</w>
       <w>presionar</w>
+      <w>previamente</w>
       <w>programar</w>
+      <w>realizo</w>
       <w>retorno</w>
+      <w>revisar</w>
       <w>sanl</w>
       <w>teltronic</w>
+      <w>tengo</w>
+      <w>tienes</w>
       <w>títulos</w>
       <w>ubicación</w>
       <w>usarla</w>
       <w>viewmodels</w>
+      <w>zaragoza</w>
     </words>
   </dictionary>
 </component>

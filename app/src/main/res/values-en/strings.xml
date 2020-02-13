@@ -39,7 +39,11 @@
     <!--SCREEN ACERCA DE-->
     <string name="version_label_about">Version</string>
     <string name="developed_label_about">Developed by:</string>
-    <string name="contact_label_about">Contact</string>
+    <string name="contact_label_about">Contact:</string>
     <string name="copyright_text">© 2020 All rights reserved</string>
+
+    <!--SCREEN LEGAL-->
+    <string name="title_contact_legal">LEGAL CONTACT</string>
+    <string name="address3_legal">SPAIN</string>
 
 </resources>

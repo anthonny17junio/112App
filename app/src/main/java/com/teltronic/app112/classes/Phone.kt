@@ -52,7 +52,7 @@ object Phone {
 
     @SuppressLint("MissingPermission")
     private fun makeCallIntent(activity: Activity) { //Se debe comprobar previamente si ya tienes permisos
-        val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "112"))
+        val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "+34976465656"))
         activity.startActivity(intent)
     }
 

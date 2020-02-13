@@ -41,7 +41,11 @@
     <!--SCREEN ACERCA DE-->
     <string name="version_label_about">Versión</string>
     <string name="developed_label_about">Desarrollado por:</string>
-    <string name="contact_label_about">Contacto</string>
+    <string name="contact_label_about">Contacto:</string>
     <string name="copyright_text">© 2020 Todos los derechos reservados</string>
+
+    <!--SCREEN LEGAL-->
+    <string name="title_contact_legal">CONTACTO LEGAL</string>
+    <string name="address3_legal">ESPAÑA</string>
 
 </resources>

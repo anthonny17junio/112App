@@ -3,7 +3,8 @@
     <color name="colorPrimary">#C91322</color>
     <color name="colorPrimaryDark">#900000</color>
     <color name="colorAccent">#0645AD</color>
-
+<!--    <color name="fontColorBlack">#00FF00</color>-->
+<!--    <color name="fontColorBlack">#444444</color>-->
 <!--    <color name="black_overlay">#C0C0C0</color>-->
 <!--    <color name="colorPrimaryLight">#FF544B</color>-->
 <!--    <color name="white">#ffffff</color>-->

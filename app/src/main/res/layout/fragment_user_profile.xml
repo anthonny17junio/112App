@@ -68,7 +68,7 @@
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/etFullName"
+                    android:id="@+id/etAllergy"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -85,7 +85,7 @@
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/etDniPassport"
+                    android:id="@+id/etDisease"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -102,7 +102,7 @@
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/etPhoneNumber"
+                    android:id="@+id/etDisability"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -119,7 +119,7 @@
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/etBirthday"
+                    android:id="@+id/etMedicine"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"

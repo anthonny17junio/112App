@@ -60,4 +60,13 @@
     <string name="hint_birthday">Insert your birthday…</string>
     <string name="hint_sex">Insert your sex…</string>
 
+    <!--SCREEN MEDICAL INFO-->
+    <string name="title_allergy">Do you have allergies?</string>
+    <string name="hint_allergy">Ex: Gluten, bee sting, penicillin…</string>
+    <string name="title_disease">Do you have any disease?</string>
+    <string name="hint_disease">Ex: Diabetes</string>
+    <string name="title_disability">Do you have any disability?</string>
+    <string name="hint_disability">Ex: Hearing impairment, motor disability…</string>
+    <string name="title_medicine">Are you taking medication?</string>
+    <string name="hint_medicines">Ex: Insulin</string>
 </resources>

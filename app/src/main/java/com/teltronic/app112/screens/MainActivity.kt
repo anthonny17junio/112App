@@ -7,27 +7,38 @@ import android.widget.ImageView
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.teltronic.app112.classes.Phone
 import com.teltronic.app112.databinding.ActivityMainBinding
 import androidx.navigation.NavController
 import com.teltronic.app112.R
+import com.teltronic.app112.classes.Preferences
 import com.teltronic.app112.screens.mainScreen.MainFragmentDirections
-
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
+    private lateinit var viewModel: MainActivityViewModel
     private lateinit var binding: ActivityMainBinding
+    private lateinit var viewModelFactory: MainActivityViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //Inicializo el binding
+
+        Preferences.loadLocate(this)
+
+        viewModelFactory = MainActivityViewModelFactory()
+        viewModel =
+            ViewModelProvider(this, viewModelFactory).get(MainActivityViewModel::class.java)
+
         binding = DataBindingUtil.setContentView(
             this,
             R.layout.activity_main
         )
+        binding.mainActivityViewModel = viewModel
+        binding.lifecycleOwner = this
         configureLateralMenu()
     }
 
@@ -97,6 +108,7 @@ class MainActivity : AppCompatActivity() {
             navController.navigate(actionNavigate)
         }
     }
+
 
 }
 

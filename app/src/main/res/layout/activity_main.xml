@@ -4,6 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".screens.MainActivity">
 
+    <data>
+        <variable
+            name="mainActivityViewModel"
+            type="com.teltronic.app112.screens.MainActivityViewModel" />
+    </data>
+
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawerLayout"
         android:layout_width="match_parent"

@@ -2,6 +2,10 @@
     <!--TODO:- BORRAR-->
     <string name="name_example" translatable="false">Ana Reverte Haro</string>
 
+    <!--KEYS-->
+    <string name="name_settings_preferences" translatable="false">settings_preferences</string>
+    <string name="KEY_LANGUAGE" translatable="false">KEY_CURRENT_LANGUAGE</string>
+
     <!--OTROS-->
     <string name="app_name">112App</string>
     <string name="right_icon">Right icon</string>
@@ -12,6 +16,7 @@
     <string name="lorem_ipsum_short" translatable="false">Lorem ipsum olor sit amet</string>
     <string name="lorem_ipsum_medium" translatable="false">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
     <string name="lorem_ipsum_large" translatable="false">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
+    <string name="changes_saved">Changes saved</string>
 
     <!--TÍTULOS DE LAS PANTALLAS-->
     <string name="notices_title">NOTICES</string>
@@ -87,4 +92,20 @@
     <string name="hint_disability">Ex: Hearing impairment, motor disability…</string>
     <string name="title_medicine">Are you taking medication?</string>
     <string name="hint_medicines">Ex: Insulin</string>
+
+    <!--SCREEN CONFIG-->
+    <string name="language">Language</string>
+    <string name="title_notices">Notices</string>
+    <string name="txtRecieveNotices">Receive notices within a radius of:</string>
+
+    <!--LANGUAGES-->
+    <string-array name="languages">
+        <item>@string/spanish</item>
+        <item>@string/english</item>
+    </string-array>
+    <string name="spanish" translatable="false">Español</string>
+    <string name="english" translatable="false">English</string>
+
+
+
 </resources>

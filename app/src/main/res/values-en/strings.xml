@@ -6,6 +6,7 @@
     <string name="txt_call">CALL</string>
     <string name="txt_save">SAVE</string>
     <string name="txt_message">MESSAGE</string>
+    <string name="changes_saved">Changes saved</string>
 
     <!--TÍTULOS DE LAS PANTALLAS-->
     <string name="notices_title">NOTICES</string>
@@ -69,4 +70,10 @@
     <string name="hint_disability">Ex: Hearing impairment, motor disability…</string>
     <string name="title_medicine">Are you taking medication?</string>
     <string name="hint_medicines">Ex: Insulin</string>
+
+    <!--SCREEN CONFIG-->
+    <string name="language">Language</string>
+    <string name="title_notices">Notices</string>
+    <string name="txtRecieveNotices">Receive notices within a radius of:</string>
+
 </resources>

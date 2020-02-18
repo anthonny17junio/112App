@@ -7,6 +7,7 @@
     <string name="txt_call">LLAMAR</string>
     <string name="txt_save">GUARDAR</string>
     <string name="txt_message">MENSAJE</string>
+    <string name="changes_saved">Cambios guardados</string>
 
     <!--TÍTULOS DE LAS PANTALLAS-->
     <string name="notices_title">AVISOS</string>
@@ -71,4 +72,9 @@
     <string name="hint_disability">Ej: Discapacidad auditiva, motriz…</string>
     <string name="title_medicine">¿Está tomando medicamentos?</string>
     <string name="hint_medicines">Ej: Insulina</string>
+
+    <!--SCREEN CONFIG-->
+    <string name="language">Idioma</string>
+    <string name="title_notices">Avisos</string>
+    <string name="txtRecieveNotices">Recibir avisos en un radio de:</string>
 </resources>

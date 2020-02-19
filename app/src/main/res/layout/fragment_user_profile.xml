@@ -18,6 +18,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginBottom="@dimen/default_margin_size"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -27,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="32dp"
+                android:padding="@dimen/default_double_margin_size"
                 app:layout_constraintBottom_toTopOf="@+id/btnSave"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -63,7 +64,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="32dp"
+                    android:layout_marginTop="@dimen/default_double_margin_size"
                     android:text="@string/title_full_name"
                     android:textStyle="bold" />
 
@@ -71,7 +72,7 @@
                     android:id="@+id/etAllergy"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="@dimen/default_margin_size"
                     android:ems="10"
                     android:hint="@string/hint_full_name"
                     android:importantForAutofill="no"
@@ -80,7 +81,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="@dimen/default_margin_size"
                     android:text="@string/title_dni_passport"
                     android:textStyle="bold" />
 
@@ -88,7 +89,7 @@
                     android:id="@+id/etDisease"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="@dimen/default_margin_size"
                     android:ems="10"
                     android:hint="@string/hint_dni_passport"
                     android:importantForAutofill="no"
@@ -97,7 +98,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="@dimen/default_margin_size"
                     android:text="@string/title_phone"
                     android:textStyle="bold" />
 
@@ -105,7 +106,7 @@
                     android:id="@+id/etDisability"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="@dimen/default_margin_size"
                     android:ems="10"
                     android:hint="@string/hint_phone_number"
                     android:importantForAutofill="no"
@@ -114,7 +115,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="@dimen/default_margin_size"
                     android:text="@string/title_birthday"
                     android:textStyle="bold" />
 
@@ -122,7 +123,7 @@
                     android:id="@+id/etMedicine"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="@dimen/default_margin_size"
                     android:ems="10"
                     android:hint="@string/hint_birthday"
                     android:importantForAutofill="no"
@@ -131,7 +132,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="@dimen/default_margin_size"
                     android:text="@string/title_sex"
                     android:textStyle="bold" />
 
@@ -139,7 +140,7 @@
                     android:id="@+id/etSex"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="@dimen/default_margin_size"
                     android:ems="10"
                     android:hint="@string/hint_sex"
                     android:importantForAutofill="no"
@@ -155,7 +156,7 @@
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="@dimen/default_margin_size"
             android:gravity="center"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -165,8 +166,8 @@
             <Button
                 android:id="@+id/btnSave"
                 style="@style/btnPrimaryRed"
-                android:layout_width="200dp"
-                android:layout_height="62dp"
+                android:layout_width="@dimen/width_button"
+                android:layout_height="@dimen/height_button"
                 android:drawableStart="@drawable/ic_save_white"
                 android:text="@string/txt_save"
                 android:textStyle="bold" />

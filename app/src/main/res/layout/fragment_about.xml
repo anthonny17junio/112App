@@ -13,15 +13,13 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="@dimen/default_double_margin_size">
 
         <ImageView
             android:id="@+id/imgLogo"
             android:layout_width="0dp"
             android:layout_height="250dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="32dp"
             android:contentDescription="@string/content_description_logo112"
             android:src="@mipmap/ic_launcher_foreground"
             app:layout_constraintEnd_toEndOf="parent"
@@ -40,7 +38,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:layout_marginTop="@dimen/default_margin_size"
+                android:layout_marginBottom="@dimen/default_margin_size"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -53,21 +52,21 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="@dimen/default_half_margin_size"
                     android:text="@string/number_version_text_about"
                     android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="@dimen/default_half_margin_size"
                     android:text="@string/version_text_about" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="@dimen/default_margin_size"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -80,7 +79,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="@dimen/default_half_margin_size"
                     android:text="@string/developed_text_about" />
             </LinearLayout>
 
@@ -99,7 +98,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="@dimen/default_half_margin_size"
                     android:autoLink="email"
                     android:text="@string/contact_text_about" />
             </LinearLayout>
@@ -110,7 +109,6 @@
             android:id="@+id/layoutURL"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/layoutCopyRight"
             app:layout_constraintEnd_toEndOf="parent"
@@ -139,7 +137,6 @@
             android:id="@+id/layoutCopyRight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -157,13 +154,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/copyright_label"
+                    android:textSize="12sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="@string/copyright_text" />
+                    android:layout_marginStart="@dimen/default_half_margin_size"
+                    android:text="@string/copyright_text"
+                    android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
 

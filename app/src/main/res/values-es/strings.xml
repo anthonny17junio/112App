@@ -77,4 +77,10 @@
     <string name="language">Idioma</string>
     <string name="title_notices">Avisos</string>
     <string name="txtRecieveNotices">Recibir avisos en un radio de:</string>
+
+    <!--SCREEN LOCATION-->
+    <string name="lat_title">Lat:</string>
+    <string name="long_title">Long:</string>
+    <string name="content_description_copy_lat_lang">Botón copiar latitud y longitud</string>
+
 </resources>

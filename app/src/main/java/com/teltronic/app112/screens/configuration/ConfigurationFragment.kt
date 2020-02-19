@@ -36,7 +36,7 @@ class ConfigurationFragment : Fragment() {
             false
         )
         //Inicializo el viewModel
-        viewModelFactory = ConfigurationViewModelFactory(this)
+        viewModelFactory = ConfigurationViewModelFactory()
         viewModel =
             ViewModelProvider(this, viewModelFactory).get(ConfigurationViewModel::class.java)
 

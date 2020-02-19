@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class ConfigurationViewModel() : ViewModel() {
+class ConfigurationViewModel : ViewModel() {
     private var _boolSave = MutableLiveData<Boolean>()
     val boolSave: LiveData<Boolean>
         get() = _boolSave

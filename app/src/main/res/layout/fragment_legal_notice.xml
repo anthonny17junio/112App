@@ -19,7 +19,7 @@
             android:id="@+id/layoutInformation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="@dimen/default_margin_size"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -28,7 +28,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="32dp"
+                android:layout_marginBottom="@dimen/default_double_margin_size"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -43,7 +43,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="@dimen/default_margin_size"
                 android:orientation="horizontal">
 
                 <TextView
@@ -61,7 +61,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
+                        android:layout_marginStart="@dimen/default_margin_size"
                         android:autoLink="email"
                         android:text="@string/email_legal" />
                 </LinearLayout>
@@ -71,7 +71,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="@dimen/default_margin_size"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -91,19 +91,19 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
+                        android:layout_marginStart="@dimen/default_margin_size"
                         android:text="@string/address1_legal" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
+                        android:layout_marginStart="@dimen/default_margin_size"
                         android:text="@string/address2_legal" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
+                        android:layout_marginStart="@dimen/default_margin_size"
                         android:text="@string/address3_legal" />
                 </LinearLayout>
             </LinearLayout>
@@ -130,7 +130,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
+                        android:layout_marginStart="@dimen/default_margin_size"
                         android:autoLink="phone"
                         android:text="@string/phone1_legal" />
 
@@ -138,7 +138,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:autoLink="phone"
-                        android:layout_marginStart="20dp"
+                        android:layout_marginStart="@dimen/default_margin_size"
                         android:text="@string/phone2_legal" />
 
                 </LinearLayout>
@@ -148,8 +148,8 @@
         <ScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginBottom="32dp"
-            android:paddingStart="16dp"
+            android:layout_marginBottom="@dimen/default_double_margin_size"
+            android:paddingStart="@dimen/default_margin_size"
             android:paddingEnd="0dp"
             app:layout_constraintBottom_toTopOf="@+id/layoutInformation"
             app:layout_constraintEnd_toEndOf="parent"
@@ -167,9 +167,9 @@
                     android:id="@+id/textView4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="32dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginTop="@dimen/default_double_margin_size"
+                    android:layout_marginEnd="@dimen/default_margin_size"
+                    android:layout_marginBottom="@dimen/default_margin_size"
                     android:text="@string/lorem_ipsum_short"
                     android:textAllCaps="true"
                     android:textStyle="bold"
@@ -179,16 +179,16 @@
                     android:id="@+id/textView5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="32dp"
+                    android:layout_marginEnd="@dimen/default_margin_size"
+                    android:layout_marginBottom="@dimen/default_double_margin_size"
                     android:text="@string/lorem_ipsum_medium" />
 
                 <TextView
                     android:id="@+id/textView6"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginEnd="@dimen/default_margin_size"
+                    android:layout_marginBottom="@dimen/default_margin_size"
                     android:text="@string/lorem_ipsum_short"
                     android:textAllCaps="true"
                     android:textStyle="bold" />
@@ -197,7 +197,7 @@
                     android:id="@+id/textView7"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginEnd="@dimen/default_margin_size"
                     android:text="@string/lorem_ipsum_large" />
             </LinearLayout>
         </ScrollView>

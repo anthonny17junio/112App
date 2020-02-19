@@ -3,8 +3,7 @@ package com.teltronic.app112.screens.configuration
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
-class ConfigurationViewModelFactory(private val context: ConfigurationFragment) :
-    ViewModelProvider.Factory {
+class ConfigurationViewModelFactory : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ConfigurationViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")

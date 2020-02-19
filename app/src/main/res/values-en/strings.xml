@@ -76,4 +76,9 @@
     <string name="title_notices">Notices</string>
     <string name="txtRecieveNotices">Receive notices within a radius of:</string>
 
+    <!--SCREEN LOCATION-->
+    <string name="lat_title">Lat:</string>
+    <string name="long_title">Long:</string>
+    <string name="content_description_copy_lat_lang">Button copy latitude and longitude</string>
+
 </resources>

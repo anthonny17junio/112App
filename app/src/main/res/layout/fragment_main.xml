@@ -13,104 +13,138 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="@dimen/default_margin_size">
 
 
-        <TextView
-            android:id="@+id/txtBtnLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/txt_btn_main_location"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/btnLocation"
-            app:layout_constraintStart_toStartOf="@+id/btnLocation"
-            app:layout_constraintTop_toBottomOf="@+id/btnLocation" />
-
-        <TextView
-            android:id="@+id/txtBtnNotices"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/txt_btn_main_notices"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/btnNotices"
-            app:layout_constraintStart_toStartOf="@+id/btnNotices"
-            app:layout_constraintTop_toBottomOf="@+id/btnNotices" />
-
-        <TextView
-            android:id="@+id/txtBtnChats"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/txt_btn_main_chats"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/btnChats"
-            app:layout_constraintStart_toStartOf="@+id/btnChats"
-            app:layout_constraintTop_toBottomOf="@+id/btnChats" />
-
-        <ImageButton
-            android:id="@+id/btnLocation"
-            style="@style/btnMainIconButtons"
-            android:layout_marginTop="70dp"
-            android:layout_marginEnd="32dp"
-            android:contentDescription="@string/location_title"
-            android:onClick="@{()->mainViewModel.navigateToLocation()}"
-            android:src="@drawable/ic_location_on_white"
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="@dimen/default_margin_size"
+            app:layout_constraintBottom_toTopOf="@+id/btnChat"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageButton
-            android:id="@+id/btnNotices"
-            style="@style/btnMainIconButtons"
-            android:layout_marginStart="32dp"
-            android:contentDescription="@string/location_title"
-            android:onClick="@{()->mainViewModel.navigateToNotices()}"
-            android:src="@drawable/ic_notices_white"
+            app:layout_constraintHorizontal_bias="0.843"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/btnLocation" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0">
 
-        <ImageButton
-            android:id="@+id/btnChats"
-            style="@style/btnMainIconButtons"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="50dp"
-            android:contentDescription="@string/location_title"
-            android:onClick="@{()->mainViewModel.navigateToChats()}"
-            android:src="@drawable/ic_chats_white"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtBtnNotices" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.50" />
+
+                <TextView
+                    android:id="@+id/txtBtnNotices"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_half_margin_size"
+                    android:text="@string/txt_btn_main_notices"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@+id/btnNotices"
+                    app:layout_constraintStart_toStartOf="@+id/btnNotices"
+                    app:layout_constraintTop_toBottomOf="@+id/btnNotices" />
+
+                <TextView
+                    android:id="@+id/txtBtnChats"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_half_margin_size"
+                    android:text="@string/txt_btn_main_chats"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@+id/btnChats"
+                    app:layout_constraintStart_toStartOf="@+id/btnChats"
+                    app:layout_constraintTop_toBottomOf="@+id/btnChats" />
+
+                <ImageButton
+                    android:id="@+id/btnNotices"
+                    style="@style/btnMainIconButtons"
+                    android:layout_marginTop="50dp"
+                    android:contentDescription="@string/location_title"
+                    android:onClick="@{()->mainViewModel.navigateToNotices()}"
+                    android:src="@drawable/ic_notices_white"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline3"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/txtBtnLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_half_margin_size"
+                    android:text="@string/txt_btn_main_location"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@+id/btnLocation"
+                    app:layout_constraintStart_toStartOf="@+id/btnLocation"
+                    app:layout_constraintTop_toBottomOf="@+id/btnLocation" />
+
+                <ImageButton
+                    android:id="@+id/btnLocation"
+                    style="@style/btnMainIconButtons"
+                    android:contentDescription="@string/location_title"
+                    android:onClick="@{()->mainViewModel.navigateToLocation()}"
+                    android:src="@drawable/ic_location_on_white"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/guideline3"
+                    app:layout_constraintTop_toTopOf="@+id/btnNotices" />
+
+                <ImageButton
+                    android:id="@+id/btnChats"
+                    style="@style/btnMainIconButtons"
+                    android:layout_marginTop="@dimen/default_double_margin_size"
+                    android:contentDescription="@string/location_title"
+                    android:onClick="@{()->mainViewModel.navigateToChats()}"
+                    android:src="@drawable/ic_chats_white"
+                    app:layout_constraintEnd_toEndOf="@+id/btnNotices"
+                    app:layout_constraintStart_toStartOf="@+id/btnNotices"
+                    app:layout_constraintTop_toBottomOf="@+id/txtBtnNotices" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
 
         <Button
             android:id="@+id/btnChat"
             style="@style/btnPrimaryRed"
-            android:layout_width="125dp"
-            android:layout_height="65dp"
-            android:layout_marginBottom="32dp"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/height_button"
+            android:layout_marginEnd="@dimen/default_half_margin_size"
             android:drawableStart="@drawable/ic_text_message"
             android:onClick="@{()->mainViewModel.navigateToNewChat()}"
             android:text="@string/txt_message"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/btnChats"
-            app:layout_constraintStart_toStartOf="@+id/btnChats" />
+            app:layout_constraintEnd_toStartOf="@+id/guideline2"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/btnCall"
             style="@style/btnPrimaryRed"
-            android:layout_width="125dp"
-            android:layout_height="65dp"
-            android:layout_marginBottom="32dp"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/height_button"
+            android:layout_marginStart="@dimen/default_half_margin_size"
             android:drawableStart="@drawable/ic_call_white"
-            android:onClick="@{()->mainViewModel.makeCall()}"
 
+            android:onClick="@{()->mainViewModel.makeCall()}"
             android:text="@string/txt_call"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/btnLocation"
-            app:layout_constraintStart_toStartOf="@+id/btnLocation" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline2" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintGuide_percent="0.50"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

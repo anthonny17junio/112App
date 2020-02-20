@@ -86,4 +86,10 @@
     <string name="content_description_copy_lat_lang">Botón copiar latitud y longitud</string>
     <string name="lat_long_copied">Latitud y longitud copiadas</string>
 
+    <!--SCREEN NEW CHAT-->
+    <string name="txt_crime">Delito</string>
+    <string name="txt_accident">Accidente</string>
+    <string name="txt_medical_urgency">Urgencia médica</string>
+    <string name="txt_other">Otro</string>
+
 </resources>

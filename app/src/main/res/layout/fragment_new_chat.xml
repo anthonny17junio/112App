@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".screens.newChat.NewChatFragment">
 
     <data>
@@ -12,13 +13,130 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="@dimen/default_margin_size">
 
-        <!-- TODO: Update blank fragment layout -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/hello_blank_fragment" />
+
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="@dimen/default_margin_size"
+            app:layout_constraintBottom_toTopOf="@+id/btnCall"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.50" />
+
+                <TextView
+                    android:id="@+id/txtBtnCrime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_half_margin_size"
+                    android:text="@string/txt_crime"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@+id/btnCrime"
+                    app:layout_constraintStart_toStartOf="@+id/btnCrime"
+                    app:layout_constraintTop_toBottomOf="@+id/btnCrime" />
+
+                <TextView
+                    android:id="@+id/txtBtnMedicalUrgency"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_half_margin_size"
+                    android:text="@string/txt_medical_urgency"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@+id/btnMedicalUrgency"
+                    app:layout_constraintStart_toStartOf="@+id/btnMedicalUrgency"
+                    app:layout_constraintTop_toBottomOf="@+id/btnMedicalUrgency" />
+
+                <TextView
+                    android:id="@+id/txtBtnOther"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_half_margin_size"
+                    android:text="@string/txt_other"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@+id/btnOther"
+                    app:layout_constraintStart_toStartOf="@+id/btnOther"
+                    app:layout_constraintTop_toBottomOf="@+id/btnOther" />
+
+                <ImageButton
+                    android:id="@+id/btnCrime"
+                    style="@style/btnMainIconButtons"
+                    android:layout_marginTop="50dp"
+                    android:contentDescription="@string/location_title"
+                    android:src="@drawable/ic_police_car_white"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline3"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/txtBtnAccident"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_half_margin_size"
+                    android:text="@string/txt_accident"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@+id/btnAccident"
+                    app:layout_constraintStart_toStartOf="@+id/btnAccident"
+                    app:layout_constraintTop_toBottomOf="@+id/btnAccident" />
+
+                <ImageButton
+                    android:id="@+id/btnAccident"
+                    style="@style/btnMainIconButtons"
+                    android:contentDescription="@string/location_title"
+                    android:src="@drawable/ic_accident_white"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/guideline3"
+                    app:layout_constraintTop_toTopOf="@+id/btnCrime" />
+
+                <ImageButton
+                    android:id="@+id/btnOther"
+                    style="@style/btnMainIconButtons"
+                    android:contentDescription="@string/location_title"
+                    android:src="@drawable/ic_more_white"
+                    app:layout_constraintEnd_toEndOf="@+id/btnAccident"
+                    app:layout_constraintStart_toStartOf="@+id/btnAccident"
+                    app:layout_constraintTop_toTopOf="@+id/btnMedicalUrgency" />
+
+                <ImageButton
+                    android:id="@+id/btnMedicalUrgency"
+                    style="@style/btnMainIconButtons"
+                    android:layout_marginTop="@dimen/default_double_margin_size"
+                    android:contentDescription="@string/location_title"
+                    android:src="@drawable/ic_hospital_white"
+                    app:layout_constraintEnd_toEndOf="@+id/btnCrime"
+                    app:layout_constraintStart_toStartOf="@+id/btnCrime"
+                    app:layout_constraintTop_toBottomOf="@+id/txtBtnCrime" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+        <Button
+            android:id="@+id/btnCall"
+            style="@style/btnPrimaryRed"
+            android:layout_width="@dimen/width_button"
+            android:layout_height="@dimen/height_button"
+            android:drawableStart="@drawable/ic_call_white"
+
+            android:text="@string/txt_call"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

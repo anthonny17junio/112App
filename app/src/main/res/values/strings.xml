@@ -115,7 +115,13 @@
     <string name="content_description_copy_lat_lang">Button copy latitude and longitude</string>
     <string name="lat_long_copied">Latitude and longitude copied</string>
 
-    <!--SCREEN FORMATS-->
+    <!--FORMATS-->
     <string name="string_format" translatable="false">%s</string>
+
+    <!--SCREEN NEW CHAT-->
+    <string name="txt_crime">Crime</string>
+    <string name="txt_accident">Accident</string>
+    <string name="txt_medical_urgency">Medical urgency</string>
+    <string name="txt_other">Other</string>
 
 </resources>

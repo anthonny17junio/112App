@@ -23,7 +23,6 @@
             android:layout_marginBottom="@dimen/default_margin_size"
             app:layout_constraintBottom_toTopOf="@+id/btnChat"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.843"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0">
@@ -40,31 +39,31 @@
                     app:layout_constraintGuide_percent="0.50" />
 
                 <TextView
-                    android:id="@+id/txtBtnNotices"
+                    android:id="@+id/txtBtnCrime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/default_half_margin_size"
                     android:text="@string/txt_btn_main_notices"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="@+id/btnNotices"
-                    app:layout_constraintStart_toStartOf="@+id/btnNotices"
-                    app:layout_constraintTop_toBottomOf="@+id/btnNotices" />
+                    app:layout_constraintEnd_toEndOf="@+id/btnCrime"
+                    app:layout_constraintStart_toStartOf="@+id/btnCrime"
+                    app:layout_constraintTop_toBottomOf="@+id/btnCrime" />
 
                 <TextView
-                    android:id="@+id/txtBtnChats"
+                    android:id="@+id/txtBtnMedicalUrgency"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/default_half_margin_size"
                     android:text="@string/txt_btn_main_chats"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="@+id/btnChats"
-                    app:layout_constraintStart_toStartOf="@+id/btnChats"
-                    app:layout_constraintTop_toBottomOf="@+id/btnChats" />
+                    app:layout_constraintEnd_toEndOf="@+id/btnMedicalUrgency"
+                    app:layout_constraintStart_toStartOf="@+id/btnMedicalUrgency"
+                    app:layout_constraintTop_toBottomOf="@+id/btnMedicalUrgency" />
 
                 <ImageButton
-                    android:id="@+id/btnNotices"
+                    android:id="@+id/btnCrime"
                     style="@style/btnMainIconButtons"
                     android:layout_marginTop="50dp"
                     android:contentDescription="@string/location_title"
@@ -75,37 +74,37 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/txtBtnLocation"
+                    android:id="@+id/txtBtnAccident"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/default_half_margin_size"
                     android:text="@string/txt_btn_main_location"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="@+id/btnLocation"
-                    app:layout_constraintStart_toStartOf="@+id/btnLocation"
-                    app:layout_constraintTop_toBottomOf="@+id/btnLocation" />
+                    app:layout_constraintEnd_toEndOf="@+id/btnAccident"
+                    app:layout_constraintStart_toStartOf="@+id/btnAccident"
+                    app:layout_constraintTop_toBottomOf="@+id/btnAccident" />
 
                 <ImageButton
-                    android:id="@+id/btnLocation"
+                    android:id="@+id/btnAccident"
                     style="@style/btnMainIconButtons"
                     android:contentDescription="@string/location_title"
                     android:onClick="@{()->mainViewModel.navigateToLocation()}"
                     android:src="@drawable/ic_location_on_white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/guideline3"
-                    app:layout_constraintTop_toTopOf="@+id/btnNotices" />
+                    app:layout_constraintTop_toTopOf="@+id/btnCrime" />
 
                 <ImageButton
-                    android:id="@+id/btnChats"
+                    android:id="@+id/btnMedicalUrgency"
                     style="@style/btnMainIconButtons"
                     android:layout_marginTop="@dimen/default_double_margin_size"
                     android:contentDescription="@string/location_title"
                     android:onClick="@{()->mainViewModel.navigateToChats()}"
                     android:src="@drawable/ic_chats_white"
-                    app:layout_constraintEnd_toEndOf="@+id/btnNotices"
-                    app:layout_constraintStart_toStartOf="@+id/btnNotices"
-                    app:layout_constraintTop_toBottomOf="@+id/txtBtnNotices" />
+                    app:layout_constraintEnd_toEndOf="@+id/btnCrime"
+                    app:layout_constraintStart_toStartOf="@+id/btnCrime"
+                    app:layout_constraintTop_toBottomOf="@+id/txtBtnCrime" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 

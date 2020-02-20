@@ -3,6 +3,7 @@ package com.teltronic.app112.screens.mainScreen
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
@@ -85,9 +86,22 @@ class MainFragment : Fragment() {
             this as LifecycleOwner,
             Observer { shouldNavigate ->
                 if (shouldNavigate) {
-                    val actionNavigate =
-                        MainFragmentDirections.actionMainFragmentToLocationFragment()
-                    findNavController().navigate(actionNavigate)
+                    if (!Phone.isLocationEnabled(activity)) {
+                        Toast.makeText(
+                            activity,
+                            R.string.location_no_enabled,
+                            Toast.LENGTH_LONG
+                        ).show()
+                    } else
+                        if (Phone.existLocationPermission(activity)) {
+                            //Si tienes permisos de localización navegas a location screen
+                            val actionNavigate =
+                                MainFragmentDirections.actionMainFragmentToLocationFragment()
+                            findNavController().navigate(actionNavigate)
+                        } else {
+                            //Si no tienes permisos de localización los pides
+                            Phone.askLocationPermissionLocation(activity!!)
+                        }
                     viewModel.onNavigateToLocationComplete()
                 }
             })

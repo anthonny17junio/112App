@@ -22,7 +22,6 @@ class ConfigurationFragment : Fragment() {
 
     private lateinit var binding: FragmentConfigurationBinding
     private lateinit var viewModel: ConfigurationViewModel
-    private lateinit var viewModelFactory: ConfigurationViewModelFactory
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,9 +35,8 @@ class ConfigurationFragment : Fragment() {
             false
         )
         //Inicializo el viewModel
-        viewModelFactory = ConfigurationViewModelFactory()
         viewModel =
-            ViewModelProvider(this, viewModelFactory).get(ConfigurationViewModel::class.java)
+            ViewModelProvider(this).get(ConfigurationViewModel::class.java)
 
         //"Uno" el layout con esta clase por medio del binding
         binding.configurationViewModel = viewModel

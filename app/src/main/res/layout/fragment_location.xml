@@ -5,6 +5,7 @@
     tools:context=".screens.location.LocationFragment">
 
     <data>
+
         <variable
             name="locationViewModel"
             type="com.teltronic.app112.screens.location.LocationViewModel" />
@@ -47,7 +48,7 @@
                 android:id="@+id/txtLat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/lat_lang_placeholder"
+                android:text="@{@string/string_format(locationViewModel.coordinates.latitude)}"
                 app:layout_constraintStart_toStartOf="@+id/txtLong"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -57,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/default_margin_size"
                 android:layout_marginTop="@dimen/default_margin_size"
-                android:text="@string/lat_lang_placeholder"
+                android:text="@{@string/string_format(locationViewModel.coordinates.longitude)}"
                 app:layout_constraintStart_toEndOf="@+id/txtTitleLong"
                 app:layout_constraintTop_toBottomOf="@+id/txtLat" />
 
@@ -66,6 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/content_description_copy_lat_lang"
+                android:onClick="@{()->locationViewModel.initCopy()}"
                 android:src="@drawable/ic_copy_white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -83,7 +85,7 @@
             app:layout_constraintTop_toBottomOf="@+id/layoutLatLang">
 
             <com.google.android.gms.maps.MapView
-                android:id="@+id/mapView"
+                android:id="@+id/map"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>
@@ -112,6 +114,7 @@
                 android:layout_height="@dimen/height_button"
                 android:layout_marginEnd="@dimen/default_half_margin_size"
                 android:drawableStart="@drawable/ic_text_message"
+                android:onClick="@{()->locationViewModel.navigateToNewChat()}"
                 android:text="@string/txt_message"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline"
@@ -125,6 +128,7 @@
                 android:layout_height="@dimen/height_button"
                 android:layout_marginStart="@dimen/default_half_margin_size"
                 android:drawableStart="@drawable/ic_call_white"
+                android:onClick="@{()->locationViewModel.makeCall()}"
                 android:text="@string/txt_call"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

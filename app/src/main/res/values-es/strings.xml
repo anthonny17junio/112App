@@ -36,6 +36,8 @@
 
     <!--MENSAJES DE PERMISOS-->
     <string name="txt_permission_call">Por favor, acepta los permisos para realizar la llamada</string>
+    <string name="txt_permission_location">Por favor, accepta los permisos para utilizar tu ubicación</string>
+    <string name="location_no_enabled">Por favor, habilita la localización GPS de tu móvil</string>
 
     <!--LATERAL MENU-->
     <string name="content_description_logo112">Imagen logo 112</string>
@@ -82,5 +84,6 @@
     <string name="lat_title">Lat:</string>
     <string name="long_title">Long:</string>
     <string name="content_description_copy_lat_lang">Botón copiar latitud y longitud</string>
+    <string name="lat_long_copied">Latitud y longitud copiadas</string>
 
 </resources>

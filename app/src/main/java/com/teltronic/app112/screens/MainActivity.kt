@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity() {
         binding.mainActivityViewModel = viewModel
         binding.lifecycleOwner = this
         configureLateralMenu()
+
     }
 
     //Menú lateral
@@ -108,6 +109,7 @@ class MainActivity : AppCompatActivity() {
             navController.navigate(actionNavigate)
         }
     }
+
 
 
 }

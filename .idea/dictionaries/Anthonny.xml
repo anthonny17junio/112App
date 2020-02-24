@@ -2,15 +2,24 @@
   <dictionary name="Anthonny">
     <words>
       <w>abierto</w>
+      <w>accidente</w>
       <w>acepto</w>
       <w>acerca</w>
+      <w>acoso</w>
       <w>actualiza</w>
+      <w>acuático</w>
       <w>adipiscing</w>
+      <w>agresión</w>
       <w>ahora</w>
       <w>aliqua</w>
       <w>aliquip</w>
       <w>amet</w>
       <w>analizar</w>
+      <w>asalto</w>
+      <w>ascensor</w>
+      <w>ataque</w>
+      <w>atraco</w>
+      <w>atragantamiento</w>
       <w>aute</w>
       <w>avisos</w>
       <w>bien</w>
@@ -18,6 +27,7 @@
       <w>botones</w>
       <w>botón</w>
       <w>cada</w>
+      <w>calle</w>
       <w>cambia</w>
       <w>cambio</w>
       <w>cambios</w>
@@ -33,29 +43,38 @@
       <w>compruebo</w>
       <w>conceder</w>
       <w>configura</w>
+      <w>conocimiento</w>
       <w>consectetur</w>
       <w>consequat</w>
       <w>consistente</w>
       <w>contacto</w>
+      <w>convulsiones</w>
       <w>coordenadas</w>
       <w>cuando</w>
       <w>culpa</w>
       <w>cupidatat</w>
       <w>código</w>
+      <w>daño</w>
       <w>debe</w>
       <w>debería</w>
       <w>debido</w>
       <w>debo</w>
       <w>derecha</w>
       <w>deserunt</w>
+      <w>desmayo</w>
+      <w>dificultad</w>
       <w>dolore</w>
       <w>donde</w>
       <w>duis</w>
+      <w>edificio</w>
       <w>eiusmod</w>
       <w>ejecuta</w>
+      <w>electrocución</w>
       <w>elit</w>
+      <w>encerrado</w>
       <w>enim</w>
       <w>enviar</w>
+      <w>escolar</w>
       <w>españa</w>
       <w>español</w>
       <w>esse</w>
@@ -64,7 +83,9 @@
       <w>evitar</w>
       <w>excepteur</w>
       <w>exercitation</w>
+      <w>extraviado</w>
       <w>foto</w>
+      <w>fractura</w>
       <w>fugiat</w>
       <w>funcione</w>
       <w>función</w>
@@ -72,19 +93,26 @@
       <w>ggesh</w>
       <w>guardado</w>
       <w>guardados</w>
+      <w>género</w>
       <w>habilita</w>
       <w>habilitada</w>
       <w>haro</w>
+      <w>hemorragia</w>
+      <w>heridos</w>
       <w>icono</w>
       <w>idioma</w>
       <w>imagenes</w>
       <w>importante</w>
+      <w>incendio</w>
       <w>incididunt</w>
+      <w>infarto</w>
       <w>inicia</w>
       <w>inicializa</w>
       <w>inicializan</w>
       <w>inicializo</w>
+      <w>inminente</w>
       <w>instanciar</w>
+      <w>intoxicación</w>
       <w>irure</w>
       <w>labore</w>
       <w>laboris</w>
@@ -127,6 +155,10 @@
       <w>otros</w>
       <w>pantallas</w>
       <w>pariatur</w>
+      <w>parto</w>
+      <w>parálisis</w>
+      <w>pecho</w>
+      <w>pelea</w>
       <w>perfil</w>
       <w>permisos</w>
       <w>persmisos</w>
@@ -139,30 +171,46 @@
       <w>previamente</w>
       <w>programar</w>
       <w>proident</w>
+      <w>pérdida</w>
+      <w>quemadura</w>
       <w>quis</w>
+      <w>radicalismos</w>
       <w>realizo</w>
       <w>recieve</w>
       <w>reprehenderit</w>
+      <w>rescate</w>
+      <w>respirar</w>
       <w>retorno</w>
       <w>reverte</w>
       <w>revisar</w>
+      <w>robo</w>
+      <w>salvamento</w>
       <w>sanl</w>
       <w>setea</w>
       <w>siempre</w>
       <w>sint</w>
       <w>sistema</w>
+      <w>subcat</w>
+      <w>subcategory_</w>
+      <w>subcategoría</w>
       <w>sunt</w>
       <w>teltronic</w>
       <w>tempor</w>
       <w>tengo</w>
       <w>tienes</w>
+      <w>traumatismo</w>
+      <w>tráfico</w>
       <w>títulos</w>
       <w>ubicación</w>
       <w>ullamco</w>
       <w>usarla</w>
+      <w>vandalismo</w>
+      <w>vehículo</w>
       <w>velit</w>
       <w>veniam</w>
       <w>viewmodels</w>
+      <w>violencia</w>
+      <w>vivienda</w>
       <w>voluptate</w>
       <w>zaragoza</w>
     </words>

@@ -5,10 +5,16 @@ import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 
 import com.teltronic.app112.R
 import com.teltronic.app112.databinding.FragmentNewChatBinding
+import com.teltronic.app112.classes.Category
+import com.teltronic.app112.classes.Phone
+
 
 /**
  * A simple [Fragment] subclass.
@@ -32,6 +38,10 @@ class NewChatFragment : Fragment() {
         //Inicializo el viewModel
         viewModel = ViewModelProvider(this).get(NewChatViewModel::class.java)
 
+        configNavigationsObservers()
+        configIconsObservers()
+        configCallButtonObserver()
+
         //"Uno" el layout con esta clase por medio del binding
         binding.newChatViewModel = viewModel
         //Para que el ciclo de vida del binding sea consistente y funcione bien con LiveData
@@ -39,6 +49,7 @@ class NewChatFragment : Fragment() {
 
         setHasOptionsMenu(true) //Habilita el icono de la derecha
         //Retorno el binding root (no el inflater)
+
         return binding.root
     }
 
@@ -50,4 +61,78 @@ class NewChatFragment : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.new_chat_right_menu, menu)
     }
+
+    private fun configNavigationsObservers() {
+        configureNavigateToConfirmChatObserver()
+    }
+
+    private fun configureNavigateToConfirmChatObserver() {
+        //Listener a navegación de avisos (notices)
+        viewModel.boolNavigateToConfirmChat.observe(
+            this as LifecycleOwner,
+            Observer { shouldNavigate ->
+                if (shouldNavigate) {
+                    val actionNavigate =
+                        NewChatFragmentDirections.actionNewChatFragmentToConfirmMessageFragment()
+                    findNavController().navigate(actionNavigate)
+                    viewModel.navigateToConfirmChatComplete()
+                }
+            })
+    }
+
+    private fun configIconsObservers() {
+        viewModel.boolNavigateToCrimeSubcategory.observe(
+            this as LifecycleOwner,
+            Observer { shouldNavigate ->
+                if (shouldNavigate) {
+                    val crime = Category.CRIME
+                    val actionNavigate =
+                        NewChatFragmentDirections.actionNewChatFragmentToSubcategoriesNewChatFragment(crime)
+                    findNavController().navigate(actionNavigate)
+                    viewModel.navigateToCrimeSubcategoryComplete()
+                }
+            }
+        )
+
+        viewModel.idCrimeIcon.observe(
+            this as LifecycleOwner,
+            Observer { idImage ->
+                binding.btnCrime.setImageResource(idImage)
+            }
+        )
+
+        viewModel.idAccidentIcon.observe(
+            this as LifecycleOwner,
+            Observer { idImage ->
+                binding.btnAccident.setImageResource(idImage)
+            }
+        )
+
+        viewModel.idMedicalUrgencyIcon.observe(
+            this as LifecycleOwner,
+            Observer { idImage ->
+                binding.btnMedicalUrgency.setImageResource(idImage)
+            }
+        )
+
+        viewModel.idOtherIcon.observe(
+            this as LifecycleOwner,
+            Observer { idImage ->
+                binding.btnOther.setImageResource(idImage)
+            }
+        )
+    }
+
+    private fun configCallButtonObserver() {
+        viewModel.boolMakeCall.observe(
+            this as LifecycleOwner,
+            Observer { shouldCall ->
+                if (shouldCall) {
+                    viewModel.makeBoolCallComplete()
+                    Phone.makeCall(activity!!)
+                }
+            }
+        )
+    }
 }
+

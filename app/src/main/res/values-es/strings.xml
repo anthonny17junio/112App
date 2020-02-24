@@ -14,6 +14,8 @@
     <string name="location_title">UBICACIÓN</string>
     <string name="chats_title">CHATS</string>
     <string name="new_chat_title">NUEVO CHAT</string>
+    <string name="confirm_chat_title">CONFIRMACIÓN</string>
+    <string name="subcategories_new_chat_title">SELECCIONE UNA OPCIÓN</string>
 
     <string name="user_profile_title">PERFIL DE USUARIO</string>
     <string name="medical_information_title">INFORMACIÓN MÉDICA</string>
@@ -91,5 +93,14 @@
     <string name="txt_accident">Accidente</string>
     <string name="txt_medical_urgency">Urgencia médica</string>
     <string name="txt_other">Otro</string>
+
+    <!--SCREEN SUBCATEGORIES-->
+    <string name="content_description_btn_crime">Botón crimen</string>
+    <string name="content_description_btn_accident">Botón accidente</string>
+    <string name="content_description_btn_medical_urgency">Botón urgencia médica</string>
+    <string name="content_description_other">Botón otro</string>
+
+    <!--SUBCATEGORIES CHAT-->
+    <string name="subcategory_accident_car_with_injured">Accidente de tráfico con heridos</string>
 
 </resources>

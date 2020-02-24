@@ -43,7 +43,8 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:$version_navigation"
     implementation "com.google.android.material:material:1.1.0"
     implementation 'com.jakewharton.timber:timber:4.7.1' //Timber  (clase 4 lección 5)
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0' //Para generar viewmodels (clase 5 lección 8)
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    //Para generar viewmodels (clase 5 lección 8)
     implementation 'de.hdodenhof:circleimageview:3.0.0' //Para imagenes circulares
     implementation "androidx.preference:preference-ktx:1.1.0" //Para sharedPreferences
     implementation 'com.google.android.gms:play-services-maps:17.0.0'

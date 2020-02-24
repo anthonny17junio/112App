@@ -98,5 +98,41 @@
         android:id="@+id/newChatFragment"
         android:name="com.teltronic.app112.screens.newChat.NewChatFragment"
         android:label="@string/new_chat_title"
-        tools:layout="@layout/fragment_new_chat" />
+        tools:layout="@layout/fragment_new_chat" >
+        <action
+            android:id="@+id/action_newChatFragment_to_confirmMessageFragment"
+            app:destination="@id/confirmMessageFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_newChatFragment_to_subcategoriesNewChatFragment"
+            app:destination="@id/subcategoriesNewChatFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/confirmMessageFragment"
+        android:name="com.teltronic.app112.screens.confirmMessage.ConfirmMessageFragment"
+        android:label="@string/confirm_chat_title"
+        tools:layout="@layout/fragment_confirm_message" />
+    <fragment
+        android:id="@+id/subcategoriesNewChatFragment"
+        android:name="com.teltronic.app112.screens.subcategoriesChat.SubcategoriesNewChatFragment"
+        android:label="@string/subcategories_new_chat_title"
+        tools:layout="@layout/fragment_subcategories_new_chat" >
+        <action
+            android:id="@+id/action_subcategoriesNewChatFragment_to_confirmMessageFragment"
+            app:destination="@id/confirmMessageFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <argument
+            android:name="category"
+            app:argType="com.teltronic.app112.classes.Category" />
+    </fragment>
 </navigation>

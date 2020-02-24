@@ -86,7 +86,8 @@ object Phone {
 
     @SuppressLint("MissingPermission")
     private fun makeCallIntent(activity: Activity) { //Se debe comprobar previamente si ya tienes permisos
-        val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "+34976465656"))
+        val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "+34661314793"))
+//        val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "+34976465656")) //Teltronic
         activity.startActivity(intent)
     }
 

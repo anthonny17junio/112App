@@ -1,0 +1,41 @@
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+
+    <ImageView
+        android:id="@+id/icon_subcategory"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:contentDescription="@string/content_description_subcategory_icon"
+        android:padding="@dimen/default_margin_size"
+        tools:src="@drawable/ic_subcategory_accident_car_with_injured" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/txt_subcategory"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignTop="@+id/icon_subcategory"
+        android:layout_alignBottom="@+id/icon_subcategory"
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@+id/icon_subcategory">
+
+        <TextView
+            android:id="@+id/lbl_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAlignment="viewStart"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/subcategory_accident_car_with_injured"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</RelativeLayout>

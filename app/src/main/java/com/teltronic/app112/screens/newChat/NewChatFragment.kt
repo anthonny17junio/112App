@@ -38,8 +38,8 @@ class NewChatFragment : Fragment() {
         //Inicializo el viewModel
         viewModel = ViewModelProvider(this).get(NewChatViewModel::class.java)
 
-        configNavigationsObservers()
         configIconsObservers()
+        configNavigationsObservers()
         configCallButtonObserver()
 
         //"Uno" el layout con esta clase por medio del binding
@@ -87,9 +87,41 @@ class NewChatFragment : Fragment() {
                 if (shouldNavigate) {
                     val crime = Category.CRIME
                     val actionNavigate =
-                        NewChatFragmentDirections.actionNewChatFragmentToSubcategoriesNewChatFragment(crime)
+                        NewChatFragmentDirections.actionNewChatFragmentToSubcategoriesNewChatFragment(
+                            crime
+                        )
                     findNavController().navigate(actionNavigate)
                     viewModel.navigateToCrimeSubcategoryComplete()
+                }
+            }
+        )
+
+        viewModel.boolNavigateToAccidentSubcategory.observe(
+            this as LifecycleOwner,
+            Observer { shouldNavigate ->
+                if (shouldNavigate) {
+                    val crime = Category.ACCIDENT
+                    val actionNavigate =
+                        NewChatFragmentDirections.actionNewChatFragmentToSubcategoriesNewChatFragment(
+                            crime
+                        )
+                    findNavController().navigate(actionNavigate)
+                    viewModel.navigateToAccidentSubcategoryComplete()
+                }
+            }
+        )
+
+        viewModel.boolNavigateToMedicalUrgencySubcategory.observe(
+            this as LifecycleOwner,
+            Observer { shouldNavigate ->
+                if (shouldNavigate) {
+                    val crime = Category.MEDICAL_URGENCY
+                    val actionNavigate =
+                        NewChatFragmentDirections.actionNewChatFragmentToSubcategoriesNewChatFragment(
+                            crime
+                        )
+                    findNavController().navigate(actionNavigate)
+                    viewModel.navigateToMedicalUrgencySubcategoryComplete()
                 }
             }
         )

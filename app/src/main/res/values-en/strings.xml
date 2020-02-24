@@ -99,6 +99,42 @@
     <string name="content_description_other">Other button</string>
 
     <!--SUBCATEGORIES CHAT-->
+    <string name="content_description_subcategory_icon">Subcategory icon</string>
+    <!--Delito-->
+    <string name="subcategory_crime_robbery">Robbery</string>
+    <string name="subcategory_crime_vandalism">Vandalism, property damage</string>
+    <string name="subcategory_crime_aggression">Aggression, fight</string>
+    <string name="subcategory_crime_sexual_assault">Sexual assault</string>
+    <string name="subcategory_crime_gender_violence">Gender violence</string>
+    <string name="subcategory_crime_bullying">Bullying</string>
+    <string name="subcategory_crime_radicalisms">Radicalisms</string>
+    <!--Accidente-->
     <string name="subcategory_accident_car_with_injured">Traffic accident with injured</string>
+    <string name="subcategory_accident_car_without_injured">Traffic accident without injured</string>
+    <string name="subcategory_accident_vehicle_fire">Vehicle fire</string>
+    <string name="subcategory_accident_street_accident">Accident in the street</string>
+    <string name="subcategory_accident_housing_accident">Accident at hone</string>
+    <string name="subcategory_accident_house_fire">House fire</string>
+    <string name="subcategory_accident_locked_inside_house">Locked in housing</string>
+    <string name="subcategory_accident_locked_inside_elevator">Locked in elevator</string>
+    <string name="subcategory_accident_mountain_accident">Accident / rescue in the bush</string>
+    <string name="subcategory_accident_mountain_lost">Lost in the bush</string>
+    <string name="subcategory_accident_aquatic_rescue">Water rescue</string>
+    <string name="subcategory_accident_animal_attack">Animal attack</string>
+    <string name="subcategory_accident_other">Other</string>
+    <!--Urgencia médica-->
+    <string name="subcategory_medical_urgency_fainting">Loss of consciousness or fainting</string>
+    <string name="subcategory_medical_urgency_heart_attack">Chest pain / heart attack</string>
+    <string name="subcategory_medical_urgency_paralysis">Paralysis</string>
+    <string name="subcategory_medical_urgency_difficulty_breathing">Shortness of breath</string>
+    <string name="subcategory_medical_urgency_chocking">Chocking</string>
+    <string name="subcategory_medical_urgency_seizures">Seizures</string>
+    <string name="subcategory_medical_urgency_fracture">Fracture or trauma</string>
+    <string name="subcategory_medical_urgency_hemorrhage">Hemorrhage</string>
+    <string name="subcategory_medical_urgency_poisoning">Poisoning</string>
+    <string name="subcategory_medical_urgency_imminent_childbirth">Imminent childbirth</string>
+    <string name="subcategory_medical_urgency_electrocution">Electrocution</string>
+    <string name="subcategory_medical_urgency_burn">Burn</string>
+    <string name="subcategory_medical_urgency_animal_attack">Animal attack</string>
 
 </resources>

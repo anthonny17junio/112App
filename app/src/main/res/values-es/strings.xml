@@ -101,6 +101,43 @@
     <string name="content_description_other">Botón otro</string>
 
     <!--SUBCATEGORIES CHAT-->
+    <string name="content_description_subcategory_icon">Icono de subcategoría</string>
+    <!--SUBCATEGORIES CHAT-->
+    <!--Delito-->
+    <string name="subcategory_crime_robbery">Robo, atraco, asalto</string>
+    <string name="subcategory_crime_vandalism">Vandalismo, daño</string>
+    <string name="subcategory_crime_aggression">Agresión, pelea</string>
+    <string name="subcategory_crime_sexual_assault">Agresión sexual</string>
+    <string name="subcategory_crime_gender_violence">Violencia de género</string>
+    <string name="subcategory_crime_bullying">Acoso escolar</string>
+    <string name="subcategory_crime_radicalisms">Radicalismos</string>
+    <!--Accidente-->
     <string name="subcategory_accident_car_with_injured">Accidente de tráfico con heridos</string>
+    <string name="subcategory_accident_car_without_injured">Accidente de tráfico sin heridos</string>
+    <string name="subcategory_accident_vehicle_fire">Incendio de vehículo</string>
+    <string name="subcategory_accident_street_accident">Accidente en la calle</string>
+    <string name="subcategory_accident_housing_accident">Accidente en la vivienda</string>
+    <string name="subcategory_accident_house_fire">Incendio en la vivienda / edificio</string>
+    <string name="subcategory_accident_locked_inside_house">Encerrado en la vivienda</string>
+    <string name="subcategory_accident_locked_inside_elevator">Encerrado en el ascensor</string>
+    <string name="subcategory_accident_mountain_accident">Accidente / Rescate en el monte</string>
+    <string name="subcategory_accident_mountain_lost">Extraviado en el monte</string>
+    <string name="subcategory_accident_aquatic_rescue">Salvamento / rescate acuático</string>
+    <string name="subcategory_accident_animal_attack">Ataque de animal</string>
+    <string name="subcategory_accident_other">Otros</string>
+    <!--Urgencia médica-->
+    <string name="subcategory_medical_urgency_fainting">Pérdida de conocimiento / desmayo</string>
+    <string name="subcategory_medical_urgency_heart_attack">Dolor de pecho / infarto</string>
+    <string name="subcategory_medical_urgency_paralysis">Parálisis</string>
+    <string name="subcategory_medical_urgency_difficulty_breathing">Dificultad al respirar</string>
+    <string name="subcategory_medical_urgency_chocking">Atragantamiento</string>
+    <string name="subcategory_medical_urgency_seizures">Convulsiones</string>
+    <string name="subcategory_medical_urgency_fracture">Fractura / traumatismo</string>
+    <string name="subcategory_medical_urgency_hemorrhage">Hemorragia</string>
+    <string name="subcategory_medical_urgency_poisoning">Intoxicación</string>
+    <string name="subcategory_medical_urgency_imminent_childbirth">Parto inminente</string>
+    <string name="subcategory_medical_urgency_electrocution">Electrocución</string>
+    <string name="subcategory_medical_urgency_burn">Quemadura</string>
+    <string name="subcategory_medical_urgency_animal_attack">Ataque de animal</string>
 
 </resources>

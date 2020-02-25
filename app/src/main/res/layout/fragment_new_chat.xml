@@ -11,7 +11,7 @@
             type="com.teltronic.app112.screens.newChat.NewChatViewModel" />
 
         <variable
-            name="categories"
+            name="category"
             type="com.teltronic.app112.classes.Category" />
     </data>
 
@@ -46,7 +46,7 @@
                     style="@style/btnMainIconButtons"
                     android:layout_marginTop="50dp"
                     android:contentDescription="@string/content_description_btn_crime"
-                    android:onClick="@{()->newChatViewModel.navigateToCrimeSubcategory()}"
+                    android:onClick="@{()->newChatViewModel.navigateToCategory(category.CRIME)}"
                     app:layout_constraintEnd_toStartOf="@+id/guideline3"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -57,7 +57,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/default_half_margin_size"
-                    android:text="@{categories.CRIME.idTitle}"
+                    android:onClick="@{()->newChatViewModel.navigateToCategory(category.CRIME)}"
+                    android:text="@{category.CRIME.idTitle}"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="@+id/btnCrime"
@@ -69,7 +70,7 @@
                     android:id="@+id/btnAccident"
                     style="@style/btnMainIconButtons"
                     android:contentDescription="@string/content_description_btn_accident"
-                    android:onClick="@{()->newChatViewModel.navigateToAccidentSubcategory()}"
+                    android:onClick="@{()->newChatViewModel.navigateToCategory(category.ACCIDENT)}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/guideline3"
                     app:layout_constraintTop_toTopOf="@+id/btnCrime"
@@ -80,7 +81,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/default_half_margin_size"
-                    android:text="@{categories.ACCIDENT.idTitle}"
+                    android:onClick="@{()->newChatViewModel.navigateToCategory(category.ACCIDENT)}"
+                    android:text="@{category.ACCIDENT.idTitle}"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="@+id/btnAccident"
@@ -93,7 +95,7 @@
                     style="@style/btnMainIconButtons"
                     android:layout_marginTop="@dimen/default_double_margin_size"
                     android:contentDescription="@string/content_description_btn_medical_urgency"
-                    android:onClick="@{()->newChatViewModel.navigateToMedicalUrgencySubcategory()}"
+                    android:onClick="@{()->newChatViewModel.navigateToCategory(category.MEDICAL_URGENCY)}"
                     app:layout_constraintEnd_toEndOf="@+id/btnCrime"
                     app:layout_constraintStart_toStartOf="@+id/btnCrime"
                     app:layout_constraintTop_toBottomOf="@+id/txtBtnCrime"
@@ -104,7 +106,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/default_half_margin_size"
-                    android:text="@{categories.MEDICAL_URGENCY.idTitle}"
+                    android:onClick="@{()->newChatViewModel.navigateToCategory(category.MEDICAL_URGENCY)}"
+                    android:text="@{category.MEDICAL_URGENCY.idTitle}"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="@+id/btnMedicalUrgency"

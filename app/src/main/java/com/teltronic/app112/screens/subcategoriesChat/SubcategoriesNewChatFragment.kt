@@ -39,7 +39,7 @@ class SubcategoriesNewChatFragment : Fragment() {
         val args = SubcategoriesNewChatFragmentArgs.fromBundle(arguments!!)
         val category = args.category
 
-        viewModelFactory = SubcategoriesNewChatViewModelFactory(category)
+        viewModelFactory = SubcategoriesNewChatViewModelFactory(category, activity as Activity)
         viewModel =
             ViewModelProvider(this, viewModelFactory).get(SubcategoriesNewChatViewModel::class.java)
 
@@ -52,6 +52,7 @@ class SubcategoriesNewChatFragment : Fragment() {
         //Retorno el binding root (no el inflater)
 
         configSubcategoriesObserver()
+        configListItemListener()
 
         return binding.root
     }
@@ -66,17 +67,17 @@ class SubcategoriesNewChatFragment : Fragment() {
     }
 
     private fun configSubcategoriesObserver() {
-        viewModel.boolListInitialSet.observe(
+        viewModel.listAdapter.observe(
             this as LifecycleOwner,
-            Observer { boolListInit ->
-                if (!boolListInit) {
-                    val listSubcategory = viewModel.listSubcategories.value
-                    val adapter = SubcategoriesListAdapter(activity as Activity, listSubcategory!!)
-
-                    binding.lvSubcategories.adapter = adapter
-                    viewModel.changeListInitBool()
-                }
+            Observer { listAdapter ->
+                binding.lvSubcategories.adapter = listAdapter
             }
         )
+    }
+
+    private fun configListItemListener(){
+        binding.lvSubcategories.setOnItemClickListener{parent, view, position, id ->
+
+        }
     }
 }

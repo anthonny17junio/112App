@@ -68,68 +68,21 @@ class NewChatFragment : Fragment() {
         configureNavigateToConfirmChatObserver()
     }
 
-    private fun configureNavigateToConfirmChatObserver() {
-        //Listener a navegación de avisos (notices)
-        viewModel.boolNavigateToConfirmChat.observe(
-            this as LifecycleOwner,
-            Observer { shouldNavigate ->
-                if (shouldNavigate) {
-                    val actionNavigate =
-                        NewChatFragmentDirections.actionNewChatFragmentToConfirmMessageFragment(
-                            Subcategory.OTHER
-                        )
-                    findNavController().navigate(actionNavigate)
-                    viewModel.navigateToConfirmChatComplete()
-                }
-            })
-    }
 
     @SuppressLint("DefaultLocale")
     private fun configIconsObservers() {
-        viewModel.boolNavigateToCrimeSubcategory.observe(
+        viewModel.categoryNavigate.observe(
             this as LifecycleOwner,
-            Observer { shouldNavigate ->
-                if (shouldNavigate) {
-                    val crime = Category.CRIME
+            Observer { category ->
+                if (category != null) {
+                    val category = viewModel.categoryNavigate.value!!
                     val actionNavigate =
                         NewChatFragmentDirections.actionNewChatFragmentToSubcategoriesNewChatFragment(
-                            crime
-                            , resources.getString(R.string.txt_crime).toUpperCase()
+                            category
+                            , resources.getString(category.idTitle).toUpperCase()
                         )
                     findNavController().navigate(actionNavigate)
-                    viewModel.navigateToCrimeSubcategoryComplete()
-                }
-            }
-        )
-
-        viewModel.boolNavigateToAccidentSubcategory.observe(
-            this as LifecycleOwner,
-            Observer { shouldNavigate ->
-                if (shouldNavigate) {
-                    val crime = Category.ACCIDENT
-                    val actionNavigate =
-                        NewChatFragmentDirections.actionNewChatFragmentToSubcategoriesNewChatFragment(
-                            crime
-                            , resources.getString(R.string.txt_accident).toUpperCase()
-                        )
-                    findNavController().navigate(actionNavigate)
-                    viewModel.navigateToAccidentSubcategoryComplete()
-                }
-            }
-        )
-
-        viewModel.boolNavigateToMedicalUrgencySubcategory.observe(
-            this as LifecycleOwner,
-            Observer { shouldNavigate ->
-                if (shouldNavigate) {
-                    val crime = Category.MEDICAL_URGENCY
-                    val actionNavigate =
-                        NewChatFragmentDirections.actionNewChatFragmentToSubcategoriesNewChatFragment(
-                            crime
-                            , resources.getString(R.string.txt_medical_urgency).toUpperCase()
-                        )
-                    findNavController().navigate(actionNavigate)
-                    viewModel.navigateToMedicalUrgencySubcategoryComplete()
+                    viewModel.navigateCategoryComplete()
                 }
             }
         )
@@ -161,6 +114,23 @@ class NewChatFragment : Fragment() {
                 binding.btnOther.setImageResource(idImage)
             }
         )
+    }
+
+
+    private fun configureNavigateToConfirmChatObserver() {
+        //Listener a navegación de avisos (notices)
+        viewModel.boolNavigateToConfirmChat.observe(
+            this as LifecycleOwner,
+            Observer { shouldNavigate ->
+                if (shouldNavigate) {
+                    val actionNavigate =
+                        NewChatFragmentDirections.actionNewChatFragmentToConfirmMessageFragment(
+                            Subcategory.OTHER
+                        )
+                    findNavController().navigate(actionNavigate)
+                    viewModel.navigateToConfirmChatComplete()
+                }
+            })
     }
 
     private fun configCallButtonObserver() {

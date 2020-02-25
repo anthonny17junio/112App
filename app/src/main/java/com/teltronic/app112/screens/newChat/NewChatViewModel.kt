@@ -38,17 +38,9 @@ class NewChatViewModel : ViewModel() {
         get() = _idTxtOther
 
     //Navigations
-    private var _boolNavigateToCrimeSubcategory = MutableLiveData<Boolean>()
-    val boolNavigateToCrimeSubcategory: LiveData<Boolean>
-        get() = _boolNavigateToCrimeSubcategory
-
-    private var _boolNavigateToAccidentSubcategory = MutableLiveData<Boolean>()
-    val boolNavigateToAccidentSubcategory: LiveData<Boolean>
-        get() = _boolNavigateToAccidentSubcategory
-
-    private var _boolNavigateToMedicalUrgencySubcategory = MutableLiveData<Boolean>()
-    val boolNavigateToMedicalUrgencySubcategory: LiveData<Boolean>
-        get() = _boolNavigateToMedicalUrgencySubcategory
+    private var _categoryNavigate = MutableLiveData<Category>()
+    val categoryNavigate: LiveData<Category>
+        get() = _categoryNavigate
 
     private var _boolNavigateToConfirmChat = MutableLiveData<Boolean>()
     val boolNavigateToConfirmChat: LiveData<Boolean>
@@ -60,12 +52,8 @@ class NewChatViewModel : ViewModel() {
         get() = _boolMakeCall
 
     init {
+        _categoryNavigate.value = null
         _boolNavigateToConfirmChat.value = false
-        _boolNavigateToCrimeSubcategory.value = false
-        _boolNavigateToAccidentSubcategory.value = false
-        _boolNavigateToMedicalUrgencySubcategory.value = false
-
-
 
         _idTxtCrime.value = Category.CRIME.idTitle
         _idCrimeIcon.value = Category.CRIME.idIcon
@@ -83,36 +71,20 @@ class NewChatViewModel : ViewModel() {
 
     }
 
+    fun navigateCategoryComplete() {
+        _categoryNavigate.value = null
+    }
+
+    fun navigateToCategory(category: Category) {
+        _categoryNavigate.value = category
+    }
+
     fun navigateToConfirmChat() {
         _boolNavigateToConfirmChat.value = true
     }
 
     fun navigateToConfirmChatComplete() {
         _boolNavigateToConfirmChat.value = false
-    }
-
-    fun navigateToCrimeSubcategory() {
-        _boolNavigateToCrimeSubcategory.value = true
-    }
-
-    fun navigateToCrimeSubcategoryComplete() {
-        _boolNavigateToCrimeSubcategory.value = false
-    }
-
-    fun navigateToAccidentSubcategory() {
-        _boolNavigateToAccidentSubcategory.value = true
-    }
-
-    fun navigateToAccidentSubcategoryComplete() {
-        _boolNavigateToAccidentSubcategory.value = false
-    }
-
-    fun navigateToMedicalUrgencySubcategory() {
-        _boolNavigateToMedicalUrgencySubcategory.value = true
-    }
-
-    fun navigateToMedicalUrgencySubcategoryComplete() {
-        _boolNavigateToMedicalUrgencySubcategory.value = false
     }
 
     //Make call

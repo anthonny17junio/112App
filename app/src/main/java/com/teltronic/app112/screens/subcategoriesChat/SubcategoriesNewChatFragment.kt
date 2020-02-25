@@ -52,6 +52,7 @@ class SubcategoriesNewChatFragment : Fragment() {
         //Retorno el binding root (no el inflater)
 
         configSubcategoriesObserver()
+
         return binding.root
     }
 

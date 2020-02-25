@@ -1,6 +1,7 @@
 package com.teltronic.app112.screens.newChat
 
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil
@@ -14,6 +15,7 @@ import com.teltronic.app112.R
 import com.teltronic.app112.databinding.FragmentNewChatBinding
 import com.teltronic.app112.classes.Category
 import com.teltronic.app112.classes.Phone
+import com.teltronic.app112.classes.Subcategory
 
 
 /**
@@ -73,13 +75,16 @@ class NewChatFragment : Fragment() {
             Observer { shouldNavigate ->
                 if (shouldNavigate) {
                     val actionNavigate =
-                        NewChatFragmentDirections.actionNewChatFragmentToConfirmMessageFragment()
+                        NewChatFragmentDirections.actionNewChatFragmentToConfirmMessageFragment(
+                            Subcategory.OTHER
+                        )
                     findNavController().navigate(actionNavigate)
                     viewModel.navigateToConfirmChatComplete()
                 }
             })
     }
 
+    @SuppressLint("DefaultLocale")
     private fun configIconsObservers() {
         viewModel.boolNavigateToCrimeSubcategory.observe(
             this as LifecycleOwner,
@@ -89,6 +94,7 @@ class NewChatFragment : Fragment() {
                     val actionNavigate =
                         NewChatFragmentDirections.actionNewChatFragmentToSubcategoriesNewChatFragment(
                             crime
+                            , resources.getString(R.string.txt_crime).toUpperCase()
                         )
                     findNavController().navigate(actionNavigate)
                     viewModel.navigateToCrimeSubcategoryComplete()
@@ -104,6 +110,7 @@ class NewChatFragment : Fragment() {
                     val actionNavigate =
                         NewChatFragmentDirections.actionNewChatFragmentToSubcategoriesNewChatFragment(
                             crime
+                            , resources.getString(R.string.txt_accident).toUpperCase()
                         )
                     findNavController().navigate(actionNavigate)
                     viewModel.navigateToAccidentSubcategoryComplete()
@@ -119,6 +126,7 @@ class NewChatFragment : Fragment() {
                     val actionNavigate =
                         NewChatFragmentDirections.actionNewChatFragmentToSubcategoriesNewChatFragment(
                             crime
+                            , resources.getString(R.string.txt_medical_urgency).toUpperCase()
                         )
                     findNavController().navigate(actionNavigate)
                     viewModel.navigateToMedicalUrgencySubcategoryComplete()

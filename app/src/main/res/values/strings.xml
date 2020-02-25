@@ -24,8 +24,6 @@
     <string name="chats_title">CHATS</string>
     <string name="new_chat_title">NEW CHAT</string>
     <string name="confirm_chat_title">CONFIRMATION</string>
-    <string name="subcategories_new_chat_title">SELECT AN OPTION</string>
-
     <string name="user_profile_title">USER PROFILE</string>
     <string name="medical_information_title">MEDICAL INFORMATION</string>
     <string name="configuration_title">CONFIGURATION</string>
@@ -49,7 +47,6 @@
     <string name="txt_permission_call">Please, accept the permissions to make the call</string>
     <string name="txt_permission_location">Please, accept the permissions to use the location</string>
     <string name="location_no_enabled">Please, enable the GPS location of your phone</string>
-
 
     <!--LATERAL MENU-->
     <string name="content_description_logo112">Logo 112 image</string>

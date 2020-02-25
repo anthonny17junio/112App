@@ -29,8 +29,13 @@ class ConfirmMessageFragment : Fragment() {
             container,
             false
         )
+
         //Inicializo el viewModel
-        viewModel = ViewModelProvider(this).get(ConfirmMessageViewModel::class.java)
+        val args = ConfirmMessageFragmentArgs.fromBundle(arguments!!)
+        val subcategory = args.subcategory
+        val viewModelFactory = ConfirmMessageViewModelFactory(subcategory)
+        viewModel =
+            ViewModelProvider(this, viewModelFactory).get(ConfirmMessageViewModel::class.java)
 
         //"Uno" el layout con esta clase por medio del binding
         binding.confirmMessageViewModel = viewModel

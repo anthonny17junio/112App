@@ -25,7 +25,6 @@ import com.teltronic.app112.databinding.FragmentLocationBinding
 class LocationFragment : Fragment(), OnMapReadyCallback {
     private lateinit var binding: FragmentLocationBinding
     private lateinit var viewModel: LocationViewModel
-    private lateinit var viewModelFactory: LocationViewModelFactory
 
     private lateinit var mGoogleMap: GoogleMap
     private lateinit var mMapView: MapView
@@ -42,7 +41,7 @@ class LocationFragment : Fragment(), OnMapReadyCallback {
             false
         )
         //Inicializo el viewModel
-        viewModelFactory = LocationViewModelFactory(activity)
+        val viewModelFactory = LocationViewModelFactory(activity)
         viewModel =
             ViewModelProvider(this, viewModelFactory).get(LocationViewModel::class.java) //Ahora
 

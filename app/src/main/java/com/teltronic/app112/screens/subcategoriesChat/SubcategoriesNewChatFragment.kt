@@ -9,10 +9,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-
+import androidx.navigation.fragment.findNavController
 import com.teltronic.app112.R
-import com.teltronic.app112.adapters.SubcategoriesListAdapter
+import com.teltronic.app112.classes.Subcategory
+
 import com.teltronic.app112.databinding.FragmentSubcategoriesNewChatBinding
+
 
 /**
  * A simple [Fragment] subclass.
@@ -21,8 +23,6 @@ class SubcategoriesNewChatFragment : Fragment() {
 
     private lateinit var binding: FragmentSubcategoriesNewChatBinding
     private lateinit var viewModel: SubcategoriesNewChatViewModel
-    private lateinit var viewModelFactory: SubcategoriesNewChatViewModelFactory
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,7 +39,7 @@ class SubcategoriesNewChatFragment : Fragment() {
         val args = SubcategoriesNewChatFragmentArgs.fromBundle(arguments!!)
         val category = args.category
 
-        viewModelFactory = SubcategoriesNewChatViewModelFactory(category, activity as Activity)
+        val viewModelFactory = SubcategoriesNewChatViewModelFactory(category, activity as Activity)
         viewModel =
             ViewModelProvider(this, viewModelFactory).get(SubcategoriesNewChatViewModel::class.java)
 
@@ -53,6 +53,7 @@ class SubcategoriesNewChatFragment : Fragment() {
 
         configSubcategoriesObserver()
         configListItemListener()
+        configSubcategoryNavigateObserver()
 
         return binding.root
     }
@@ -75,9 +76,28 @@ class SubcategoriesNewChatFragment : Fragment() {
         )
     }
 
-    private fun configListItemListener(){
-        binding.lvSubcategories.setOnItemClickListener{parent, view, position, id ->
-
+    private fun configListItemListener() {
+        binding.lvSubcategories.setOnItemClickListener { adapter, view, position, id ->
+            val subcategory = adapter.getItemAtPosition(position) as Subcategory
+            viewModel.navigateToSubcategory(subcategory)
         }
     }
+
+    //Se ejecuta cuando se hace click en un subcategoría
+    private fun configSubcategoryNavigateObserver() {
+        viewModel.subcategoryNavigate.observe(
+            this as LifecycleOwner,
+            Observer { subcategory ->
+                if (subcategory != null) {
+                    val actionNavigate =
+                        SubcategoriesNewChatFragmentDirections.actionSubcategoriesNewChatFragmentToConfirmMessageFragment(
+                            subcategory
+                        )
+                    findNavController().navigate(actionNavigate)
+                    viewModel.navigateSubcategoryComplete()
+                }
+            }
+        )
+    }
+
 }

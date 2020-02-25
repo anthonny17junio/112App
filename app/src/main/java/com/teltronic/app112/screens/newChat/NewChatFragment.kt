@@ -13,7 +13,6 @@ import androidx.navigation.fragment.findNavController
 
 import com.teltronic.app112.R
 import com.teltronic.app112.databinding.FragmentNewChatBinding
-import com.teltronic.app112.classes.Category
 import com.teltronic.app112.classes.Phone
 import com.teltronic.app112.classes.Subcategory
 

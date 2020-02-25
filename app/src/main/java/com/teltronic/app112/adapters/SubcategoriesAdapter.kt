@@ -33,6 +33,7 @@ class SubcategoriesListAdapter(
                 activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             view = inflater.inflate(R.layout.item_subcategory, null)
             viewHolder = ViewHolder(view)
+
             view.tag = viewHolder
         } else {
             view = convertView
@@ -46,7 +47,7 @@ class SubcategoriesListAdapter(
         return view
     }
 
-    override fun getItem(position: Int): Any {
+    override fun getItem(position: Int): Subcategory {
         return subcategories[position]
     }
 

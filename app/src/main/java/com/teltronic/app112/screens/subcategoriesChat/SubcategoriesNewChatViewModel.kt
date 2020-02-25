@@ -13,26 +13,27 @@ import com.teltronic.app112.classes.Subcategory
 class SubcategoriesNewChatViewModel(category: Category, activity: Activity) : ViewModel() {
     private var _listSubcategories = MutableLiveData<List<Subcategory>>()
 
+    private var _subcategoryNavigate = MutableLiveData<Subcategory>()
+    val subcategoryNavigate: LiveData<Subcategory>
+        get() = _subcategoryNavigate
+
     private var _listAdapter = MutableLiveData<ListAdapter>()
     val listAdapter: LiveData<ListAdapter>
         get() = _listAdapter
 
-    private var _boolNavigateToConfirmChat = MutableLiveData<Boolean>()
-    val boolNavigateToConfirmChat: LiveData<Boolean>
-        get() = _boolNavigateToConfirmChat
 
     init {
         _listSubcategories.value = Subcategories(category).listSubcategories
-        _boolNavigateToConfirmChat.value = false
+        _subcategoryNavigate.value = null
         //Inicializo el adaptador para el list view de subcategorías
         _listAdapter.value = SubcategoriesListAdapter(activity, _listSubcategories.value!!)
     }
 
-    fun navigateToConfirmChat() {
-        _boolNavigateToConfirmChat.value = true
+    fun navigateSubcategoryComplete() {
+        _subcategoryNavigate.value = null
     }
 
-    fun navigateToConfirmChatComplete() {
-        _boolNavigateToConfirmChat.value = false
+    fun navigateToSubcategory(subcategory: Subcategory) {
+        _subcategoryNavigate.value = subcategory
     }
 }

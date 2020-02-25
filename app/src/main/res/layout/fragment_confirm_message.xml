@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".screens.confirmMessage.ConfirmMessageFragment">
 
@@ -12,13 +13,114 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="@dimen/default_margin_size">
 
         <!-- TODO: Update blank fragment layout -->
+
+        <Button
+            android:id="@+id/btnCancel"
+            style="@style/btnCancel"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/height_button"
+            android:layout_marginEnd="@dimen/default_half_margin_size"
+            android:drawableStart="@drawable/ic_cancel_white"
+            android:text="@string/txt_cancel"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/btnConfirm"
+            style="@style/btnPrimaryRed"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/height_button"
+            android:layout_marginStart="@dimen/default_half_margin_size"
+            android:drawableStart="@drawable/ic_done_white"
+            android:onClick="@{()->confirmMessageViewModel.navigateToChat()}"
+            android:text="@string/txt_confirm"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintGuide_percent="0.50"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <TextView
+            android:id="@+id/txtSubcategory"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/default_margin_size"
+            android:text="@{confirmMessageViewModel.subcategory.idTitle}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtInform"
+            tools:text="@string/subcategory_accident_car_with_injured" />
+
+        <ImageView
+            android:id="@+id/imgSubcategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_double_margin_size"
+            android:contentDescription="@string/content_description_confirmation_image"
+            android:tint="@color/colorPrimaryDark"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_subcategory_accident_car_with_injured" />
+
+        <TextView
+            android:id="@+id/txtInform"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_double_margin_size"
+            android:text="@{@string/inform_format(confirmMessageViewModel.strCategory)}"
+            android:textAllCaps="true"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imgSubcategory"
+            tools:text="INFORM ACCIDENT" />
+
+        <TextView
+            android:id="@+id/txtNotice"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/hello_blank_fragment" />
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/default_margin_size"
+            android:text="@string/txt_notice"
+            app:layout_constraintBottom_toTopOf="@+id/btnCancel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <CheckBox
+            android:id="@+id/chkRealTimeLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/txt_chk_location"
+            app:layout_constraintBottom_toTopOf="@+id/txtNotice"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtSubcategory" />
+
+        <ImageView
+            android:id="@+id/imgInfoRealTime"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="@dimen/default_half_margin_size"
+            android:contentDescription="@string/content_description_information"
+            android:src="@drawable/ic_info"
+            android:tint="@color/colorAccent"
+            app:layout_constraintStart_toEndOf="@+id/chkRealTimeLocation"
+            app:layout_constraintTop_toTopOf="@+id/chkRealTimeLocation" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

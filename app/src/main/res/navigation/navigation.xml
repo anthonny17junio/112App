@@ -122,6 +122,13 @@
         <argument
             android:name="subcategory"
             app:argType="com.teltronic.app112.classes.Subcategory" />
+        <action
+            android:id="@+id/action_confirmMessageFragment_to_chatFragment"
+            app:destination="@id/chatFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/subcategoriesNewChatFragment"
@@ -142,4 +149,9 @@
             android:name="title"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.teltronic.app112.screens.chat.ChatFragment"
+        android:label="@string/chat_title"
+        tools:layout="@layout/fragment_chat" />
 </navigation>

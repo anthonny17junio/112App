@@ -3,7 +3,6 @@
     <!--OTROS-->
     <string name="app_name">112App</string>
     <string name="right_icon">Icono derecho</string>
-    <string name="hello_blank_fragment">Hola fragmento vacío</string>
     <string name="txt_call">LLAMAR</string>
     <string name="txt_save">GUARDAR</string>
     <string name="txt_message">MENSAJE</string>
@@ -138,5 +137,15 @@
     <string name="subcategory_medical_urgency_electrocution">Electrocución</string>
     <string name="subcategory_medical_urgency_burn">Quemadura</string>
     <string name="subcategory_medical_urgency_animal_attack">Ataque de animal</string>
+
+    <!--CONFIRMATION SCREEN-->
+    <string name="inform_format" >Informar %s</string>
+    <string name="txt_confirm">Confirmar</string>
+    <string name="txt_cancel">Cancelar</string>
+    <string name="content_description_confirmation_image">Logo de emergencia</string>
+    <string name="txt_notice"><b>Aviso: </b> Al iniciar el chat, se envía tu ubicación y tus datos al centro de atención.</string>
+    <string name="txt_chk_location">Ubicación en tiempo real</string>
+    <string name="txt_chk_location_info">Si activas esta opción, enviarás preiódicamente tu ubicación mientras la alerta se encuentre activa.</string>
+    <string name="content_description_information">Information button</string>
 
 </resources>

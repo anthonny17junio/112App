@@ -6,6 +6,7 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 
 import com.teltronic.app112.R
 import com.teltronic.app112.databinding.FragmentUserProfileBinding
@@ -38,6 +39,7 @@ class UserProfileFragment : Fragment() {
         //Para que el ciclo de vida del binding sea consistente y funcione bien con LiveData
         binding.lifecycleOwner = this
 
+        configureBackButton()
         setHasOptionsMenu(true) //Habilita el icono de la derecha
         //Retorno el binding root (no el inflater)
         return binding.root
@@ -50,5 +52,11 @@ class UserProfileFragment : Fragment() {
     ) { //Habilita el icono de la derecha
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.edit_profile_screen_right_menu, menu)
+    }
+
+    private fun configureBackButton() {
+        binding.btnCancel.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 }

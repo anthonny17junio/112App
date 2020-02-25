@@ -46,7 +46,9 @@ class LocationViewModel(activity: FragmentActivity?) : ViewModel() {
             LocationServices.getFusedLocationProviderClient(_activity as Activity)
         mFusedLocationClient.lastLocation.addOnCompleteListener(_activity as Activity) { task ->
             val location: Location? = task.result
-            _coordinates.value = LatLng(location!!.latitude, location.longitude)
+            if (location != null) {
+                _coordinates.value = LatLng(location.latitude, location.longitude)
+            }
         }
         return null
     }

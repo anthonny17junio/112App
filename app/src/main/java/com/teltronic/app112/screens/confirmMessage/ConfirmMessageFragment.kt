@@ -1,11 +1,16 @@
 package com.teltronic.app112.screens.confirmMessage
 
 
+import android.app.Activity
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 
 import com.teltronic.app112.R
 import com.teltronic.app112.databinding.FragmentConfirmMessageBinding
@@ -33,9 +38,11 @@ class ConfirmMessageFragment : Fragment() {
         //Inicializo el viewModel
         val args = ConfirmMessageFragmentArgs.fromBundle(arguments!!)
         val subcategory = args.subcategory
-        val viewModelFactory = ConfirmMessageViewModelFactory(subcategory)
+        val viewModelFactory = ConfirmMessageViewModelFactory(subcategory, activity as Activity)
         viewModel =
             ViewModelProvider(this, viewModelFactory).get(ConfirmMessageViewModel::class.java)
+
+        binding.imgSubcategory.setImageResource(subcategory.idIcon)
 
         //"Uno" el layout con esta clase por medio del binding
         binding.confirmMessageViewModel = viewModel
@@ -43,6 +50,9 @@ class ConfirmMessageFragment : Fragment() {
         binding.lifecycleOwner = this
 
         setHasOptionsMenu(true) //Habilita el icono de la derecha
+        configureInfoRealtime()
+        configureBackButton()
+        configureConfirmButtonObserver()
         //Retorno el binding root (no el inflater)
         return binding.root
     }
@@ -55,5 +65,45 @@ class ConfirmMessageFragment : Fragment() {
     ) { //Habilita el icono de la derecha
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.chats_right_menu, menu)
+    }
+
+    private fun configureInfoRealtime() {
+        binding.imgInfoRealTime.setOnClickListener {
+            // Initialize a new instance of
+            val builder = AlertDialog.Builder(activity)
+
+            // Set the alert dialog title
+            builder.setTitle(resources.getString(R.string.txt_chk_location))
+
+            // Display a message on alert dialog
+            builder.setMessage(resources.getString(R.string.txt_chk_location_info))
+
+
+            // Finally, make the alert dialog using builder
+            val dialog: AlertDialog = builder.create()
+
+            // Display the alert dialog on app interface
+            dialog.show()
+        }
+    }
+
+    private fun configureBackButton() {
+        binding.btnCancel.setOnClickListener {
+            findNavController().popBackStack()
+        }
+    }
+
+    private fun configureConfirmButtonObserver() {
+        viewModel.boolNavigateToChat.observe(
+            this as LifecycleOwner,
+            Observer { shouldNavigate ->
+                if (shouldNavigate) {
+                    val actionNavigate =
+                        ConfirmMessageFragmentDirections.actionConfirmMessageFragmentToChatFragment()
+                    findNavController().navigate(actionNavigate)
+                    viewModel.navigateToChatComplete()
+                }
+            }
+        )
     }
 }

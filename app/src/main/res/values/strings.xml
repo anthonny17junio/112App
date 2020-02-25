@@ -9,7 +9,7 @@
     <!--OTROS-->
     <string name="app_name">112App</string>
     <string name="right_icon">Right icon</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" translatable="false">Blank fragment</string>
     <string name="txt_call">CALL</string>
     <string name="txt_save">SAVE</string>
     <string name="txt_message">MESSAGE</string>
@@ -29,6 +29,7 @@
     <string name="configuration_title">CONFIGURATION</string>
     <string name="about_title">ABOUT</string>
     <string name="legal_notice_title">LEGAL NOTICE</string>
+    <string name="chat_title" translatable="false">CHAT</string>
 
     <!--OPCIONES DEL MENÚ LATERAL-->
     <string name="edit_profile">Edit profile</string>
@@ -167,5 +168,16 @@
     <string name="subcategory_medical_urgency_electrocution">Electrocution</string>
     <string name="subcategory_medical_urgency_burn">Burn</string>
     <string name="subcategory_medical_urgency_animal_attack">Animal attack</string>
+
+    <!--CONFIRMATION SCREEN-->
+    <string name="inform_format">Inform %s</string>
+    <string name="txt_confirm">Confirm</string>
+    <string name="txt_cancel">Cancel</string>
+    <string name="content_description_confirmation_image">Logo emergency</string>
+    <string name="txt_notice"><b>Notice: </b> When you start the chat, your location and your data are sent to the emergency center.</string>
+    <string name="txt_chk_location">Real time location</string>
+    <string name="txt_chk_location_info">If you check this option, you will periodically send your location while the alert is active.</string>
+    <string name="content_description_information">Information button</string>
+
 
 </resources>

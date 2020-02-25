@@ -1,4 +1,4 @@
-package com.teltronic.app112.screens.medicalInfo
+package com.teltronic.app112.screens.chat
 
 
 import android.os.Bundle
@@ -6,18 +6,17 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 
 import com.teltronic.app112.R
-import com.teltronic.app112.databinding.FragmentMedicalInfoBinding
+import com.teltronic.app112.databinding.FragmentChatBinding
 
 /**
  * A simple [Fragment] subclass.
  */
-class MedicalInfoFragment : Fragment() {
+class ChatFragment : Fragment() {
 
-    private lateinit var binding: FragmentMedicalInfoBinding
-    private lateinit var viewModel: MedicalInfoViewModel
+    private lateinit var binding: FragmentChatBinding
+    private lateinit var viewModel: ChatViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,20 +25,19 @@ class MedicalInfoFragment : Fragment() {
         //Inicializo el binding
         binding = DataBindingUtil.inflate(
             inflater,
-            R.layout.fragment_medical_info,
+            R.layout.fragment_chat,
             container,
             false
         )
-
         //Inicializo el viewModel
-        viewModel = ViewModelProvider(this).get(MedicalInfoViewModel::class.java)
+        val viewModelFactory = ChatViewModelFactory()
+        viewModel = ViewModelProvider(this, viewModelFactory).get(ChatViewModel::class.java)
 
         //"Uno" el layout con esta clase por medio del binding
-        binding.medicalInfoViewModel = viewModel
+        binding.chatViewModel = viewModel
         //Para que el ciclo de vida del binding sea consistente y funcione bien con LiveData
         binding.lifecycleOwner = this
 
-        configureBackButton()
         setHasOptionsMenu(true) //Habilita el icono de la derecha
         //Retorno el binding root (no el inflater)
         return binding.root
@@ -51,12 +49,7 @@ class MedicalInfoFragment : Fragment() {
         inflater: MenuInflater
     ) { //Habilita el icono de la derecha
         super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.medical_info_screen_right_menu, menu)
+        inflater.inflate(R.menu.chats_right_menu, menu)
     }
 
-    private fun configureBackButton() {
-        binding.btnCancel.setOnClickListener {
-            findNavController().popBackStack()
-        }
-    }
 }

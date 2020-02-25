@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 
 import com.teltronic.app112.R
 import com.teltronic.app112.classes.Preferences
@@ -47,6 +48,7 @@ class ConfigurationFragment : Fragment() {
         //Retorno el binding root (no el inflater)
 
         configureBtnSaveObserver()
+        configureBackButton()
         return binding.root
     }
 
@@ -81,4 +83,9 @@ class ConfigurationFragment : Fragment() {
         )
     }
 
+    private fun configureBackButton() {
+        binding.btnCancel.setOnClickListener {
+            findNavController().popBackStack()
+        }
+    }
 }

@@ -18,7 +18,8 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+            android:layout_marginBottom="@dimen/default_margin_size"
+            app:layout_constraintBottom_toTopOf="@+id/btnCancel"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -27,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="@dimen/default_double_margin_size"
+                android:padding="@dimen/default_margin_size"
                 app:layout_constraintBottom_toTopOf="@+id/btnSave"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -36,7 +37,6 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/default_double_margin_size"
                     android:text="@string/title_allergy"
                     android:textStyle="bold" />
 
@@ -110,25 +110,45 @@
 
         </ScrollView>
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginBottom="@dimen/default_double_margin_size"
-            android:gravity="center"
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintGuide_percent="0.50"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+        <Button
+            android:id="@+id/btnCancel"
+            style="@style/btnCancel"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/height_button"
+            android:layout_marginStart="@dimen/default_margin_size"
+            android:layout_marginEnd="@dimen/default_half_margin_size"
+            android:layout_marginBottom="@dimen/default_margin_size"
+            android:drawableStart="@drawable/ic_cancel_white"
+            android:text="@string/txt_cancel"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/btnSave"
+            style="@style/btnPrimaryRed"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/height_button"
+            android:layout_marginStart="@dimen/default_half_margin_size"
+            android:layout_marginEnd="@dimen/default_margin_size"
+            android:layout_marginBottom="@dimen/default_margin_size"
+            android:drawableStart="@drawable/ic_save_white"
+            android:text="@string/txt_save"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="@+id/guideline" />
 
-            <Button
-                android:id="@+id/btnSave"
-                style="@style/btnPrimaryRed"
-                android:layout_width="@dimen/width_button"
-                android:layout_height="@dimen/height_button"
-                android:drawableStart="@drawable/ic_save_white"
-                android:text="@string/txt_save"
-                android:textStyle="bold" />
-        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

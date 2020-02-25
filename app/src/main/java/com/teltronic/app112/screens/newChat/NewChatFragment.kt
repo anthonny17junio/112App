@@ -86,35 +86,11 @@ class NewChatFragment : Fragment() {
             }
         )
 
-        viewModel.idCrimeIcon.observe(
-            this as LifecycleOwner,
-            Observer { idImage ->
-                binding.btnCrime.setImageResource(idImage)
-            }
-        )
-
-        viewModel.idAccidentIcon.observe(
-            this as LifecycleOwner,
-            Observer { idImage ->
-                binding.btnAccident.setImageResource(idImage)
-            }
-        )
-
-        viewModel.idMedicalUrgencyIcon.observe(
-            this as LifecycleOwner,
-            Observer { idImage ->
-                binding.btnMedicalUrgency.setImageResource(idImage)
-            }
-        )
-
-        viewModel.idOtherIcon.observe(
-            this as LifecycleOwner,
-            Observer { idImage ->
-                binding.btnOther.setImageResource(idImage)
-            }
-        )
+        binding.btnCrime.setImageResource(viewModel.idCrimeIcon.value!!)
+        binding.btnAccident.setImageResource(viewModel.idAccidentIcon.value!!)
+        binding.btnMedicalUrgency.setImageResource(viewModel.idMedicalUrgencyIcon.value!!)
+        binding.btnOther.setImageResource(viewModel.idOtherIcon.value!!)
     }
-
 
     private fun configureNavigateToConfirmChatObserver() {
         //Listener a navegación de avisos (notices)

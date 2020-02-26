@@ -52,15 +52,6 @@ class ConfigurationFragment : Fragment() {
         return binding.root
     }
 
-    //Inicia el menú de la derecha (en este caso solo es un icono)
-    override fun onCreateOptionsMenu(
-        menu: Menu,
-        inflater: MenuInflater
-    ) { //Habilita el icono de la derecha
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.configuration_screen_right_menu, menu)
-    }
-
     private fun configureBtnSaveObserver() {
         viewModel.boolSave.observe(
             this as LifecycleOwner,
@@ -86,6 +77,28 @@ class ConfigurationFragment : Fragment() {
     private fun configureBackButton() {
         binding.btnCancel.setOnClickListener {
             findNavController().popBackStack()
+        }
+    }
+
+    //Inicia el menú de la derecha (en este caso solo es un icono)
+    override fun onCreateOptionsMenu(
+        menu: Menu,
+        inflater: MenuInflater
+    ) { //Habilita el icono de la derecha
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.home_right_menu, menu)
+    }
+
+    //Navega al main fragment cuando se presiona el icono home
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.homeIconItem -> {
+                val actionNavigate = ConfigurationFragmentDirections.actionConfigurationFragmentToMainFragment()
+                findNavController().navigate(actionNavigate)
+                true
+            }
+            else ->
+                false
         }
     }
 }

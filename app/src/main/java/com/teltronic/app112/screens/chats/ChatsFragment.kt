@@ -6,6 +6,7 @@ import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 
 import com.teltronic.app112.R
 import com.teltronic.app112.databinding.FragmentChatsBinding
@@ -48,6 +49,19 @@ class ChatsFragment : Fragment() {
         inflater: MenuInflater
     ) { //Habilita el icono de la derecha
         super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.chats_right_menu, menu)
+        inflater.inflate(R.menu.home_right_menu, menu)
+    }
+
+    //Navega al main fragment cuando se presiona el icono home
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.homeIconItem -> {
+                val actionNavigate = ChatsFragmentDirections.actionChatsFragmentToMainFragment()
+                findNavController().navigate(actionNavigate)
+                true
+            }
+            else ->
+                false
+        }
     }
 }

@@ -45,18 +45,31 @@ class UserProfileFragment : Fragment() {
         return binding.root
     }
 
+    private fun configureBackButton() {
+        binding.btnCancel.setOnClickListener {
+            findNavController().popBackStack()
+        }
+    }
+
     //Inicia el menú de la derecha (en este caso solo es un icono)
     override fun onCreateOptionsMenu(
         menu: Menu,
         inflater: MenuInflater
     ) { //Habilita el icono de la derecha
         super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.edit_profile_screen_right_menu, menu)
+        inflater.inflate(R.menu.home_right_menu, menu)
     }
 
-    private fun configureBackButton() {
-        binding.btnCancel.setOnClickListener {
-            findNavController().popBackStack()
+    //Navega al main fragment cuando se presiona el icono home
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.homeIconItem -> {
+                val actionNavigate = UserProfileFragmentDirections.actionUserProfileFragmentToMainFragment()
+                findNavController().navigate(actionNavigate)
+                true
+            }
+            else ->
+                false
         }
     }
 }

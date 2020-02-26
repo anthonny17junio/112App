@@ -137,6 +137,19 @@ class LocationFragment : Fragment(), OnMapReadyCallback {
         inflater: MenuInflater
     ) { //Habilita el icono de la derecha
         super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.location_screen_right_menu, menu)
+        inflater.inflate(R.menu.home_right_menu, menu)
+    }
+
+    //Navega al main fragment cuando se presiona el icono home
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.homeIconItem -> {
+                val actionNavigate = LocationFragmentDirections.actionLocationFragmentToMainFragment()
+                findNavController().navigate(actionNavigate)
+                true
+            }
+            else ->
+                false
+        }
     }
 }

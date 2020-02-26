@@ -58,15 +58,6 @@ class ConfirmMessageFragment : Fragment() {
     }
 
 
-    //Inicia el menú de la derecha (en este caso solo es un icono)
-    override fun onCreateOptionsMenu(
-        menu: Menu,
-        inflater: MenuInflater
-    ) { //Habilita el icono de la derecha
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.chats_right_menu, menu)
-    }
-
     private fun configureInfoRealtime() {
         binding.imgInfoRealTime.setOnClickListener {
             // Initialize a new instance of
@@ -105,5 +96,27 @@ class ConfirmMessageFragment : Fragment() {
                 }
             }
         )
+    }
+
+    //Inicia el menú de la derecha (en este caso solo es un icono)
+    override fun onCreateOptionsMenu(
+        menu: Menu,
+        inflater: MenuInflater
+    ) { //Habilita el icono de la derecha
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.home_right_menu, menu)
+    }
+
+    //Navega al main fragment cuando se presiona el icono home
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.homeIconItem -> {
+                val actionNavigate = ConfirmMessageFragmentDirections.actionConfirmMessageFragmentToMainFragment()
+                findNavController().navigate(actionNavigate)
+                true
+            }
+            else ->
+                false
+        }
     }
 }

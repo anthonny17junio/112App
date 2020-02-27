@@ -16,8 +16,11 @@ import com.teltronic.app112.databinding.FragmentChatsBinding
  */
 class ChatsFragment : Fragment() {
 
+
+
     private lateinit var binding: FragmentChatsBinding
     private lateinit var viewModel: ChatsViewModel
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

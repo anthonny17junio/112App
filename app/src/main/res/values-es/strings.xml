@@ -7,6 +7,7 @@
     <string name="txt_save">GUARDAR</string>
     <string name="txt_message">MENSAJE</string>
     <string name="changes_saved">Cambios guardados</string>
+    <string name="title_biometric">Escanea tu huella</string>
 
     <!--TÍTULOS DE LAS PANTALLAS-->
     <string name="notices_title">AVISOS</string>

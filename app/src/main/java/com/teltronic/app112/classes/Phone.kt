@@ -8,34 +8,35 @@ import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.net.Uri
 import android.widget.Toast
+import androidx.biometric.BiometricPrompt
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.findNavController
 import com.teltronic.app112.R
 import com.teltronic.app112.screens.mainScreen.MainFragmentDirections
+import java.util.concurrent.Executors
 
 object Phone {
 
-    private const val CALL_REQUEST_CODE = 100
-    private const val LOCATION_REQUEST_CODE = 200
 
-    fun existLocationPermission(context: FragmentActivity?): Boolean {
+    fun existPermission(context: FragmentActivity?, perm:PermissionsApp): Boolean {
         val permission =
             ContextCompat.checkSelfPermission(
                 context!!,
-                android.Manifest.permission.ACCESS_FINE_LOCATION
+                perm.manifestName
             ) //Compruebo si tengo permisos
 
         return permission == PackageManager.PERMISSION_GRANTED
     }
 
 
-    fun askLocationPermissionLocation(context: FragmentActivity) {
+    fun askPermission(context: FragmentActivity, perm:PermissionsApp) {
         ActivityCompat.requestPermissions(
             context,
-            arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
-            LOCATION_REQUEST_CODE
+            arrayOf(perm.manifestName),
+            perm.code
         )
     }
 
@@ -44,14 +45,14 @@ object Phone {
         activity: Activity, requestCode: Int, grantResults: IntArray
     ) {
         when (requestCode) {
-            CALL_REQUEST_CODE -> {
+            PermissionsApp.CALL_PHONE.code -> {
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                     makeCallIntent(activity)
                 } else {
                     Toast.makeText(activity, R.string.txt_permission_call, Toast.LENGTH_LONG).show()
                 }
             }
-            LOCATION_REQUEST_CODE -> {
+            PermissionsApp.FINE_LOCATION.code -> {
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                     //Si acepto los permisos navego a "location screen"
                     val actionNavigate =
@@ -70,14 +71,14 @@ object Phone {
         val permission =
             ContextCompat.checkSelfPermission(
                 context,
-                android.Manifest.permission.CALL_PHONE
+                PermissionsApp.CALL_PHONE.manifestName
             ) //Compruebo si tengo permisos
 
         if (permission != PackageManager.PERMISSION_GRANTED) { //Si no los tengo los pido
             ActivityCompat.requestPermissions(
                 context,
-                arrayOf(android.Manifest.permission.CALL_PHONE),
-                CALL_REQUEST_CODE
+                arrayOf(PermissionsApp.CALL_PHONE.manifestName),
+                PermissionsApp.CALL_PHONE.code
             )
         } else { //Si los tengo realizo la llamada
             makeCallIntent(context)
@@ -97,5 +98,54 @@ object Phone {
             activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
     }
+
+    /*Esta variable (boolNavigateLiveData) trabaja conjuntamente con biometricAuth
+    si en el override onAuthenticationSucceeded se pone boolNavigateLiveDataParam.value = true
+    solo se ejecuta una vez dicho override y siempre irá a la misma pantalla
+    */
+    private lateinit var boolNavigateLiveData: MutableLiveData<Boolean>
+
+    fun biometricAuth(
+        activity: FragmentActivity, //activity (si está en un fragment)
+        boolNavigateLiveDataParam: MutableLiveData<Boolean>
+    ) {
+        boolNavigateLiveData = boolNavigateLiveDataParam
+        fun changeNavigateLiveDataToTrue() {
+            boolNavigateLiveData.value = true
+        }
+
+        val executor = Executors.newSingleThreadExecutor()
+        val biometricPrompt = BiometricPrompt(
+            activity,
+            executor,
+            object : BiometricPrompt.AuthenticationCallback() {
+                override fun onAuthenticationError(
+                    errorCode: Int,
+                    errString: CharSequence
+                ) {
+                    super.onAuthenticationError(errorCode, errString)
+                    //Si el error es diferente a que el usuario ha presionado fuera de la pantalla
+                    if (errorCode != BiometricPrompt.ERROR_USER_CANCELED) {
+                        Toast.makeText(activity, errString.toString(), Toast.LENGTH_LONG)
+                            .show() //Muestra el error
+                    }
+                }
+
+                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                    changeNavigateLiveDataToTrue()
+                    super.onAuthenticationSucceeded(result)
+                }
+            })
+
+        val promptInfo = BiometricPrompt.PromptInfo.Builder()
+            .setTitle(activity.resources.getString(R.string.title_biometric))
+            .setDeviceCredentialAllowed(true) //Pide el patrón
+            .build()
+
+        biometricPrompt.authenticate(promptInfo)
+
+
+    }
+
 }
 

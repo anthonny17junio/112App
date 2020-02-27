@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 
 import com.teltronic.app112.R
+import com.teltronic.app112.classes.PermissionsApp
 import com.teltronic.app112.classes.Phone
 import com.teltronic.app112.databinding.FragmentMainBinding
 
@@ -19,6 +20,9 @@ import com.teltronic.app112.databinding.FragmentMainBinding
  * A simple [Fragment] subclass.
  */
 class MainFragment : Fragment() {
+
+
+//    private val executor = Executor { }
 
     private lateinit var binding: FragmentMainBinding
     private lateinit var viewModel: MainViewModel
@@ -93,14 +97,18 @@ class MainFragment : Fragment() {
                             Toast.LENGTH_LONG
                         ).show()
                     } else
-                        if (Phone.existLocationPermission(activity)) {
+                        if (Phone.existPermission(
+                                activity,
+                                PermissionsApp.FINE_LOCATION
+                            )
+                        ) {
                             //Si tienes permisos de localización navegas a location screen
                             val actionNavigate =
                                 MainFragmentDirections.actionMainFragmentToLocationFragment()
                             findNavController().navigate(actionNavigate)
                         } else {
                             //Si no tienes permisos de localización los pides
-                            Phone.askLocationPermissionLocation(activity!!)
+                            Phone.askPermission(activity!!,PermissionsApp.FINE_LOCATION)
                         }
                     viewModel.onNavigateToLocationComplete()
                 }
@@ -114,7 +122,8 @@ class MainFragment : Fragment() {
             Observer { shouldNavigate ->
                 if (shouldNavigate) {
                     val actionNavigate = MainFragmentDirections.actionMainFragmentToChatsFragment()
-                    findNavController().navigate(actionNavigate)
+                    findNavController().navigate(actionNavigate) //Si se desea ir directamente
+//                    Phone.biometricAuth(activity!!, findNavController(), actionNavigate) //Si se desea que pida la huella para ir
                     viewModel.navigateToChatsComplete()
                 }
             })

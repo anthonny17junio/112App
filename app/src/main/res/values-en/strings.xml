@@ -6,6 +6,7 @@
     <string name="txt_save">SAVE</string>
     <string name="txt_message">MESSAGE</string>
     <string name="changes_saved">Changes saved</string>
+    <string name="title_biometric">Touch the fingerprint sensor</string>
 
     <!--TÍTULOS DE LAS PANTALLAS-->
     <string name="notices_title">NOTICES</string>

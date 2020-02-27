@@ -15,7 +15,6 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.teltronic.app112.classes.Phone
 import com.teltronic.app112.databinding.ActivityMainBinding
-import androidx.navigation.NavController
 import com.teltronic.app112.R
 import com.teltronic.app112.classes.Preferences
 import com.teltronic.app112.screens.mainScreen.MainFragmentDirections

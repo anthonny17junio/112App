@@ -50,4 +50,5 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.google.android.gms:play-services-location:17.0.0'//Para google maps
     implementation 'androidx.biometric:biometric:1.0.1' //Para autenticación biométrica
+    implementation 'com.google.android.gms:play-services-auth:17.0.0' //Para la autenticación por google account
 }

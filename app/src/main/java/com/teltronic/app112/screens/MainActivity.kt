@@ -13,11 +13,23 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.SignInButton
 import com.teltronic.app112.classes.Phone
 import com.teltronic.app112.databinding.ActivityMainBinding
-import com.teltronic.app112.R
 import com.teltronic.app112.classes.Preferences
 import com.teltronic.app112.screens.mainScreen.MainFragmentDirections
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import android.view.View
+import androidx.core.app.ActivityCompat.startActivityForResult
+import android.content.Intent
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.teltronic.app112.R
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -43,6 +55,7 @@ class MainActivity : AppCompatActivity() {
 
         configureLateralMenu()
         configureNavigationObservers()
+        googleAuth()
     }
 
     //Menú lateral
@@ -67,7 +80,8 @@ class MainActivity : AppCompatActivity() {
 
     //Configura el onClick de la foto de perfil del header del menú lateral
     private fun configureOnClickImageProfileLateralMenu() {
-        val imgProfileLateralMenu: ImageView = binding.lateralMenu.getHeaderView(0).findViewById(R.id.img_profile)
+        val imgProfileLateralMenu: ImageView =
+            binding.lateralMenu.getHeaderView(0).findViewById(R.id.img_profile)
         imgProfileLateralMenu.setOnClickListener {
             viewModel.navigateToUserProfile(this)
         }
@@ -135,7 +149,7 @@ class MainActivity : AppCompatActivity() {
     private fun configUserProfileItemClickListener(menu: Menu) {
         menu.findItem(R.id.userProfileFragment).setOnMenuItemClickListener {
             viewModel.navigateToUserProfile(this)
-            false
+            true
         }
     }
 
@@ -143,11 +157,12 @@ class MainActivity : AppCompatActivity() {
         viewModel.boolNavigateToUserProfile.observe(this as LifecycleOwner,
             Observer { shouldNavigate ->
                 if (shouldNavigate) {
-//                    if (navController.currentDestination?.id == navController.graph.startDestination) {
-                    val actionNavigate =
-                        MainFragmentDirections.actionMainFragmentToUserProfileFragment()
-                    findNavController(R.id.myNavHostFragment).navigate(actionNavigate)
-//                    }
+                    val navCont = findNavController(R.id.myNavHostFragment)
+                    if (navCont.currentDestination?.id == navCont.graph.startDestination) {
+                        val actionNavigate =
+                            MainFragmentDirections.actionMainFragmentToUserProfileFragment()
+                        navCont.navigate(actionNavigate)
+                    }
                     viewModel.navigateToUserProfileComplete()
                 }
             }
@@ -167,86 +182,121 @@ class MainActivity : AppCompatActivity() {
         viewModel.boolNavigateToMedicalInfo.observe(this as LifecycleOwner,
             Observer { shouldNavigate ->
                 if (shouldNavigate) {
-//                    if (navController.currentDestination?.id == navController.graph.startDestination) {
-                    val actionNavigate =
-                        MainFragmentDirections.actionMainFragmentToMedicalInfoFragment()
-                    findNavController(R.id.myNavHostFragment).navigate(actionNavigate)
-//                    }
+                    val navCont = findNavController(R.id.myNavHostFragment)
+                    if (navCont.currentDestination?.id == navCont.graph.startDestination) {
+                        val actionNavigate =
+                            MainFragmentDirections.actionMainFragmentToMedicalInfoFragment()
+                        navCont.navigate(actionNavigate)
+                    }
                     viewModel.navigateToMedicalInfoComplete()
                 }
             }
         )
     }
 
-     //Configuration click listener and observer
-     // **************************************************
-     private fun configConfigurationItemClickListener(menu: Menu) {
-         menu.findItem(R.id.configurationFragment).setOnMenuItemClickListener {
-             viewModel.navigateToConfiguration()
-             true
-         }
-     }
-     private fun configureNavigationConfigurationObserver() {
-         viewModel.boolNavigateToConfiguration.observe(this as LifecycleOwner,
-             Observer { shouldNavigate ->
-                 if (shouldNavigate) {
- //                    if (navController.currentDestination?.id == navController.graph.startDestination) {
-                     val actionNavigate =
-                         MainFragmentDirections.actionMainFragmentToConfigurationFragment()
-                     findNavController(R.id.myNavHostFragment).navigate(actionNavigate)
- //                    }
-                     viewModel.navigateToConfigurationComplete()
-                 }
-             }
-         )
-     }
+    //Configuration click listener and observer
+    // **************************************************
+    private fun configConfigurationItemClickListener(menu: Menu) {
+        menu.findItem(R.id.configurationFragment).setOnMenuItemClickListener {
+            viewModel.navigateToConfiguration()
+            true
+        }
+    }
 
-     //Legal notice click listener and observer
-     // **************************************************
-     private fun configLegalNoticeItemClickListener(menu: Menu) {
-         menu.findItem(R.id.legalNoticeFragment).setOnMenuItemClickListener {
-             viewModel.navigateToLegalNotice()
-             true
-         }
-     }
+    private fun configureNavigationConfigurationObserver() {
+        viewModel.boolNavigateToConfiguration.observe(this as LifecycleOwner,
+            Observer { shouldNavigate ->
+                if (shouldNavigate) {
+                    val navCont = findNavController(R.id.myNavHostFragment)
+                    if (navCont.currentDestination?.id == navCont.graph.startDestination) {
+                        val actionNavigate =
+                            MainFragmentDirections.actionMainFragmentToConfigurationFragment()
+                        navCont.navigate(actionNavigate)
+                    }
+                    viewModel.navigateToConfigurationComplete()
+                }
+            }
+        )
+    }
 
-     private fun configureNavigationLegalNoticeObserver() {
-         viewModel.boolNavigateToLegalNotice.observe(this as LifecycleOwner,
-             Observer { shouldNavigate ->
-                 if (shouldNavigate) {
- //                    if (navController.currentDestination?.id == navController.graph.startDestination) {
-                     val actionNavigate =
-                         MainFragmentDirections.actionMainFragmentToLegalNoticeFragment()
-                     findNavController(R.id.myNavHostFragment).navigate(actionNavigate)
- //                    }
-                     viewModel.navigateToLegalNoticeComplete()
-                 }
-             }
-         )
-     }
+    //Legal notice click listener and observer
+    // **************************************************
+    private fun configLegalNoticeItemClickListener(menu: Menu) {
+        menu.findItem(R.id.legalNoticeFragment).setOnMenuItemClickListener {
+            viewModel.navigateToLegalNotice()
+            true
+        }
+    }
 
-     //About click listener and observer
-     // **************************************************
-     private fun configAboutItemClickListener(menu: Menu) {
-         menu.findItem(R.id.aboutFragment).setOnMenuItemClickListener {
-             viewModel.navigateToAbout()
-             true
-         }
-     }
+    private fun configureNavigationLegalNoticeObserver() {
+        viewModel.boolNavigateToLegalNotice.observe(this as LifecycleOwner,
+            Observer { shouldNavigate ->
+                if (shouldNavigate) {
+                    val navCont = findNavController(R.id.myNavHostFragment)
+                    if (navCont.currentDestination?.id == navCont.graph.startDestination) {
+                        val actionNavigate =
+                            MainFragmentDirections.actionMainFragmentToLegalNoticeFragment()
+                        navCont.navigate(actionNavigate)
+                    }
+                    viewModel.navigateToLegalNoticeComplete()
+                }
+            }
+        )
+    }
 
-     private fun configureNavigationAboutObserver() {
-         viewModel.boolNavigateToAbout.observe(this as LifecycleOwner,
-             Observer { shouldNavigate ->
-                 if (shouldNavigate) {
- //                    if (navController.currentDestination?.id == navController.graph.startDestination) {
-                     val actionNavigate =
-                         MainFragmentDirections.actionMainFragmentToAboutFragment()
-                     findNavController(R.id.myNavHostFragment).navigate(actionNavigate)
- //                    }
-                     viewModel.navigateToAboutComplete()
-                 }
-             }
-         )
-     }
+    //About click listener and observer
+    // **************************************************
+    private fun configAboutItemClickListener(menu: Menu) {
+        menu.findItem(R.id.aboutFragment).setOnMenuItemClickListener {
+            viewModel.navigateToAbout()
+            true
+        }
+    }
 
+    private fun configureNavigationAboutObserver() {
+        viewModel.boolNavigateToAbout.observe(this as LifecycleOwner,
+            Observer { shouldNavigate ->
+                if (shouldNavigate) {
+                    val navCont = findNavController(R.id.myNavHostFragment)
+                    if (navCont.currentDestination?.id == navCont.graph.startDestination
+                    ) {
+                        val actionNavigate =
+                            MainFragmentDirections.actionMainFragmentToAboutFragment()
+                        navCont.navigate(actionNavigate)
+                    }
+                    viewModel.navigateToAboutComplete()
+                }
+            }
+        )
+    }
+
+    private lateinit var mGoogleSignInClient: GoogleSignInClient
+    private fun googleAuth() {
+        //https://developers.google.com/identity/sign-in/android/sign-in
+
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .build()
+
+        // Build a GoogleSignInClient with the options specified by gso.
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
+
+        val account = GoogleSignIn.getLastSignedInAccount(this)
+//        updateUI(account)
+
+//        findViewById<SignInButton>(R.id.sign_in_button).setOnClickListener{
+//            this
+//        }
+    }
+
+    fun onClick(v: View) {
+//        when (v.getId()) {
+//            R.id.sign_in_button -> signIn()
+//        }// ...
+    }
+
+    private fun signIn() {
+        val signInIntent = mGoogleSignInClient.getSignInIntent()
+        startActivityForResult(signInIntent, 100)
+    }
 }

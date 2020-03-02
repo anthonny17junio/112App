@@ -8,8 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 
-import com.teltronic.app112.R
 import com.teltronic.app112.databinding.FragmentChatsBinding
+import com.teltronic.app112.R
+
 
 /**
  * A simple [Fragment] subclass.
@@ -43,6 +44,7 @@ class ChatsFragment : Fragment() {
 
         setHasOptionsMenu(true) //Habilita el icono de la derecha
         //Retorno el binding root (no el inflater)
+
         return binding.root
     }
 

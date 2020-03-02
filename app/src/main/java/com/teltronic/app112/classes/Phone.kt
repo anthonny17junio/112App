@@ -21,7 +21,7 @@ import java.util.concurrent.Executors
 object Phone {
 
 
-    fun existPermission(context: FragmentActivity?, perm:PermissionsApp): Boolean {
+    fun existPermission(context: FragmentActivity?, perm: PermissionsApp): Boolean {
         val permission =
             ContextCompat.checkSelfPermission(
                 context!!,
@@ -32,7 +32,7 @@ object Phone {
     }
 
 
-    fun askPermission(context: FragmentActivity, perm:PermissionsApp) {
+    fun askPermission(context: FragmentActivity, perm: PermissionsApp) {
         ActivityCompat.requestPermissions(
             context,
             arrayOf(perm.manifestName),
@@ -111,7 +111,7 @@ object Phone {
     ) {
         boolNavigateLiveData = boolNavigateLiveDataParam
         fun changeNavigateLiveDataToTrue() {
-            boolNavigateLiveData.value = true
+            boolNavigateLiveData.postValue(true)
         }
 
         val executor = Executors.newSingleThreadExecutor()

@@ -1,6 +1,7 @@
 <resources>
     <!--OTROS-->
     <string name="app_name">112App</string>
+    <string name="log_in"><u>Log in</u></string>
     <string name="right_icon">Right icon</string>
     <string name="txt_call">CALL</string>
     <string name="txt_save">SAVE</string>

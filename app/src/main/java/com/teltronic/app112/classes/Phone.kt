@@ -14,13 +14,15 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.findNavController
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.teltronic.app112.R
 import com.teltronic.app112.screens.mainScreen.MainFragmentDirections
 import java.util.concurrent.Executors
 
 object Phone {
 
-
+    //Verifica si existe un determinado permiso
     fun existPermission(context: FragmentActivity?, perm: PermissionsApp): Boolean {
         val permission =
             ContextCompat.checkSelfPermission(
@@ -31,7 +33,7 @@ object Phone {
         return permission == PackageManager.PERMISSION_GRANTED
     }
 
-
+    //Pide un determinado permiso
     fun askPermission(context: FragmentActivity, perm: PermissionsApp) {
         ActivityCompat.requestPermissions(
             context,
@@ -52,7 +54,7 @@ object Phone {
                     Toast.makeText(activity, R.string.txt_permission_call, Toast.LENGTH_LONG).show()
                 }
             }
-            PermissionsApp.FINE_LOCATION.code -> {
+            Codes.CODE_PERMISSION_CALL_PHONE.code -> {
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                     //Si acepto los permisos navego a "location screen"
                     val actionNavigate =
@@ -67,6 +69,7 @@ object Phone {
         }
     }
 
+    //Realiza una llamada
     fun makeCall(context: FragmentActivity) {
         val permission =
             ContextCompat.checkSelfPermission(
@@ -78,7 +81,7 @@ object Phone {
             ActivityCompat.requestPermissions(
                 context,
                 arrayOf(PermissionsApp.CALL_PHONE.manifestName),
-                PermissionsApp.CALL_PHONE.code
+                Codes.CODE_PERMISSION_CALL_PHONE.code
             )
         } else { //Si los tengo realizo la llamada
             makeCallIntent(context)
@@ -104,12 +107,56 @@ object Phone {
     solo se ejecuta una vez dicho override y siempre irá a la misma pantalla
     */
     private lateinit var boolNavigateLiveData: MutableLiveData<Boolean>
+    private var shouldAuthWithGoogle: Boolean = false
+
+//    fun biometricAndGoogleAuth(
+//        activity: FragmentActivity, //activity (si está en un fragment)
+//        boolNavigateLiveDataParam: MutableLiveData<Boolean>
+//    ) {
+//        boolNavigateLiveData = boolNavigateLiveDataParam
+//        fun changeNavigateLiveDataToTrue() {
+//            boolNavigateLiveData.postValue(true)
+//        }
+//
+//        val executor = Executors.newSingleThreadExecutor()
+//        val biometricPrompt = BiometricPrompt(
+//            activity,
+//            executor,
+//            object : BiometricPrompt.AuthenticationCallback() {
+//                override fun onAuthenticationError(
+//                    errorCode: Int,
+//                    errString: CharSequence
+//                ) {
+//                    super.onAuthenticationError(errorCode, errString)
+//                    //Si el error es diferente a que el usuario ha presionado fuera de la pantalla
+//                    if (errorCode != BiometricPrompt.ERROR_USER_CANCELED) {
+//                        Toast.makeText(activity, errString.toString(), Toast.LENGTH_LONG)
+//                            .show() //Muestra el error
+//                    }
+//                }
+//
+//                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+//                    googleAuth2(activity)
+//                    super.onAuthenticationSucceeded(result)
+//                }
+//
+//            })
+//
+//        val promptInfo = BiometricPrompt.PromptInfo.Builder()
+//            .setTitle(activity.resources.getString(R.string.title_biometric))
+//            .setDeviceCredentialAllowed(true) //Pide el patrón
+//            .build()
+//
+//        biometricPrompt.authenticate(promptInfo)
+//    }
 
     fun biometricAuth(
         activity: FragmentActivity, //activity (si está en un fragment)
-        boolNavigateLiveDataParam: MutableLiveData<Boolean>
+        boolNavigateLiveDataParam: MutableLiveData<Boolean>,
+        shouldAuthWithGoogleParam: Boolean
     ) {
         boolNavigateLiveData = boolNavigateLiveDataParam
+        shouldAuthWithGoogle = shouldAuthWithGoogleParam
         fun changeNavigateLiveDataToTrue() {
             boolNavigateLiveData.postValue(true)
         }
@@ -132,7 +179,10 @@ object Phone {
                 }
 
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                    changeNavigateLiveDataToTrue()
+                    if (shouldAuthWithGoogle)
+                        googleAuth2(activity)
+                    else
+                        changeNavigateLiveDataToTrue()
                     super.onAuthenticationSucceeded(result)
                 }
             })
@@ -143,8 +193,36 @@ object Phone {
             .build()
 
         biometricPrompt.authenticate(promptInfo)
+    }
 
+    //Fun google authentication
+    fun googleAuth(activity: Activity) {
+        val account = GoogleSignIn.getLastSignedInAccount(activity)
+        if (account == null) {
+            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build()
+            var mGoogleSignInClient = GoogleSignIn.getClient(activity, gso)
+            val signInIntent = mGoogleSignInClient.signInIntent
+            activity.startActivityForResult(signInIntent, Codes.CODE_REQUEST_GOOGLE_AUTH_MAIN.code)
+        }
+    }
 
+    fun googleAuth2(activity: Activity) {
+        val account = GoogleSignIn.getLastSignedInAccount(activity)
+        if (account == null) {
+            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build()
+            var mGoogleSignInClient = GoogleSignIn.getClient(activity, gso)
+            val signInIntent = mGoogleSignInClient.signInIntent
+            activity.startActivityForResult(
+                signInIntent,
+                Codes.CODE_REQUEST_GOOGLE_AUTH_EDIT_PROFILE.code
+            )
+        } else {
+            boolNavigateLiveData.postValue(true)
+        }
     }
 
 }

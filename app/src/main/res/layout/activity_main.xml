@@ -28,11 +28,6 @@
                 app:navGraph="@navigation/navigation"
                 tools:ignore="FragmentTagUsage" />
 
-<!--            <com.google.android.gms.common.SignInButton-->
-<!--                android:id="@+id/sign_in_button"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content" />-->
-
         </LinearLayout>
 
         <com.google.android.material.navigation.NavigationView

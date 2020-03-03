@@ -1,5 +1,6 @@
 package com.teltronic.app112.screens
 
+import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -13,22 +14,14 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.SignInButton
 import com.teltronic.app112.classes.Phone
 import com.teltronic.app112.databinding.ActivityMainBinding
 import com.teltronic.app112.classes.Preferences
 import com.teltronic.app112.screens.mainScreen.MainFragmentDirections
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import android.view.View
-import androidx.core.app.ActivityCompat.startActivityForResult
 import android.content.Intent
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import android.widget.TextView
 import com.teltronic.app112.R
+import com.teltronic.app112.classes.Codes
 
 
 class MainActivity : AppCompatActivity() {
@@ -40,9 +33,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Preferences.loadLocate(this)
+        Preferences.loadLocate(this) //Para el lenguaje
 
-        val viewModelFactory = MainActivityViewModelFactory()
+        val viewModelFactory = MainActivityViewModelFactory(this)
         viewModel =
             ViewModelProvider(this, viewModelFactory).get(MainActivityViewModel::class.java)
 
@@ -55,7 +48,9 @@ class MainActivity : AppCompatActivity() {
 
         configureLateralMenu()
         configureNavigationObservers()
-        googleAuth()
+        configureGoogleAccountObserver()
+        viewModel.getProfileInfo() //Obtengo la información del perfil (este logueado o no)
+        Phone.googleAuth(this) //Si no estoy logueado me intento loguear (con google)
     }
 
     //Menú lateral
@@ -123,6 +118,23 @@ class MainActivity : AppCompatActivity() {
         Phone.makeActionRequestPermissionsResult(this, requestCode, grantResults)
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
+
+    //Después de iniciar la sesión de google se ejecuta esto
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        //Si se ha iniciado sesión (desde donde sea) se inicializa el nombre de usuario y la foto del menú lateral
+        if (resultCode == Activity.RESULT_OK) {
+            viewModel.getProfileInfo()
+
+            when (requestCode) {
+                Codes.CODE_REQUEST_GOOGLE_AUTH_EDIT_PROFILE.code ->
+                    viewModel.navigateToUserProfileWithoutAuth()
+            }
+        }
+
+    }
+
 
     private fun configureOnItemSelectedLateralMenu() {
         val menu = binding.lateralMenu.menu
@@ -270,33 +282,18 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    private lateinit var mGoogleSignInClient: GoogleSignInClient
-    private fun googleAuth() {
-        //https://developers.google.com/identity/sign-in/android/sign-in
-
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestEmail()
-            .build()
-
-        // Build a GoogleSignInClient with the options specified by gso.
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
-
-        val account = GoogleSignIn.getLastSignedInAccount(this)
-//        updateUI(account)
-
-//        findViewById<SignInButton>(R.id.sign_in_button).setOnClickListener{
-//            this
-//        }
+    //Google account observer
+    private fun configureGoogleAccountObserver() {
+        viewModel.boolGetProfileInfo.observe(this as LifecycleOwner,
+            Observer { shouldGetGoogleAccount ->
+                if (shouldGetGoogleAccount) {
+                    viewModel.profileInfoGetted()
+                } else {
+                    val txtName: TextView =
+                        binding.lateralMenu.getHeaderView(0).findViewById(R.id.txtName)
+                    txtName.text = viewModel.userName.value
+                }
+            })
     }
 
-    fun onClick(v: View) {
-//        when (v.getId()) {
-//            R.id.sign_in_button -> signIn()
-//        }// ...
-    }
-
-    private fun signIn() {
-        val signInIntent = mGoogleSignInClient.getSignInIntent()
-        startActivityForResult(signInIntent, 100)
-    }
 }

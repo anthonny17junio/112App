@@ -4,9 +4,11 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.teltronic.app112.classes.Phone
 
-class MainActivityViewModel : ViewModel() {
+class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
+    private lateinit var _activity: MainActivity
     //LIVE DATA
     //****************************************************
     //User profile
@@ -29,31 +31,67 @@ class MainActivityViewModel : ViewModel() {
     private var _boolNavigateToAbout = MutableLiveData<Boolean>()
     val boolNavigateToAbout: LiveData<Boolean>
         get() = _boolNavigateToAbout
+    //Google session
+    private var _boolGetProfileInfo = MutableLiveData<Boolean>()
+    val boolGetProfileInfo: LiveData<Boolean>
+        get() = _boolGetProfileInfo
+
+    private var _userName = MutableLiveData<String>()
+    val userName: LiveData<String>
+        get() = _userName
+
 
     //INIT
     //****************************************************
     init {
+        _activity = activityParam
         _boolNavigateToUserProfile.value = false
         _boolNavigateToMedicalInfo.value = false
         _boolNavigateToConfiguration.value = false
         _boolNavigateToLegalNotice.value = false
         _boolNavigateToAbout.value = false
+        val account = GoogleSignIn.getLastSignedInAccount(_activity)
+        if (account == null) {
+            _boolGetProfileInfo.value = false
+        } else {
+            _boolGetProfileInfo.value = true
+        }
     }
+
+    fun getProfileInfo() {
+        _boolGetProfileInfo.value = true
+
+        val account = GoogleSignIn.getLastSignedInAccount(_activity)
+        if (account == null) {
+            _userName.value = "Iniciar sesión"
+        } else {
+            _userName.value = account.email
+        }
+    }
+
+    fun profileInfoGetted() {
+        _boolGetProfileInfo.value = false
+    }
+
 
     //NAVIGATION
     //****************************************************
     //User profile
     fun navigateToUserProfile(activity: FragmentActivity) {
-        Phone.biometricAuth(activity, _boolNavigateToUserProfile)
+        Phone.biometricAuth(activity, _boolNavigateToUserProfile, true)
     }
 
     fun navigateToUserProfileComplete() {
         _boolNavigateToUserProfile.value = false
     }
 
+    fun navigateToUserProfileWithoutAuth() {
+        _boolNavigateToUserProfile.value = true
+    }
+
     //    Medical info
     fun navigateToMedicalInfo(activity: FragmentActivity) {
-        Phone.biometricAuth(activity, _boolNavigateToMedicalInfo)
+        Phone.biometricAuth(activity, _boolNavigateToMedicalInfo, false)
     }
 
     fun navigateToMedicalInfoComplete() {

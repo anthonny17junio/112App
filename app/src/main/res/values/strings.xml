@@ -1,6 +1,4 @@
 <resources>
-    <!--TODO:- BORRAR-->
-    <string name="name_example" translatable="false">Anthonny Pazmiño Haro</string>
 
     <!--KEYS-->
     <string name="name_settings_preferences" translatable="false">settings_preferences</string>
@@ -8,6 +6,7 @@
 
     <!--OTROS-->
     <string name="app_name">112App</string>
+    <string name="log_in"><u>Log in</u></string>
     <string name="right_icon">Right icon</string>
     <string name="hello_blank_fragment" translatable="false">Blank fragment</string>
     <string name="txt_call">CALL</string>

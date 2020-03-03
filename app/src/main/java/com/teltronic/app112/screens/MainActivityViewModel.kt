@@ -8,7 +8,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.teltronic.app112.classes.Phone
 
 class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
-    private lateinit var _activity: MainActivity
+    private var _activity: MainActivity = activityParam
     //LIVE DATA
     //****************************************************
     //User profile
@@ -44,18 +44,13 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
     //INIT
     //****************************************************
     init {
-        _activity = activityParam
         _boolNavigateToUserProfile.value = false
         _boolNavigateToMedicalInfo.value = false
         _boolNavigateToConfiguration.value = false
         _boolNavigateToLegalNotice.value = false
         _boolNavigateToAbout.value = false
         val account = GoogleSignIn.getLastSignedInAccount(_activity)
-        if (account == null) {
-            _boolGetProfileInfo.value = false
-        } else {
-            _boolGetProfileInfo.value = true
-        }
+        _boolGetProfileInfo.value = account != null
     }
 
     fun getProfileInfo() {

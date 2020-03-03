@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         configureNavigationObservers()
         configureGoogleAccountObserver()
         viewModel.getProfileInfo() //Obtengo la información del perfil (este logueado o no)
-        Phone.googleAuth(this) //Si no estoy logueado me intento loguear (con google)
+        Phone.googleMainAuth(this) //Si no estoy logueado me intento loguear (con google)
     }
 
     //Menú lateral

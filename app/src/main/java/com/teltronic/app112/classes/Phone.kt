@@ -109,46 +109,6 @@ object Phone {
     private lateinit var boolNavigateLiveData: MutableLiveData<Boolean>
     private var shouldAuthWithGoogle: Boolean = false
 
-//    fun biometricAndGoogleAuth(
-//        activity: FragmentActivity, //activity (si está en un fragment)
-//        boolNavigateLiveDataParam: MutableLiveData<Boolean>
-//    ) {
-//        boolNavigateLiveData = boolNavigateLiveDataParam
-//        fun changeNavigateLiveDataToTrue() {
-//            boolNavigateLiveData.postValue(true)
-//        }
-//
-//        val executor = Executors.newSingleThreadExecutor()
-//        val biometricPrompt = BiometricPrompt(
-//            activity,
-//            executor,
-//            object : BiometricPrompt.AuthenticationCallback() {
-//                override fun onAuthenticationError(
-//                    errorCode: Int,
-//                    errString: CharSequence
-//                ) {
-//                    super.onAuthenticationError(errorCode, errString)
-//                    //Si el error es diferente a que el usuario ha presionado fuera de la pantalla
-//                    if (errorCode != BiometricPrompt.ERROR_USER_CANCELED) {
-//                        Toast.makeText(activity, errString.toString(), Toast.LENGTH_LONG)
-//                            .show() //Muestra el error
-//                    }
-//                }
-//
-//                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-//                    googleAuth2(activity)
-//                    super.onAuthenticationSucceeded(result)
-//                }
-//
-//            })
-//
-//        val promptInfo = BiometricPrompt.PromptInfo.Builder()
-//            .setTitle(activity.resources.getString(R.string.title_biometric))
-//            .setDeviceCredentialAllowed(true) //Pide el patrón
-//            .build()
-//
-//        biometricPrompt.authenticate(promptInfo)
-//    }
 
     fun biometricAuth(
         activity: FragmentActivity, //activity (si está en un fragment)
@@ -180,7 +140,7 @@ object Phone {
 
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     if (shouldAuthWithGoogle)
-                        googleAuth2(activity)
+                        googleAuthEditProfile(activity)
                     else
                         changeNavigateLiveDataToTrue()
                     super.onAuthenticationSucceeded(result)
@@ -195,8 +155,8 @@ object Phone {
         biometricPrompt.authenticate(promptInfo)
     }
 
-    //Fun google authentication
-    fun googleAuth(activity: Activity) {
+    //Fun google authentication (cuando se inicia en la aplicación)
+    fun googleMainAuth(activity: Activity) {
         val account = GoogleSignIn.getLastSignedInAccount(activity)
         if (account == null) {
             val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -208,7 +168,8 @@ object Phone {
         }
     }
 
-    fun googleAuth2(activity: Activity) {
+    //Google authentication (cuando se entra en edit profile)
+    fun googleAuthEditProfile(activity: Activity) {
         val account = GoogleSignIn.getLastSignedInAccount(activity)
         if (account == null) {
             val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -216,10 +177,7 @@ object Phone {
                 .build()
             var mGoogleSignInClient = GoogleSignIn.getClient(activity, gso)
             val signInIntent = mGoogleSignInClient.signInIntent
-            activity.startActivityForResult(
-                signInIntent,
-                Codes.CODE_REQUEST_GOOGLE_AUTH_EDIT_PROFILE.code
-            )
+            activity.startActivityForResult(signInIntent, Codes.CODE_REQUEST_GOOGLE_AUTH_EDIT_PROFILE.code)
         } else {
             boolNavigateLiveData.postValue(true)
         }

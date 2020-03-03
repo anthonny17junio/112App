@@ -1,0 +1,8 @@
+package com.teltronic.app112.classes
+
+enum class Codes(val code:Int) {
+    CODE_PERMISSION_CALL_PHONE(100),
+    CODE_PERMISSION_FINE_LOCATION(200),
+    CODE_REQUEST_GOOGLE_AUTH_MAIN(300),
+    CODE_REQUEST_GOOGLE_AUTH_EDIT_PROFILE(400)
+}

@@ -106,19 +106,14 @@ object Phone {
     si en el override onAuthenticationSucceeded se pone boolNavigateLiveDataParam.value = true
     solo se ejecuta una vez dicho override y siempre irá a la misma pantalla
     */
-    private lateinit var boolNavigateLiveData: MutableLiveData<Boolean>
-    private var shouldAuthWithGoogle: Boolean = false
-
-
+    private lateinit var boolDataParam: MutableLiveData<Boolean>
     fun biometricAuth(
         activity: FragmentActivity, //activity (si está en un fragment)
-        boolNavigateLiveDataParam: MutableLiveData<Boolean>,
-        shouldAuthWithGoogleParam: Boolean
+        boolLiveDataParam: MutableLiveData<Boolean>
     ) {
-        boolNavigateLiveData = boolNavigateLiveDataParam
-        shouldAuthWithGoogle = shouldAuthWithGoogleParam
+        boolDataParam = boolLiveDataParam
         fun changeNavigateLiveDataToTrue() {
-            boolNavigateLiveData.postValue(true)
+            boolDataParam.postValue(true)
         }
 
         val executor = Executors.newSingleThreadExecutor()
@@ -139,10 +134,7 @@ object Phone {
                 }
 
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                    if (shouldAuthWithGoogle)
-                        googleAuthEditProfile(activity)
-                    else
-                        changeNavigateLiveDataToTrue()
+                    changeNavigateLiveDataToTrue()
                     super.onAuthenticationSucceeded(result)
                 }
             })
@@ -156,32 +148,36 @@ object Phone {
     }
 
     //Fun google authentication (cuando se inicia en la aplicación)
-    fun googleMainAuth(activity: Activity) {
+    fun googleAuth(activity: Activity, resultCode:Int) {
         val account = GoogleSignIn.getLastSignedInAccount(activity)
         if (account == null) {
             val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build()
+
             var mGoogleSignInClient = GoogleSignIn.getClient(activity, gso)
             val signInIntent = mGoogleSignInClient.signInIntent
-            activity.startActivityForResult(signInIntent, Codes.CODE_REQUEST_GOOGLE_AUTH_MAIN.code)
+            activity.startActivityForResult(signInIntent, resultCode)
         }
     }
 
     //Google authentication (cuando se entra en edit profile)
-    fun googleAuthEditProfile(activity: Activity) {
-        val account = GoogleSignIn.getLastSignedInAccount(activity)
-        if (account == null) {
-            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build()
-            var mGoogleSignInClient = GoogleSignIn.getClient(activity, gso)
-            val signInIntent = mGoogleSignInClient.signInIntent
-            activity.startActivityForResult(signInIntent, Codes.CODE_REQUEST_GOOGLE_AUTH_EDIT_PROFILE.code)
-        } else {
-            boolNavigateLiveData.postValue(true)
-        }
-    }
+//    fun googleAuthEditProfile(activity: Activity) {
+//        val account = GoogleSignIn.getLastSignedInAccount(activity)
+//        if (account == null) {
+//            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                .requestEmail()
+//                .build()
+//            var mGoogleSignInClient = GoogleSignIn.getClient(activity, gso)
+//            val signInIntent = mGoogleSignInClient.signInIntent
+//            activity.startActivityForResult(
+//                signInIntent,
+//                Codes.CODE_REQUEST_GOOGLE_AUTH_EDIT_PROFILE.code
+//            )
+//        } else {
+//            boolDataParam.postValue(true)
+//        }
+//    }
 
 }
 

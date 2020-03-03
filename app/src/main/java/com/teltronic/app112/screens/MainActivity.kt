@@ -1,6 +1,9 @@
 package com.teltronic.app112.screens
 
 import android.app.Activity
+import android.content.Intent
+import android.graphics.BitmapFactory
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -18,10 +21,11 @@ import com.teltronic.app112.classes.Phone
 import com.teltronic.app112.databinding.ActivityMainBinding
 import com.teltronic.app112.classes.Preferences
 import com.teltronic.app112.screens.mainScreen.MainFragmentDirections
-import android.content.Intent
 import android.widget.TextView
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.teltronic.app112.R
 import com.teltronic.app112.classes.Codes
+import java.net.URL
 
 
 class MainActivity : AppCompatActivity() {
@@ -49,8 +53,6 @@ class MainActivity : AppCompatActivity() {
         configureLateralMenu()
         configureNavigationObservers()
         configureGoogleAccountObserver()
-        viewModel.getProfileInfo() //Obtengo la información del perfil (este logueado o no)
-        Phone.googleMainAuth(this) //Si no estoy logueado me intento loguear (con google)
     }
 
     //Menú lateral
@@ -73,12 +75,18 @@ class MainActivity : AppCompatActivity() {
         configureOnItemSelectedLateralMenu()
     }
 
-    //Configura el onClick de la foto de perfil del header del menú lateral
+    //Configura el onClick de la foto de perfil o el nombre de usuario del header del menú lateral
     private fun configureOnClickImageProfileLateralMenu() {
         val imgProfileLateralMenu: ImageView =
             binding.lateralMenu.getHeaderView(0).findViewById(R.id.img_profile)
+        val txtNameProfileLateralMenu: TextView =
+            binding.lateralMenu.getHeaderView(0).findViewById(R.id.txtName)
+
         imgProfileLateralMenu.setOnClickListener {
-            viewModel.navigateToUserProfile(this)
+            viewModel.tryNavigateToUserProfile()
+        }
+        txtNameProfileLateralMenu.setOnClickListener {
+            viewModel.tryNavigateToUserProfile()
         }
     }
 
@@ -123,16 +131,14 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        //Si se ha iniciado sesión (desde donde sea) se inicializa el nombre de usuario y la foto del menú lateral
+        //Si se ha iniciado sesión seteo en true la variable del view model
         if (resultCode == Activity.RESULT_OK) {
-            viewModel.getProfileInfo()
-
-            when (requestCode) {
+            when(requestCode){
                 Codes.CODE_REQUEST_GOOGLE_AUTH_EDIT_PROFILE.code ->
-                    viewModel.navigateToUserProfileWithoutAuth()
+                    viewModel.navigateToUserProfile()
             }
+            viewModel.authenticationWithGoogleComplete()
         }
-
     }
 
 
@@ -148,8 +154,11 @@ class MainActivity : AppCompatActivity() {
 
     //Navigation observers
     private fun configureNavigationObservers() {
+        configureBiometricAuthToUserProfileObserver()
+        configureTryNavigationUserProfileObserver()
         configureNavigationUserProfileObserver()
-        configureNavigationMedicalInfoObserver()
+        configureTryNavigationMedicalInfoObserver() //Cuando intento navegar (inicia autenticación)
+        configureNavigationMedicalInfoObserver() //Cuando estoy autenticado
         configureNavigationConfigurationObserver()
         configureNavigationLegalNoticeObserver()
         configureNavigationAboutObserver()
@@ -160,9 +169,35 @@ class MainActivity : AppCompatActivity() {
     //**************************************************
     private fun configUserProfileItemClickListener(menu: Menu) {
         menu.findItem(R.id.userProfileFragment).setOnMenuItemClickListener {
-            viewModel.navigateToUserProfile(this)
+            viewModel.tryNavigateToUserProfile()
             true
         }
+    }
+
+    private fun configureTryNavigationUserProfileObserver() {
+        viewModel.boolTryNavigateToUserProfile.observe(this as LifecycleOwner,
+            Observer { tryNavigate ->
+                if (tryNavigate) {
+                    Phone.biometricAuth(this, viewModel.getLiveDataBiometricAuthToUserProfile())
+                    viewModel.navigateToUserProfileTried()
+                }
+            }
+        )
+    }
+
+    private fun configureBiometricAuthToUserProfileObserver() {
+        viewModel.boolBiometricAuthToUserProfile.observe(this as LifecycleOwner,
+            Observer { isBiometricAuthenticated ->
+                if (isBiometricAuthenticated) {
+                    if (viewModel.boolGoogleAuthenticated.value!!) { //Si está autenticado con google ir a la user profile
+                        viewModel.navigateToUserProfile()
+                    } else { //Si no está autenticado pedir sesión google
+                        Phone.googleAuth(this, Codes.CODE_REQUEST_GOOGLE_AUTH_EDIT_PROFILE.code)
+                    }
+                    viewModel.resetBiometricUserProfileAuth()
+                }
+            }
+        )
     }
 
     private fun configureNavigationUserProfileObserver() {
@@ -185,9 +220,20 @@ class MainActivity : AppCompatActivity() {
     //**************************************************
     private fun configMedicalInfoItemClickListener(menu: Menu) {
         menu.findItem(R.id.medicalInfoFragment).setOnMenuItemClickListener {
-            viewModel.navigateToMedicalInfo(this)
+            viewModel.tryNavigateToMedicalInfo()
             true
         }
+    }
+
+    private fun configureTryNavigationMedicalInfoObserver() {
+        viewModel.boolTryNavigateToMedicalInfo.observe(this as LifecycleOwner,
+            Observer { tryNavigate ->
+                if (tryNavigate) {
+                    Phone.biometricAuth(this, viewModel.getLiveDataNavigateToMedicalInfo())
+                    viewModel.navigateToMedicalInfoTried()
+                }
+            }
+        )
     }
 
     private fun configureNavigationMedicalInfoObserver() {
@@ -284,14 +330,18 @@ class MainActivity : AppCompatActivity() {
 
     //Google account observer
     private fun configureGoogleAccountObserver() {
-        viewModel.boolGetProfileInfo.observe(this as LifecycleOwner,
-            Observer { shouldGetGoogleAccount ->
-                if (shouldGetGoogleAccount) {
-                    viewModel.profileInfoGetted()
-                } else {
-                    val txtName: TextView =
-                        binding.lateralMenu.getHeaderView(0).findViewById(R.id.txtName)
-                    txtName.text = viewModel.userName.value
+        viewModel.boolGoogleAuthenticated.observe(this as LifecycleOwner,
+            Observer { isAuthenticatedWithGoogle ->
+                if (isAuthenticatedWithGoogle) {
+                    val account = GoogleSignIn.getLastSignedInAccount(this)
+
+                    val header = binding.lateralMenu.getHeaderView(0)
+                    val txtName: TextView = header.findViewById(R.id.txtName)
+                    txtName.text = account!!.displayName
+                } else if (viewModel.shouldAskGoogleAuth.value!!) { //Verifica si ha pedido antes iniciar sesión o no
+                    Phone.googleAuth(this, Codes.CODE_REQUEST_GOOGLE_AUTH_MAIN.code)
+                    viewModel.googleAuthAsked()
+
                 }
             })
     }

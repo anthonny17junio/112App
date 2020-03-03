@@ -1,21 +1,31 @@
 package com.teltronic.app112.screens
 
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.teltronic.app112.classes.Phone
 
 class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
     private var _activity: MainActivity = activityParam
-    //LIVE DATA
-    //****************************************************
+
     //User profile
+    private var _boolTryNavigateToUserProfile = MutableLiveData<Boolean>()
+    val boolTryNavigateToUserProfile: LiveData<Boolean>
+        get() = _boolTryNavigateToUserProfile
+
+    private var _boolBiometricAuthToUserProfile = MutableLiveData<Boolean>()
+    val boolBiometricAuthToUserProfile: LiveData<Boolean>
+        get() = _boolBiometricAuthToUserProfile
+
     private var _boolNavigateToUserProfile = MutableLiveData<Boolean>()
     val boolNavigateToUserProfile: LiveData<Boolean>
         get() = _boolNavigateToUserProfile
+    
     //Medical info
+    private var _boolTryNavigateToMedicalInfo = MutableLiveData<Boolean>()
+    val boolTryNavigateToMedicalInfo: LiveData<Boolean>
+        get() = _boolTryNavigateToMedicalInfo
+
     private var _boolNavigateToMedicalInfo = MutableLiveData<Boolean>()
     val boolNavigateToMedicalInfo: LiveData<Boolean>
         get() = _boolNavigateToMedicalInfo
@@ -32,65 +42,83 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
     val boolNavigateToAbout: LiveData<Boolean>
         get() = _boolNavigateToAbout
     //Google session
-    private var _boolGetProfileInfo = MutableLiveData<Boolean>()
-    val boolGetProfileInfo: LiveData<Boolean>
-        get() = _boolGetProfileInfo
+    private var _boolGoogleAuthenticated =
+        MutableLiveData<Boolean>() //Indica si está autenticado o no con una cuenta de google
+    val boolGoogleAuthenticated: LiveData<Boolean>
+        get() = _boolGoogleAuthenticated
 
-    private var _userName = MutableLiveData<String>()
-    val userName: LiveData<String>
-        get() = _userName
+    private var _shouldAskGoogleAuth =
+        MutableLiveData<Boolean>() //Indica si ya ha pedido autenticación o no (para evitar que pida cada ver que se gire la pantalla
+    val shouldAskGoogleAuth: LiveData<Boolean>
+        get() = _shouldAskGoogleAuth
 
 
-    //INIT
-    //****************************************************
     init {
+        //Esto se inicia cuando se presiona el botón para ir a user profile
+        _boolTryNavigateToUserProfile.value = false
+        _boolBiometricAuthToUserProfile.value = false
+        //Esto se inicia cuando se cumplen todos los requisitos para ir a user profile
         _boolNavigateToUserProfile.value = false
+
+        _boolTryNavigateToMedicalInfo.value = false
         _boolNavigateToMedicalInfo.value = false
         _boolNavigateToConfiguration.value = false
         _boolNavigateToLegalNotice.value = false
         _boolNavigateToAbout.value = false
-        val account = GoogleSignIn.getLastSignedInAccount(_activity)
-        _boolGetProfileInfo.value = account != null
+        val googleAccount = GoogleSignIn.getLastSignedInAccount(_activity)
+        _boolGoogleAuthenticated.value = googleAccount != null
+        _shouldAskGoogleAuth.value = true
     }
-
-    fun getProfileInfo() {
-        _boolGetProfileInfo.value = true
-
-        val account = GoogleSignIn.getLastSignedInAccount(_activity)
-        if (account == null) {
-            _userName.value = "Iniciar sesión"
-        } else {
-            _userName.value = account.email
-        }
-    }
-
-    fun profileInfoGetted() {
-        _boolGetProfileInfo.value = false
-    }
-
 
     //NAVIGATION
     //****************************************************
     //User profile
-    fun navigateToUserProfile(activity: FragmentActivity) {
-        Phone.biometricAuth(activity, _boolNavigateToUserProfile, true)
+
+    //Cuando se da click por primera vez para ir a la pantalla de user profile
+    fun tryNavigateToUserProfile() {
+        _boolTryNavigateToUserProfile.value = true
     }
 
+    //Cuando se termina de intentar ir a user profile (puede que se haya ido o no)
+    fun navigateToUserProfileTried() {
+        _boolTryNavigateToUserProfile.value = false
+    }
+
+    //Cuando se va a user profile (cuando se tiene todos los permisos)
+    fun navigateToUserProfile(){
+        _boolNavigateToUserProfile.value = true
+    }
+
+    //Cuando se ha ido a user profile
     fun navigateToUserProfileComplete() {
         _boolNavigateToUserProfile.value = false
     }
 
-    fun navigateToUserProfileWithoutAuth() {
-        _boolNavigateToUserProfile.value = true
+    //Se obtiene el bool para saber si está autenticado biométricamente (para modificarlo en Phone.biometricAuth())
+    fun getLiveDataBiometricAuthToUserProfile(): MutableLiveData<Boolean> {
+        return _boolBiometricAuthToUserProfile
     }
 
-    //    Medical info
-    fun navigateToMedicalInfo(activity: FragmentActivity) {
-        Phone.biometricAuth(activity, _boolNavigateToMedicalInfo, false)
+    //Se reinicia el bool de biometric auth para que lo vuelva a pedir cada vez
+    fun resetBiometricUserProfileAuth(){
+        _boolBiometricAuthToUserProfile.value = false
+    }
+
+    //Medical info
+    fun tryNavigateToMedicalInfo() {
+        _boolTryNavigateToMedicalInfo.value = true
+    }
+
+    fun navigateToMedicalInfoTried() {
+        _boolTryNavigateToMedicalInfo.value = false
     }
 
     fun navigateToMedicalInfoComplete() {
         _boolNavigateToMedicalInfo.value = false
+    }
+
+    fun getLiveDataNavigateToMedicalInfo(): MutableLiveData<Boolean> {
+        return _boolNavigateToMedicalInfo
     }
 
     //Configuration
@@ -118,6 +146,15 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
 
     fun navigateToAboutComplete() {
         _boolNavigateToAbout.value = false
+    }
+
+    //Google authentication
+    fun authenticationWithGoogleComplete() {
+        _boolGoogleAuthenticated.value = true
+    }
+
+    fun googleAuthAsked() {
+        _shouldAskGoogleAuth.value = false
     }
 
 }

@@ -23,6 +23,8 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
         get() = _boolNavigateToUserProfile
 
     private var _profileImage = MutableLiveData<Bitmap>()
+    val profileImage: LiveData<Bitmap>
+        get() = _profileImage
 
     //Medical info
     private var _boolTryNavigateToMedicalInfo = MutableLiveData<Boolean>()

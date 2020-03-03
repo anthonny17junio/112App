@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 
@@ -32,25 +34,39 @@ class UserProfileFragment : Fragment() {
         )
 
         //Inicializo el viewModel
-        viewModel = ViewModelProvider(this).get(UserProfileViewModel::class.java)
+        val viewModelFactory = UserProfileViewModelFactory(activity!!)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(UserProfileViewModel::class.java)
 
         //"Uno" el layout con esta clase por medio del binding
         binding.userProfileViewModel = viewModel
         //Para que el ciclo de vida del binding sea consistente y funcione bien con LiveData
         binding.lifecycleOwner = this
 
-        configureBackButton()
+        configureImageProfile()
+//        configureBackButton()
         setHasOptionsMenu(true) //Habilita el icono de la derecha
         //Retorno el binding root (no el inflater)
 
         return binding.root
     }
 
-    private fun configureBackButton() {
-        binding.btnCancel.setOnClickListener {
-            findNavController().popBackStack()
-        }
+    private fun configureImageProfile() {
+        binding.imgProfile.setImageBitmap(viewModel.profileImage.value)
+        configureImageProfileObserver()
     }
+
+    private fun configureImageProfileObserver() {
+        viewModel.profileImage.observe(this as LifecycleOwner,
+            Observer { imageBitmap ->
+                binding.imgProfile.setImageBitmap(imageBitmap)
+            }
+        )
+    }
+//    private fun configureBackButton() {
+//        binding.btnCancel.setOnClickListener {
+//            findNavController().popBackStack()
+//        }
+//    }
 
     //Inicia el menú de la derecha (en este caso solo es un icono)
     override fun onCreateOptionsMenu(
@@ -65,7 +81,8 @@ class UserProfileFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.homeIconItem -> {
-                val actionNavigate = UserProfileFragmentDirections.actionUserProfileFragmentToMainFragment()
+                val actionNavigate =
+                    UserProfileFragmentDirections.actionUserProfileFragmentToMainFragment()
                 findNavController().navigate(actionNavigate)
                 true
             }

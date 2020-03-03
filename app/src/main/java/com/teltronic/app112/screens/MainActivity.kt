@@ -15,15 +15,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
-import com.teltronic.app112.classes.Phone
 import com.teltronic.app112.databinding.ActivityMainBinding
-import com.teltronic.app112.classes.Preferences
 import com.teltronic.app112.screens.mainScreen.MainFragmentDirections
 import android.widget.TextView
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.teltronic.app112.classes.Codes
 import com.teltronic.app112.R
-import com.teltronic.app112.classes.DownloadImageTask
+import com.teltronic.app112.classes.*
 import java.lang.ref.WeakReference
 
 
@@ -164,6 +161,7 @@ class MainActivity : AppCompatActivity() {
         configureNavigationLegalNoticeObserver()
         configureNavigationAboutObserver()
 
+        configureImageProfileObserver()
         configureGoogleAccountObserver() //Cuando me autentico con la cuenta de google
     }
 
@@ -346,7 +344,6 @@ class MainActivity : AppCompatActivity() {
 
                     //Debe ser weak reference porque puede pasar que al cargar la imagen el parámetro ya no exista
                     DownloadImageTask(
-                        WeakReference(header.findViewById(R.id.img_profile)),
                         resources,
                         WeakReference(viewModel.getLiveDataProfileImageBitmap())
                     ).execute(account.photoUrl.toString())
@@ -358,5 +355,13 @@ class MainActivity : AppCompatActivity() {
             })
     }
 
+    private fun configureImageProfileObserver(){
+        viewModel.profileImage.observe(this as LifecycleOwner,
+            Observer { imageBitmap ->
+                val imgProfileLateralMenu: ImageView = binding.lateralMenu.getHeaderView(0).findViewById(R.id.img_profile)
+                imgProfileLateralMenu.setImageBitmap(imageBitmap)
+            }
+        )
+    }
 
 }

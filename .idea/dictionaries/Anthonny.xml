@@ -17,6 +17,7 @@
       <w>amet</w>
       <w>analizar</w>
       <w>anthonny</w>
+      <w>aplicación</w>
       <w>asalto</w>
       <w>ascensor</w>
       <w>ataque</w>
@@ -24,10 +25,13 @@
       <w>atragantamiento</w>
       <w>aute</w>
       <w>autenticación</w>
+      <w>autenticado</w>
+      <w>autentico</w>
       <w>avisos</w>
       <w>basta</w>
       <w>bien</w>
       <w>biométrica</w>
+      <w>biométricamente</w>
       <w>borrar</w>
       <w>botones</w>
       <w>botón</w>
@@ -57,7 +61,9 @@
       <w>convulsiones</w>
       <w>coordenadas</w>
       <w>cuando</w>
+      <w>cuenta</w>
       <w>culpa</w>
+      <w>cumplen</w>
       <w>cupidatat</w>
       <w>código</w>
       <w>daño</w>
@@ -71,6 +77,8 @@
       <w>deseo</w>
       <w>deserunt</w>
       <w>desmayo</w>
+      <w>después</w>
+      <w>determinado</w>
       <w>dicho</w>
       <w>diferente</w>
       <w>dificultad</w>
@@ -79,22 +87,28 @@
       <w>donde</w>
       <w>duis</w>
       <w>edificio</w>
+      <w>editar</w>
       <w>eiusmod</w>
       <w>ejecuta</w>
       <w>electrocución</w>
       <w>elit</w>
+      <w>empiezo</w>
       <w>encerrado</w>
       <w>enim</w>
+      <w>entra</w>
       <w>enviar</w>
       <w>escolar</w>
       <w>españa</w>
       <w>español</w>
       <w>esse</w>
       <w>este</w>
+      <w>esto</w>
+      <w>estoy</w>
       <w>está</w>
       <w>evitar</w>
       <w>excepteur</w>
       <w>exercitation</w>
+      <w>existe</w>
       <w>extraviado</w>
       <w>foto</w>
       <w>fractura</w>
@@ -104,6 +118,7 @@
       <w>función</w>
       <w>generar</w>
       <w>ggesh</w>
+      <w>gire</w>
       <w>guardado</w>
       <w>guardados</w>
       <w>género</w>
@@ -112,6 +127,7 @@
       <w>hace</w>
       <w>hacer</w>
       <w>haro</w>
+      <w>haya</w>
       <w>hemorragia</w>
       <w>heridos</w>
       <w>huella</w>
@@ -121,13 +137,18 @@
       <w>importante</w>
       <w>incendio</w>
       <w>incididunt</w>
+      <w>indica</w>
       <w>infarto</w>
       <w>inicia</w>
+      <w>iniciado</w>
       <w>inicializa</w>
       <w>inicializan</w>
       <w>inicializo</w>
+      <w>iniciar</w>
       <w>inminente</w>
       <w>instanciar</w>
+      <w>intentar</w>
+      <w>intento</w>
       <w>intoxicación</w>
       <w>irure</w>
       <w>labore</w>
@@ -137,6 +158,7 @@
       <w>lenguaje</w>
       <w>llamada</w>
       <w>localización</w>
+      <w>logueado</w>
       <w>línea</w>
       <w>magna</w>
       <w>malpica</w>
@@ -146,6 +168,7 @@
       <w>mensajes</w>
       <w>menú</w>
       <w>misma</w>
+      <w>modificarlo</w>
       <w>modo</w>
       <w>mollit</w>
       <w>muestra</w>
@@ -160,6 +183,7 @@
       <w>navigations</w>
       <w>necesario</w>
       <w>nisi</w>
+      <w>nombre</w>
       <w>nostrud</w>
       <w>nuevo</w>
       <w>nulla</w>
@@ -184,8 +208,11 @@
       <w>patrón</w>
       <w>pazmiño</w>
       <w>pecho</w>
+      <w>pedido</w>
+      <w>pedir</w>
       <w>pelea</w>
       <w>perfil</w>
+      <w>permiso</w>
       <w>permisos</w>
       <w>persmisos</w>
       <w>pida</w>
@@ -200,16 +227,21 @@
       <w>presionado</w>
       <w>presionar</w>
       <w>previamente</w>
+      <w>primera</w>
       <w>programar</w>
       <w>proident</w>
+      <w>puede</w>
       <w>pérdida</w>
       <w>quemadura</w>
       <w>quis</w>
       <w>radicalismos</w>
       <w>radicalisms</w>
+      <w>realiza</w>
       <w>realizo</w>
       <w>recieve</w>
+      <w>reinicia</w>
       <w>reprehenderit</w>
+      <w>requisitos</w>
       <w>rescate</w>
       <w>respirar</w>
       <w>retorno</w>
@@ -218,7 +250,9 @@
       <w>robo</w>
       <w>salvamento</w>
       <w>sanl</w>
+      <w>sesión</w>
       <w>setea</w>
+      <w>seteo</w>
       <w>siempre</w>
       <w>sint</w>
       <w>sistema</w>
@@ -230,7 +264,10 @@
       <w>teltronic</w>
       <w>tempor</w>
       <w>tengo</w>
+      <w>termina</w>
+      <w>tiene</w>
       <w>tienes</w>
+      <w>todos</w>
       <w>trabaja</w>
       <w>traumatismo</w>
       <w>tráfico</w>
@@ -244,11 +281,13 @@
       <w>vehículo</w>
       <w>velit</w>
       <w>veniam</w>
+      <w>verifica</w>
       <w>verificación</w>
       <w>viewmodels</w>
       <w>violencia</w>
       <w>vivienda</w>
       <w>voluptate</w>
+      <w>vuelva</w>
       <w>zaragoza</w>
     </words>
   </dictionary>

@@ -155,29 +155,12 @@ object Phone {
                 .requestEmail()
                 .build()
 
-            var mGoogleSignInClient = GoogleSignIn.getClient(activity, gso)
+            val mGoogleSignInClient = GoogleSignIn.getClient(activity, gso)
             val signInIntent = mGoogleSignInClient.signInIntent
             activity.startActivityForResult(signInIntent, resultCode)
         }
     }
 
-    //Google authentication (cuando se entra en edit profile)
-//    fun googleAuthEditProfile(activity: Activity) {
-//        val account = GoogleSignIn.getLastSignedInAccount(activity)
-//        if (account == null) {
-//            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                .requestEmail()
-//                .build()
-//            var mGoogleSignInClient = GoogleSignIn.getClient(activity, gso)
-//            val signInIntent = mGoogleSignInClient.signInIntent
-//            activity.startActivityForResult(
-//                signInIntent,
-//                Codes.CODE_REQUEST_GOOGLE_AUTH_EDIT_PROFILE.code
-//            )
-//        } else {
-//            boolDataParam.postValue(true)
-//        }
-//    }
 
 }
 

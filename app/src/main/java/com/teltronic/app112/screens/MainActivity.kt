@@ -2,8 +2,6 @@ package com.teltronic.app112.screens
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.BitmapFactory
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -25,7 +23,6 @@ import android.widget.TextView
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.teltronic.app112.R
 import com.teltronic.app112.classes.Codes
-import java.net.URL
 
 
 class MainActivity : AppCompatActivity() {
@@ -37,7 +34,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Preferences.loadLocate(this) //Para el lenguaje
+        Preferences.loadLocate(this)
 
         val viewModelFactory = MainActivityViewModelFactory(this)
         viewModel =
@@ -52,7 +49,6 @@ class MainActivity : AppCompatActivity() {
 
         configureLateralMenu()
         configureNavigationObservers()
-        configureGoogleAccountObserver()
     }
 
     //Menú lateral
@@ -133,7 +129,8 @@ class MainActivity : AppCompatActivity() {
 
         //Si se ha iniciado sesión seteo en true la variable del view model
         if (resultCode == Activity.RESULT_OK) {
-            when(requestCode){
+            when (requestCode) {
+                //Si se ha logueado al dar click en editar perfil empiezo la navegación a editar perfil
                 Codes.CODE_REQUEST_GOOGLE_AUTH_EDIT_PROFILE.code ->
                     viewModel.navigateToUserProfile()
             }
@@ -154,14 +151,18 @@ class MainActivity : AppCompatActivity() {
 
     //Navigation observers
     private fun configureNavigationObservers() {
-        configureBiometricAuthToUserProfileObserver()
-        configureTryNavigationUserProfileObserver()
-        configureNavigationUserProfileObserver()
-        configureTryNavigationMedicalInfoObserver() //Cuando intento navegar (inicia autenticación)
-        configureNavigationMedicalInfoObserver() //Cuando estoy autenticado
+        configureTryNavigationUserProfileObserver() //Cuando doy click (inicia autenticación)
+        configureBiometricAuthToUserProfileObserver() //Cuando me autentico biométricamente
+        configureNavigationUserProfileObserver() //Cuando voy a la pantalla
+
+        configureTryNavigationMedicalInfoObserver() //Cuando doy click
+        configureNavigationMedicalInfoObserver() //Cuando voy a la pantalla
+
         configureNavigationConfigurationObserver()
         configureNavigationLegalNoticeObserver()
         configureNavigationAboutObserver()
+
+        configureGoogleAccountObserver() //Cuando me autentico con la cuenta de google
     }
 
 
@@ -345,5 +346,4 @@ class MainActivity : AppCompatActivity() {
                 }
             })
     }
-
 }

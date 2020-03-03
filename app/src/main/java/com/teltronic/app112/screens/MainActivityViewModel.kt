@@ -1,5 +1,6 @@
 package com.teltronic.app112.screens
 
+import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,7 +21,9 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
     private var _boolNavigateToUserProfile = MutableLiveData<Boolean>()
     val boolNavigateToUserProfile: LiveData<Boolean>
         get() = _boolNavigateToUserProfile
-    
+
+    private var _profileImage = MutableLiveData<Bitmap>()
+
     //Medical info
     private var _boolTryNavigateToMedicalInfo = MutableLiveData<Boolean>()
     val boolTryNavigateToMedicalInfo: LiveData<Boolean>
@@ -73,7 +76,7 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
     //NAVIGATION
     //****************************************************
     //User profile
-
+    //*************
     //Cuando se da click por primera vez para ir a la pantalla de user profile
     fun tryNavigateToUserProfile() {
         _boolTryNavigateToUserProfile.value = true
@@ -85,7 +88,7 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
     }
 
     //Cuando se va a user profile (cuando se tiene todos los permisos)
-    fun navigateToUserProfile(){
+    fun navigateToUserProfile() {
         _boolNavigateToUserProfile.value = true
     }
 
@@ -100,11 +103,16 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
     }
 
     //Se reinicia el bool de biometric auth para que lo vuelva a pedir cada vez
-    fun resetBiometricUserProfileAuth(){
+    fun resetBiometricUserProfileAuth() {
         _boolBiometricAuthToUserProfile.value = false
     }
 
+    fun getLiveDataProfileImageBitmap(): MutableLiveData<Bitmap> {
+        return _profileImage
+    }
+
     //Medical info
+    //*************
     fun tryNavigateToMedicalInfo() {
         _boolTryNavigateToMedicalInfo.value = true
     }

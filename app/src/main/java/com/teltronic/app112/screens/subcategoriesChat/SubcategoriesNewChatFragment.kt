@@ -68,7 +68,7 @@ class SubcategoriesNewChatFragment : Fragment() {
     }
 
     private fun configListItemListener() {
-        binding.lvSubcategories.setOnItemClickListener { adapter, view, position, id ->
+        binding.lvSubcategories.setOnItemClickListener { adapter, _, position, _ ->
             val subcategory = adapter.getItemAtPosition(position) as Subcategory
             viewModel.navigateToSubcategory(subcategory)
         }

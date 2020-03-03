@@ -42,6 +42,7 @@ class UserProfileFragment : Fragment() {
         configureBackButton()
         setHasOptionsMenu(true) //Habilita el icono de la derecha
         //Retorno el binding root (no el inflater)
+
         return binding.root
     }
 

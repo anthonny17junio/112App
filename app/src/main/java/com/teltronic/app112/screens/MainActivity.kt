@@ -21,8 +21,10 @@ import com.teltronic.app112.classes.Preferences
 import com.teltronic.app112.screens.mainScreen.MainFragmentDirections
 import android.widget.TextView
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.teltronic.app112.R
 import com.teltronic.app112.classes.Codes
+import com.teltronic.app112.R
+import com.teltronic.app112.classes.DownloadImageTask
+import java.lang.ref.WeakReference
 
 
 class MainActivity : AppCompatActivity() {
@@ -337,8 +339,17 @@ class MainActivity : AppCompatActivity() {
                     val account = GoogleSignIn.getLastSignedInAccount(this)
 
                     val header = binding.lateralMenu.getHeaderView(0)
+
                     val txtName: TextView = header.findViewById(R.id.txtName)
+
                     txtName.text = account!!.displayName
+
+                    //Debe ser weak reference porque puede pasar que al cargar la imagen el parámetro ya no exista
+                    DownloadImageTask(
+                        WeakReference(header.findViewById(R.id.img_profile)),
+                        resources,
+                        WeakReference(viewModel.getLiveDataProfileImageBitmap())
+                    ).execute(account.photoUrl.toString())
                 } else if (viewModel.shouldAskGoogleAuth.value!!) { //Verifica si ha pedido antes iniciar sesión o no
                     Phone.googleAuth(this, Codes.CODE_REQUEST_GOOGLE_AUTH_MAIN.code)
                     viewModel.googleAuthAsked()
@@ -346,4 +357,6 @@ class MainActivity : AppCompatActivity() {
                 }
             })
     }
+
+
 }

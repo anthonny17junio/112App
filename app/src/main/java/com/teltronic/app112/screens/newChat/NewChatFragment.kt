@@ -65,11 +65,11 @@ class NewChatFragment : Fragment() {
             this as LifecycleOwner,
             Observer { category ->
                 if (category != null) {
-                    val category = viewModel.categoryNavigate.value!!
+                    val cat = viewModel.categoryNavigate.value!!
                     val actionNavigate =
                         NewChatFragmentDirections.actionNewChatFragmentToSubcategoriesNewChatFragment(
-                            category
-                            , resources.getString(category.idTitle).toUpperCase()
+                            cat
+                            , resources.getString(cat.idTitle).toUpperCase()
                         )
                     findNavController().navigate(actionNavigate)
                     viewModel.navigateCategoryComplete()

@@ -1,7 +1,10 @@
+@file:Suppress("SpellCheckingInspection")
+
 package com.teltronic.app112.classes
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -54,7 +57,7 @@ object Phone {
                     Toast.makeText(activity, R.string.txt_permission_call, Toast.LENGTH_LONG).show()
                 }
             }
-            Codes.CODE_PERMISSION_CALL_PHONE.code -> {
+            PermissionsApp.FINE_LOCATION.code -> {
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                     //Si acepto los permisos navego a "location screen"
                     val actionNavigate =
@@ -117,46 +120,64 @@ object Phone {
         }
 
         val executor = Executors.newSingleThreadExecutor()
-        val biometricPrompt = BiometricPrompt(
-            activity,
-            executor,
-            object : BiometricPrompt.AuthenticationCallback() {
-                override fun onAuthenticationError(
-                    errorCode: Int,
-                    errString: CharSequence
-                ) {
-                    super.onAuthenticationError(errorCode, errString)
-                    //Si el error es diferente a que el usuario ha presionado fuera de la pantalla
-                    if (errorCode != BiometricPrompt.ERROR_USER_CANCELED) {
-                        Toast.makeText(activity, errString.toString(), Toast.LENGTH_LONG)
-                            .show() //Muestra el error
+        val kgm = activity.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+
+        if (kgm.isKeyguardSecure) { //Si puedo autenticarme (aunque no sea con huella) lo cual setDeviceCredentialAllowed(true) lo permite
+            val biometricPrompt = BiometricPrompt( //Inicia el proceso de autenticación biométrica
+                activity,
+                executor,
+                object : BiometricPrompt.AuthenticationCallback() {
+                    override fun onAuthenticationError(
+                        errorCode: Int,
+                        errString: CharSequence
+                    ) {
+                        super.onAuthenticationError(errorCode, errString)
+                        //Si el error es diferente a que el usuario ha presionado fuera de la pantalla
+                        if (errorCode != BiometricPrompt.ERROR_USER_CANCELED) {
+                            Toast.makeText(activity, errString.toString(), Toast.LENGTH_LONG)
+                                .show() //Muestra el error
+                        }
                     }
-                }
 
-                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                    changeNavigateLiveDataToTrue()
-                    super.onAuthenticationSucceeded(result)
-                }
-            })
+                    override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                        changeNavigateLiveDataToTrue()
+                        super.onAuthenticationSucceeded(result)
+                    }
+                })
 
-        val promptInfo = BiometricPrompt.PromptInfo.Builder()
-            .setTitle(activity.resources.getString(R.string.title_biometric))
-            .setDeviceCredentialAllowed(true) //Pide el patrón
-            .build()
+            val promptInfo = BiometricPrompt.PromptInfo.Builder()
+                .setTitle(activity.resources.getString(R.string.title_biometric))
+                .setDeviceCredentialAllowed(true) //Pide el patrón
+                .build()
 
-        biometricPrompt.authenticate(promptInfo)
+            biometricPrompt.authenticate(promptInfo)
+        } else { //Si no puedo autenticarme muestro un mensaje
+            Toast.makeText(
+                    activity,
+                    activity.resources.getString(R.string.device_no_secure),
+                    Toast.LENGTH_LONG
+                )
+                .show()
+        }
     }
 
     //Fun google authentication (cuando se inicia en la aplicación)
-    fun googleAuth(activity: Activity, resultCode:Int) {
+    fun googleAuth(activity: Activity, resultCode: Int) {
+
         val account = GoogleSignIn.getLastSignedInAccount(activity)
         if (account == null) {
+            val clientId =
+                "533065996558-m8n8cbivnpvfi8oap2c6s9ttpnga4pk5.apps.googleusercontent.com"
+
             val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestServerAuthCode(clientId)
+//                .requestScopes(Scope("https://www.googleapis.com/auth/user.birthday.read"),Scope(Scopes.PROFILE))
                 .requestEmail()
                 .build()
 
             val mGoogleSignInClient = GoogleSignIn.getClient(activity, gso)
             val signInIntent = mGoogleSignInClient.signInIntent
+
             activity.startActivityForResult(signInIntent, resultCode)
         }
     }

@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.teltronic.app112.classes.DownloadImageTask
+
 import java.lang.ref.WeakReference
 
 class UserProfileViewModel(activityParam: FragmentActivity) : ViewModel() {
@@ -27,6 +28,7 @@ class UserProfileViewModel(activityParam: FragmentActivity) : ViewModel() {
         if (googleAccount != null) {
             _strName.value = googleAccount.displayName
             _strEmail.value = googleAccount.email
+
             DownloadImageTask(
                 activityParam.resources,
                 WeakReference(_profileImage)

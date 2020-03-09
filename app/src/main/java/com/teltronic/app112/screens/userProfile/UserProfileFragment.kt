@@ -62,11 +62,6 @@ class UserProfileFragment : Fragment() {
             }
         )
     }
-//    private fun configureBackButton() {
-//        binding.btnCancel.setOnClickListener {
-//            findNavController().popBackStack()
-//        }
-//    }
 
     //Inicia el menú de la derecha (en este caso solo es un icono)
     override fun onCreateOptionsMenu(

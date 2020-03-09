@@ -126,8 +126,15 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
+
         //Si se ha iniciado sesión seteo en true la variable del view model
         if (resultCode == Activity.RESULT_OK) {
+//            val googleAccount = GoogleSignIn.getLastSignedInAccount(this)
+//            val code = googleAccount?.serverAuthCode
+//            val p = ClasePeople.setUp(this, code)
+//
+//            val user = p.people()
+
             when (requestCode) {
                 //Si se ha logueado al dar click en editar perfil empiezo la navegación a editar perfil
                 Codes.CODE_REQUEST_GOOGLE_AUTH_EDIT_PROFILE.code ->
@@ -355,10 +362,11 @@ class MainActivity : AppCompatActivity() {
             })
     }
 
-    private fun configureImageProfileObserver(){
+    private fun configureImageProfileObserver() {
         viewModel.profileImage.observe(this as LifecycleOwner,
             Observer { imageBitmap ->
-                val imgProfileLateralMenu: ImageView = binding.lateralMenu.getHeaderView(0).findViewById(R.id.img_profile)
+                val imgProfileLateralMenu: ImageView =
+                    binding.lateralMenu.getHeaderView(0).findViewById(R.id.img_profile)
                 imgProfileLateralMenu.setImageBitmap(imageBitmap)
             }
         )

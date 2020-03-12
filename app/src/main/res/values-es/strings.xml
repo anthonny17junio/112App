@@ -76,6 +76,10 @@
     <string name="title_notices">Avisos</string>
     <string name="txtRecieveNotices">Recibir avisos en un radio de:</string>
 
+    <!--LANGUAGES-->
+    <string name="spanish">Español</string>
+    <string name="english">Inglés</string>
+
     <!--SCREEN LOCATION-->
     <string name="lat_title">Lat:</string>
     <string name="long_title">Long:</string>

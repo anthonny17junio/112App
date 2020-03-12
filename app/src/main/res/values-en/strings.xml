@@ -84,6 +84,10 @@
     <string name="title_notices">Notices</string>
     <string name="txtRecieveNotices">Receive notices within a radius of:</string>
 
+    <!--LANGUAGES-->
+    <string name="spanish">Spanish</string>
+    <string name="english">English</string>
+
     <!--SCREEN LOCATION-->
     <string name="lat_title">Lat:</string>
     <string name="long_title">Long:</string>

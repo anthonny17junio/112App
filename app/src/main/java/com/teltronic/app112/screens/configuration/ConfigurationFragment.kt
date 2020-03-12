@@ -1,10 +1,8 @@
 package com.teltronic.app112.screens.configuration
 
 
-import android.content.Context
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
@@ -13,7 +11,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 
 import com.teltronic.app112.R
-import com.teltronic.app112.classes.Preferences
 import com.teltronic.app112.databinding.FragmentConfigurationBinding
 
 /**
@@ -21,7 +18,7 @@ import com.teltronic.app112.databinding.FragmentConfigurationBinding
  */
 class ConfigurationFragment : Fragment() {
 
-    private lateinit var binding: FragmentConfigurationBinding
+    lateinit var binding: FragmentConfigurationBinding
     private lateinit var viewModel: ConfigurationViewModel
 
     override fun onCreateView(
@@ -36,8 +33,8 @@ class ConfigurationFragment : Fragment() {
             false
         )
         //Inicializo el viewModel
-        viewModel =
-            ViewModelProvider(this).get(ConfigurationViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(ConfigurationViewModel::class.java)
+        viewModel.loadConfigurations(this.activity!!)
 
         //"Uno" el layout con esta clase por medio del binding
         binding.configurationViewModel = viewModel
@@ -49,7 +46,36 @@ class ConfigurationFragment : Fragment() {
 
         configureBtnSaveObserver()
         configureBackButton()
+        configurePosSelectedLanguageObserver()
         return binding.root
+    }
+
+    private fun configurePosSelectedLanguageObserver() {
+        viewModel.posSelectedLanguage.observe(
+            this as LifecycleOwner,
+            Observer { posLang ->
+                if (posLang != -1) {
+                    binding.spinnerLanguage.setSelection(posLang)
+//                    val keyLanguage = this.resources.getString(R.string.KEY_LANGUAGE)
+//                    val nameSettingsPreferences = this.resources.getString(R.string.name_settings_preferences)
+//                    val sharedPreferences= context?.getSharedPreferences(nameSettingsPreferences, Activity.MODE_PRIVATE)
+//                    val language = sharedPreferences?.getString(keyLanguage, "")
+//
+//                    if (language != "") {
+//                        var posSelected = 0
+//                        val langCodes = activity!!.resources.getStringArray(R.array.languages_values)
+//                        for ((index, langCode) in langCodes.withIndex()) {
+//                            if (langCode == language) {
+//                                posSelected = index
+//                                break
+//                            }
+//                        }
+//                        binding.spinnerLanguage.setSelection(posSelected)
+//                    }
+                }
+            }
+        )
+
     }
 
     private fun configureBtnSaveObserver() {
@@ -57,18 +83,7 @@ class ConfigurationFragment : Fragment() {
             this as LifecycleOwner,
             Observer { shouldSave ->
                 if (shouldSave) {
-                    //TODO: analizar donde debería ir este código
-                    val newLanguage = binding.spinnerLanguage.selectedItem.toString()
-                    val langCode = Preferences.getLangCode(newLanguage, activity as Context)
-
-                    Preferences.setLocate(langCode, activity as Context)
-                    viewModel.saveComplete()
-                    activity!!.recreate()
-                    Toast.makeText(
-                        activity,
-                        resources.getString(R.string.changes_saved),
-                        Toast.LENGTH_LONG
-                    ).show()
+                    viewModel.saveConfigurations(this)
                 }
             }
         )
@@ -93,7 +108,8 @@ class ConfigurationFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.homeIconItem -> {
-                val actionNavigate = ConfigurationFragmentDirections.actionConfigurationFragmentToMainFragment()
+                val actionNavigate =
+                    ConfigurationFragmentDirections.actionConfigurationFragmentToMainFragment()
                 findNavController().navigate(actionNavigate)
                 true
             }

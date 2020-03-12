@@ -110,8 +110,14 @@
         <item>@string/spanish</item>
         <item>@string/english</item>
     </string-array>
-    <string name="spanish" translatable="false">Español</string>
-    <string name="english" translatable="false">English</string>
+
+    <string-array name="languages_values">
+        <item>es</item>
+        <item>en</item>
+    </string-array>
+
+    <string name="spanish">Spanish</string>
+    <string name="english">English</string>
 
     <!--SCREEN LOCATION-->
     <string name="lat_title">Lat:</string>

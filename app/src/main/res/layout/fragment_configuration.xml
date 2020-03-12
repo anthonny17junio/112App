@@ -55,21 +55,26 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="50dp"
                     android:text="@string/title_notices"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="invisible" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/default_margin_size"
                     android:layout_marginTop="@dimen/default_margin_size"
-                    android:text="@string/txtRecieveNotices" />
+                    android:text="@string/txtRecieveNotices"
+                    android:visibility="invisible" />
 
                 <SeekBar
                     android:id="@+id/seekBarDistance"
+                    style="@style/Widget.AppCompat.SeekBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/default_double_margin_size"
-                    android:layout_marginTop="@dimen/default_margin_size" />
+                    android:layout_marginTop="@dimen/default_margin_size"
+                    android:max="1000"
+                    android:visibility="invisible" />
 
 
             </LinearLayout>

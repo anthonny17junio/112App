@@ -38,19 +38,4 @@ object Preferences {
         setLocate(language!!, context)
     }
 
-
-    //Obtiene el código de un lenguaje
-    fun getLangCode(strLanguage: String?, context: Context): String {
-        val resources = context.resources
-        return when (strLanguage) {
-            resources.getString(R.string.spanish) ->
-                "es"
-            resources.getString(R.string.english) ->
-                "en"
-            else ->
-                ""
-        }
-    }
-
-
 }

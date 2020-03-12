@@ -17,11 +17,10 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.findNavController
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.teltronic.app112.R
 import com.teltronic.app112.screens.mainScreen.MainFragmentDirections
 import java.util.concurrent.Executors
+
 
 object Phone {
 
@@ -84,7 +83,7 @@ object Phone {
             ActivityCompat.requestPermissions(
                 context,
                 arrayOf(PermissionsApp.CALL_PHONE.manifestName),
-                Codes.CODE_PERMISSION_CALL_PHONE.code
+                IntCodes.CODE_PERMISSION_CALL_PHONE.code
             )
         } else { //Si los tengo realizo la llamada
             makeCallIntent(context)
@@ -109,8 +108,9 @@ object Phone {
     si en el override onAuthenticationSucceeded se pone boolNavigateLiveDataParam.value = true
     solo se ejecuta una vez dicho override y siempre irá a la misma pantalla
     */
-    private lateinit var boolDataParam: MutableLiveData<Boolean>
-    fun biometricAuth(
+    private lateinit var boolDataParam: MutableLiveData<Boolean> //Aquí se almacena el parámetro hacia el cual se quiere navegar (se hace esto porque el override onAuthenticationSucceeded se ejecuta solo una vez y si se lo setea directamente siempre irá a la misma pantalla)
+
+    fun tryBiometricAuth(
         activity: FragmentActivity, //activity (si está en un fragment)
         boolLiveDataParam: MutableLiveData<Boolean>
     ) {
@@ -119,10 +119,9 @@ object Phone {
             boolDataParam.postValue(true)
         }
 
-        val executor = Executors.newSingleThreadExecutor()
         val kgm = activity.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
-
-        if (kgm.isKeyguardSecure) { //Si puedo autenticarme (aunque no sea con huella) lo cual setDeviceCredentialAllowed(true) lo permite
+        if (kgm.isKeyguardSecure) { //Si existe algúna seguridad en el teléfono (huella, patrón, pin...)
+            val executor = Executors.newSingleThreadExecutor()
             val biometricPrompt = BiometricPrompt( //Inicia el proceso de autenticación biométrica
                 activity,
                 executor,
@@ -134,8 +133,10 @@ object Phone {
                         super.onAuthenticationError(errorCode, errString)
                         //Si el error es diferente a que el usuario ha presionado fuera de la pantalla
                         if (errorCode != BiometricPrompt.ERROR_USER_CANCELED) {
-                            Toast.makeText(activity, errString.toString(), Toast.LENGTH_LONG)
-                                .show() //Muestra el error
+                            activity.runOnUiThread {
+                                Toast.makeText(activity, errString.toString(), Toast.LENGTH_LONG)
+                                    .show() //Muestra el error
+                            }
                         }
                     }
 
@@ -153,35 +154,12 @@ object Phone {
             biometricPrompt.authenticate(promptInfo)
         } else { //Si no puedo autenticarme muestro un mensaje
             Toast.makeText(
-                    activity,
-                    activity.resources.getString(R.string.device_no_secure),
-                    Toast.LENGTH_LONG
-                )
-                .show()
+                activity,
+                activity.resources.getString(R.string.device_no_secure),
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
-
-    //Fun google authentication (cuando se inicia en la aplicación)
-    fun googleAuth(activity: Activity, resultCode: Int) {
-
-        val account = GoogleSignIn.getLastSignedInAccount(activity)
-        if (account == null) {
-            val clientId =
-                "533065996558-m8n8cbivnpvfi8oap2c6s9ttpnga4pk5.apps.googleusercontent.com"
-
-            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestServerAuthCode(clientId)
-//                .requestScopes(Scope("https://www.googleapis.com/auth/user.birthday.read"),Scope(Scopes.PROFILE))
-                .requestEmail()
-                .build()
-
-            val mGoogleSignInClient = GoogleSignIn.getClient(activity, gso)
-            val signInIntent = mGoogleSignInClient.signInIntent
-
-            activity.startActivityForResult(signInIntent, resultCode)
-        }
-    }
-
 
 }
 

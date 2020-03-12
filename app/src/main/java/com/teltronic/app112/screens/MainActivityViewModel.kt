@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.teltronic.app112.classes.GoogleApiPeopleHelper
 
 class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
     private var _activity: MainActivity = activityParam
@@ -60,7 +61,6 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
 
     init {
         //Esto se inicia cuando se presiona el botón para ir a user profile
-        _boolTryNavigateToUserProfile.value = false
         _boolBiometricAuthToUserProfile.value = false
         //Esto se inicia cuando se cumplen todos los requisitos para ir a user profile
         _boolNavigateToUserProfile.value = false
@@ -73,8 +73,15 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
         val googleAccount = GoogleSignIn.getLastSignedInAccount(_activity)
         _boolGoogleAuthenticated.value = googleAccount != null
         _shouldAskGoogleAuth.value = true
+
+        GoogleApiPeopleHelper.initGoogleApiClient(_activity)
     }
 
+    fun googleAuthAsked() {
+        _shouldAskGoogleAuth.value = false
+    }
+
+    //****************************************************
     //NAVIGATION
     //****************************************************
     //User profile
@@ -158,13 +165,13 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
         _boolNavigateToAbout.value = false
     }
 
+    //****************************************************
+    //FIN NAVIGATION
+    //****************************************************
+
     //Google authentication
     fun authenticationWithGoogleComplete() {
         _boolGoogleAuthenticated.value = true
-    }
-
-    fun googleAuthAsked() {
-        _shouldAskGoogleAuth.value = false
     }
 
 }

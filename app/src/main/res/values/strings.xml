@@ -77,6 +77,8 @@
     <!--SCREEN USER PROFILE-->
     <string name="title_full_name">Full name</string>
     <string name="title_email">Email</string>
+    <string name="title_birthday">Birthday</string>
+    <string name="title_gender">Gender</string>
 <!--    <string name="title_dni_passport">DNI / Passport</string>-->
 <!--    <string name="title_phone">Phone number</string>-->
 <!--    <string name="title_birthday">Birthday</string>-->
@@ -119,6 +121,7 @@
 
     <!--FORMATS-->
     <string name="string_format" translatable="false">%s</string>
+    <string name="birthday_format" translatable="false">%s %s %s</string>
 
     <!--SCREEN NEW CHAT-->
     <string name="txt_crime">Crime</string>
@@ -180,6 +183,12 @@
     <string name="txt_chk_location">Real time location</string>
     <string name="txt_chk_location_info">If you check this option, you will periodically send your location while the alert is active.</string>
     <string name="content_description_information">Information button</string>
+
+    <!--GENDERS-->
+    <string name="gender_male">Male</string>
+    <string name="gender_female">Female</string>
+    <string name="gender_other">Other</string>
+    <string name="gender_unknown">Unknown</string>
 
 
 </resources>

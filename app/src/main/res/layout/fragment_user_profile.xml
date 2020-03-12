@@ -49,15 +49,6 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintVertical_bias="0.0" />
 
-<!--                    <ImageView-->
-<!--                        android:id="@+id/imgCamera"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:contentDescription="@string/content_description_change_user_picture"-->
-<!--                        android:src="@drawable/ic_camera_black"-->
-<!--                        app:layout_constraintBottom_toBottomOf="@+id/img_profile"-->
-<!--                        app:layout_constraintEnd_toEndOf="@+id/img_profile" />-->
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
@@ -71,13 +62,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/default_margin_size"
+                    android:layout_marginTop="@dimen/default_half_margin_size"
                     android:ems="10"
                     android:text="@{@string/string_format(userProfileViewModel.strName)}" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/default_margin_size"
+                    android:layout_marginTop="@dimen/default_double_margin_size"
                     android:text="@string/title_email"
                     android:textStyle="bold" />
 
@@ -85,110 +77,49 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/default_margin_size"
+                    android:layout_marginTop="@dimen/default_half_margin_size"
                     android:ems="10"
                     android:text="@{@string/string_format(userProfileViewModel.strEmail)}" />
 
-<!--                <TextView-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="@dimen/default_margin_size"-->
-<!--                    android:text="@string/title_phone"-->
-<!--                    android:textStyle="bold" />-->
+                <TextView
+                    android:id="@+id/lvBirthdayTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_double_margin_size"
+                    android:text="@string/title_birthday"
+                    android:textStyle="bold" />
 
-<!--                <EditText-->
-<!--                    android:id="@+id/etDisability"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginStart="@dimen/default_margin_size"-->
-<!--                    android:ems="10"-->
-<!--                    android:hint="@string/hint_phone_number"-->
-<!--                    android:importantForAutofill="no"-->
-<!--                    android:inputType="textPersonName" />-->
+                <TextView
+                    android:id="@+id/lvBirthday"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/default_margin_size"
+                    android:layout_marginTop="@dimen/default_half_margin_size"
+                    android:text="@{@string/birthday_format(userProfileViewModel.strBirthDay,userProfileViewModel.strBirthMonth,userProfileViewModel.strBirthYear)}"
+                    app:layout_constraintStart_toStartOf="parent" />
 
-<!--                <TextView-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="@dimen/default_margin_size"-->
-<!--                    android:text="@string/title_birthday"-->
-<!--                    android:textStyle="bold" />-->
+                <TextView
+                    android:id="@+id/lvGenderTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_double_margin_size"
+                    android:text="@string/title_gender"
+                    android:textStyle="bold" />
 
-<!--                <EditText-->
-<!--                    android:id="@+id/etMedicine"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginStart="@dimen/default_margin_size"-->
-<!--                    android:ems="10"-->
-<!--                    android:hint="@string/hint_birthday"-->
-<!--                    android:importantForAutofill="no"-->
-<!--                    android:inputType="textPersonName" />-->
+                <TextView
+                    android:id="@+id/lvGender"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/default_margin_size"
+                    android:layout_marginTop="@dimen/default_half_margin_size"
+                    android:text="@{@string/string_format(userProfileViewModel.strGender)}"
+                    app:layout_constraintStart_toStartOf="parent" />
 
-<!--                <TextView-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="@dimen/default_margin_size"-->
-<!--                    android:text="@string/title_sex"-->
-<!--                    android:textStyle="bold" />-->
-
-<!--                <EditText-->
-<!--                    android:id="@+id/etSex"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginStart="@dimen/default_margin_size"-->
-<!--                    android:ems="10"-->
-<!--                    android:hint="@string/hint_sex"-->
-<!--                    android:importantForAutofill="no"-->
-<!--                    android:inputType="textPersonName"-->
-<!--                    app:layout_constraintStart_toStartOf="parent" />-->
-
-<!--                <androidx.constraintlayout.widget.Guideline-->
-<!--                    android:id="@+id/guideline5"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content" />-->
 
             </LinearLayout>
 
 
         </ScrollView>
-
-<!--        <androidx.constraintlayout.widget.Guideline-->
-<!--            android:id="@+id/guideline"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="vertical"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintGuide_percent="0.50"-->
-<!--            app:layout_constraintStart_toStartOf="parent" />-->
-
-
-<!--        <Button-->
-<!--            android:id="@+id/btnCancel"-->
-<!--            style="@style/btnCancel"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="@dimen/height_button"-->
-<!--            android:layout_marginStart="@dimen/default_margin_size"-->
-<!--            android:layout_marginEnd="@dimen/default_half_margin_size"-->
-<!--            android:layout_marginBottom="@dimen/default_margin_size"-->
-<!--            android:drawableStart="@drawable/ic_cancel_white"-->
-<!--            android:text="@string/txt_cancel"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toStartOf="@+id/guideline"-->
-<!--            app:layout_constraintHorizontal_bias="1.0"-->
-<!--            app:layout_constraintStart_toStartOf="parent" />-->
-
-<!--        <Button-->
-<!--            android:id="@+id/btnSave"-->
-<!--            style="@style/btnPrimaryRed"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="@dimen/height_button"-->
-<!--            android:layout_marginStart="@dimen/default_half_margin_size"-->
-<!--            android:layout_marginEnd="@dimen/default_margin_size"-->
-<!--            android:layout_marginBottom="@dimen/default_margin_size"-->
-<!--            android:drawableStart="@drawable/ic_save_white"-->
-<!--            android:text="@string/txt_save"-->
-<!--            android:textStyle="bold"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="@+id/guideline" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

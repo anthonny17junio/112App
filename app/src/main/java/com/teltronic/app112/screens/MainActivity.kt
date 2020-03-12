@@ -19,12 +19,17 @@ import com.teltronic.app112.databinding.ActivityMainBinding
 import com.teltronic.app112.screens.mainScreen.MainFragmentDirections
 import android.widget.TextView
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
+import com.google.android.gms.common.api.GoogleApiClient
 import com.teltronic.app112.R
 import com.teltronic.app112.classes.*
+import timber.log.Timber
+import java.lang.Exception
 import java.lang.ref.WeakReference
 
+class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedListener {
 
-class MainActivity : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var viewModel: MainActivityViewModel
@@ -122,29 +127,6 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
-    //Después de iniciar la sesión de google se ejecuta esto
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-
-        //Si se ha iniciado sesión seteo en true la variable del view model
-        if (resultCode == Activity.RESULT_OK) {
-//            val googleAccount = GoogleSignIn.getLastSignedInAccount(this)
-//            val code = googleAccount?.serverAuthCode
-//            val p = ClasePeople.setUp(this, code)
-//
-//            val user = p.people()
-
-            when (requestCode) {
-                //Si se ha logueado al dar click en editar perfil empiezo la navegación a editar perfil
-                Codes.CODE_REQUEST_GOOGLE_AUTH_EDIT_PROFILE.code ->
-                    viewModel.navigateToUserProfile()
-            }
-            viewModel.authenticationWithGoogleComplete()
-        }
-    }
-
-
     private fun configureOnItemSelectedLateralMenu() {
         val menu = binding.lateralMenu.menu
 
@@ -186,7 +168,14 @@ class MainActivity : AppCompatActivity() {
         viewModel.boolTryNavigateToUserProfile.observe(this as LifecycleOwner,
             Observer { tryNavigate ->
                 if (tryNavigate) {
-                    Phone.biometricAuth(this, viewModel.getLiveDataBiometricAuthToUserProfile())
+                    try {
+                        Phone.tryBiometricAuth(
+                            this,
+                            viewModel.getLiveDataBiometricAuthToUserProfile()
+                        )
+                    } catch (e: Exception) {
+                        Timber.e("${this.javaClass.name} - ${e.message}")
+                    }
                     viewModel.navigateToUserProfileTried()
                 }
             }
@@ -200,7 +189,11 @@ class MainActivity : AppCompatActivity() {
                     if (viewModel.boolGoogleAuthenticated.value!!) { //Si está autenticado con google ir a la user profile
                         viewModel.navigateToUserProfile()
                     } else { //Si no está autenticado pedir sesión google
-                        Phone.googleAuth(this, Codes.CODE_REQUEST_GOOGLE_AUTH_EDIT_PROFILE.code)
+                        GoogleApiPeopleHelper.googleAuth(
+                            IntCodes.CODE_REQUEST_GOOGLE_AUTH_EDIT_PROFILE.code,
+                            this
+                        )
+                        viewModel.googleAuthAsked()
                     }
                     viewModel.resetBiometricUserProfileAuth()
                 }
@@ -237,7 +230,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.boolTryNavigateToMedicalInfo.observe(this as LifecycleOwner,
             Observer { tryNavigate ->
                 if (tryNavigate) {
-                    Phone.biometricAuth(this, viewModel.getLiveDataNavigateToMedicalInfo())
+                    Phone.tryBiometricAuth(this, viewModel.getLiveDataNavigateToMedicalInfo())
                     viewModel.navigateToMedicalInfoTried()
                 }
             }
@@ -336,32 +329,40 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    //Google account observer
+    //**********************************************************************************************
+    //GOOGLE ACCOUNT
+    //**********************************************************************************************
+    //Google account observer (observer de la variable que indica si está autenticado o no)
     private fun configureGoogleAccountObserver() {
         viewModel.boolGoogleAuthenticated.observe(this as LifecycleOwner,
             Observer { isAuthenticatedWithGoogle ->
-                if (isAuthenticatedWithGoogle) {
-                    val account = GoogleSignIn.getLastSignedInAccount(this)
-
-                    val header = binding.lateralMenu.getHeaderView(0)
-
-                    val txtName: TextView = header.findViewById(R.id.txtName)
-
-                    txtName.text = account!!.displayName
-
-                    //Debe ser weak reference porque puede pasar que al cargar la imagen el parámetro ya no exista
-                    DownloadImageTask(
-                        resources,
-                        WeakReference(viewModel.getLiveDataProfileImageBitmap())
-                    ).execute(account.photoUrl.toString())
+                if (isAuthenticatedWithGoogle) { //Si está autenticado con google setea la
+                    this.displayGoogleAccountInfo()
                 } else if (viewModel.shouldAskGoogleAuth.value!!) { //Verifica si ha pedido antes iniciar sesión o no
-                    Phone.googleAuth(this, Codes.CODE_REQUEST_GOOGLE_AUTH_MAIN.code)
+                    GoogleApiPeopleHelper.googleAuth(
+                        IntCodes.CODE_REQUEST_GOOGLE_AUTH_MAIN.code,
+                        this
+                    )
                     viewModel.googleAuthAsked()
-
                 }
             })
     }
 
+    //Setea el nombre de la cuenta de google en el menú lateral y descarga la foto de perfil
+    private fun displayGoogleAccountInfo() {
+        val account = GoogleSignIn.getLastSignedInAccount(this)
+        val header = binding.lateralMenu.getHeaderView(0)
+        val txtName: TextView = header.findViewById(R.id.txtName)
+
+        txtName.text = account!!.displayName
+        //Debe ser weak reference porque puede pasar que al cargar la imagen el parámetro ya no exista
+        DownloadImageTask(
+            resources,
+            WeakReference(viewModel.getLiveDataProfileImageBitmap())
+        ).execute(account.photoUrl.toString())
+    }
+
+    //Si existe una imagen de la cuenta de google la setea en el menú lateral
     private fun configureImageProfileObserver() {
         viewModel.profileImage.observe(this as LifecycleOwner,
             Observer { imageBitmap ->
@@ -372,4 +373,37 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
+    //Después de iniciar la sesión de google se ejecuta esto
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        //Si se ha iniciado sesión seteo en true la variable del view model
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                IntCodes.CODE_REQUEST_GOOGLE_AUTH_EDIT_PROFILE.code -> { //Al loguearse después de dar click en el perfil de usuario
+                    viewModel.navigateToUserProfile() //Ir a la pantalla de user profile
+                }
+
+                //Descomentar si se quiere que pase algo después de loguearse por primera vez (por ejemplo guardar los datos de la cuenta de google en alguna base de datos)
+//                IntCodes.CODE_REQUEST_GOOGLE_AUTH_MAIN.code -> { //Al loguearse por primera vez (sin dar click a nada previamente)
+//                }
+//                IntCodes.CODE_REQUEST_GOOGLE_AUTH_FRAGMENT_PROFILE.code -> { //Al loguearse por primera vez (sin dar click a nada previamente)
+
+            }
+            viewModel.authenticationWithGoogleComplete()
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    //Si la conexión para la autenticación con google falla se muestra un dialog
+    override fun onConnectionFailed(connectionResult: ConnectionResult) {
+        val mGoogleApiAvailability = GoogleApiAvailability.getInstance()
+        val dialog =
+            mGoogleApiAvailability.getErrorDialog(
+                this,
+                connectionResult.errorCode, 1000
+            )
+        dialog.show()
+    }
+    // **********************************************************************************************
+    //GOOGLE ACCOUNT
+    //**********************************************************************************************
 }

@@ -56,18 +56,10 @@
     <string name="address3_legal">ESPAÑA</string>
 
     <!--SCREEN USER PROFILE-->
-    <string name="title_full_name">Nombre y apellidos</string>
+    <string name="title_full_name">Nombre</string>
     <string name="title_email">Email</string>
-<!--    <string name="title_dni_passport">DNI / Pasaporte</string>-->
-<!--    <string name="title_phone">Teléfono</string>-->
-<!--    <string name="title_birthday">Fecha de nacimiento</string>-->
-<!--    <string name="title_sex">Sexo</string>-->
-<!--    <string name="content_description_change_user_picture">Cambiar foto de perfil de usuario</string>-->
-<!--    <string name="hint_full_name">Introduce tu nombre y apellidos</string>-->
-<!--    <string name="hint_dni_passport">Introduce tu DNI o pasaporte…</string>-->
-<!--    <string name="hint_phone_number">Introduce tu número de teléfono…</string>-->
-<!--    <string name="hint_birthday">Introduce tu cumpleaños…</string>-->
-<!--    <string name="hint_sex">Introduce tu sexo…</string>-->
+    <string name="title_birthday">Fecha de nacimiento</string>
+    <string name="title_gender">Género</string>
 
     <!--SCREEN MEDICAL INFO-->
     <string name="title_allergy">¿Tiene alergias?</string>
@@ -151,5 +143,11 @@
     <string name="txt_chk_location">Ubicación en tiempo real</string>
     <string name="txt_chk_location_info">Si activas esta opción, enviarás preiódicamente tu ubicación mientras la alerta se encuentre activa.</string>
     <string name="content_description_information">Information button</string>
+
+    <!--GENDERS-->
+    <string name="gender_male">Masculino</string>
+    <string name="gender_female">Femenino</string>
+    <string name="gender_other">Otro</string>
+    <string name="gender_unknown">Desconocido</string>
 
 </resources>

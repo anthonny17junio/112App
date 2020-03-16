@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.teltronic.app112.R
-import com.teltronic.app112.classes.Subcategory
+import com.teltronic.app112.classes.enums.Subcategory
 
 import com.teltronic.app112.databinding.FragmentSubcategoriesNewChatBinding
 

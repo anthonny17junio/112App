@@ -15,7 +15,7 @@ import com.google.android.gms.auth.api.Auth
 
 import com.teltronic.app112.R
 import com.teltronic.app112.classes.GoogleApiPeopleHelper
-import com.teltronic.app112.classes.IntCodes
+import com.teltronic.app112.classes.enums.IntCodes
 import com.teltronic.app112.databinding.FragmentUserProfileBinding
 
 /**

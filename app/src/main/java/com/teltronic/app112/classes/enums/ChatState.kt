@@ -1,4 +1,4 @@
-package com.teltronic.app112.classes
+package com.teltronic.app112.classes.enums
 
 import com.teltronic.app112.R
 

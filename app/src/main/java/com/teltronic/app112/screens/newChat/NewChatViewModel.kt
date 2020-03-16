@@ -3,7 +3,7 @@ package com.teltronic.app112.screens.newChat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.teltronic.app112.classes.Category
+import com.teltronic.app112.classes.enums.Category
 
 class NewChatViewModel : ViewModel() {
 

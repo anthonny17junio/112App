@@ -3,7 +3,7 @@ package com.teltronic.app112.screens.confirmMessage
 import android.app.Activity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.teltronic.app112.classes.Subcategory
+import com.teltronic.app112.classes.enums.Subcategory
 
 class ConfirmMessageViewModelFactory(
     private val subcategory: Subcategory,

@@ -24,6 +24,7 @@ import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.GoogleApiClient
 import com.teltronic.app112.R
 import com.teltronic.app112.classes.*
+import com.teltronic.app112.classes.enums.IntCodes
 import timber.log.Timber
 import java.lang.Exception
 import java.lang.ref.WeakReference

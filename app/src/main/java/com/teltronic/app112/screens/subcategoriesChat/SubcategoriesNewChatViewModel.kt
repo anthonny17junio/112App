@@ -6,9 +6,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.teltronic.app112.adapters.SubcategoriesListAdapter
-import com.teltronic.app112.classes.Category
+import com.teltronic.app112.classes.enums.Category
 import com.teltronic.app112.classes.Subcategories
-import com.teltronic.app112.classes.Subcategory
+import com.teltronic.app112.classes.enums.Subcategory
 
 class SubcategoriesNewChatViewModel(category: Category, activity: Activity) : ViewModel() {
     private var _listSubcategories = MutableLiveData<List<Subcategory>>()

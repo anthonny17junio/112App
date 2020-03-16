@@ -1,4 +1,4 @@
-package com.teltronic.app112.classes
+package com.teltronic.app112.classes.enums
 
 enum class IntCodes(val code:Int) {
     CODE_PERMISSION_CALL_PHONE(100),

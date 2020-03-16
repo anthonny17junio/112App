@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.teltronic.app112.classes.DownloadImageTask
 import com.teltronic.app112.classes.GoogleApiPeopleHelper
-import com.teltronic.app112.classes.IntCodes
+import com.teltronic.app112.classes.enums.IntCodes
 
 import java.lang.ref.WeakReference
 

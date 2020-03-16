@@ -1,5 +1,8 @@
 package com.teltronic.app112.classes
 
+import com.teltronic.app112.classes.enums.Category
+import com.teltronic.app112.classes.enums.Subcategory
+
 class Subcategories(category: Category) {
 
     var listSubcategories: List<Subcategory>? = when (category) {

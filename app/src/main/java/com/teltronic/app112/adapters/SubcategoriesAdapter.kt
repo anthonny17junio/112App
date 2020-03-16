@@ -10,7 +10,7 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.teltronic.app112.R
-import com.teltronic.app112.classes.Subcategory
+import com.teltronic.app112.classes.enums.Subcategory
 
 class SubcategoriesListAdapter(
     private var activity: Activity,

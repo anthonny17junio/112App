@@ -18,6 +18,8 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.findNavController
 import com.teltronic.app112.R
+import com.teltronic.app112.classes.enums.IntCodes
+import com.teltronic.app112.classes.enums.PermissionsApp
 import com.teltronic.app112.screens.mainScreen.MainFragmentDirections
 import java.util.concurrent.Executors
 

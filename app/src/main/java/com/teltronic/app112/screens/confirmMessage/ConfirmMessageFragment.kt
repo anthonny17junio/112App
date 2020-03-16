@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 
 import com.teltronic.app112.R
-import com.teltronic.app112.classes.ChatState
+import com.teltronic.app112.classes.enums.ChatState
 import com.teltronic.app112.databinding.FragmentConfirmMessageBinding
 
 /**

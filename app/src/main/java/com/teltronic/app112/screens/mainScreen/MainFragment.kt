@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 
 import com.teltronic.app112.R
-import com.teltronic.app112.classes.PermissionsApp
+import com.teltronic.app112.classes.enums.PermissionsApp
 import com.teltronic.app112.classes.Phone
 import com.teltronic.app112.databinding.FragmentMainBinding
 
@@ -108,7 +108,8 @@ class MainFragment : Fragment() {
                             findNavController().navigate(actionNavigate)
                         } else {
                             //Si no tienes permisos de localización los pides
-                            Phone.askPermission(activity!!,PermissionsApp.FINE_LOCATION)
+                            Phone.askPermission(activity!!,
+                                PermissionsApp.FINE_LOCATION)
                         }
                     viewModel.onNavigateToLocationComplete()
                 }

@@ -5,8 +5,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.teltronic.app112.classes.ChatState
-import com.teltronic.app112.classes.Subcategory
+import com.teltronic.app112.classes.enums.ChatState
+import com.teltronic.app112.classes.enums.Subcategory
 
 class ChatViewModel(
     fragment: Fragment,

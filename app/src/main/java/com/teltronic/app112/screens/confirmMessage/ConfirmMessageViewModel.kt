@@ -4,7 +4,7 @@ import android.app.Activity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.teltronic.app112.classes.Subcategory
+import com.teltronic.app112.classes.enums.Subcategory
 
 class ConfirmMessageViewModel(subcat: Subcategory, activity: Activity) : ViewModel() {
 

@@ -13,7 +13,7 @@
 
         <variable
             name="category"
-            type="com.teltronic.app112.classes.Category" />
+            type="com.teltronic.app112.classes.enums.Category" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -219,7 +219,7 @@
         tools:layout="@layout/fragment_confirm_message" >
         <argument
             android:name="subcategory"
-            app:argType="com.teltronic.app112.classes.Subcategory" />
+            app:argType="com.teltronic.app112.classes.enums.Subcategory" />
         <action
             android:id="@+id/action_confirmMessageFragment_to_chatFragment"
             app:destination="@id/chatFragment"
@@ -250,7 +250,7 @@
             app:popExitAnim="@anim/slide_out_right" />
         <argument
             android:name="category"
-            app:argType="com.teltronic.app112.classes.Category" />
+            app:argType="com.teltronic.app112.classes.enums.Category" />
         <argument
             android:name="title"
             app:argType="string" />
@@ -276,9 +276,9 @@
             app:popUpToInclusive="true" />
         <argument
             android:name="subcategory"
-            app:argType="com.teltronic.app112.classes.Subcategory" />
+            app:argType="com.teltronic.app112.classes.enums.Subcategory" />
         <argument
             android:name="chatState"
-            app:argType="com.teltronic.app112.classes.ChatState" />
+            app:argType="com.teltronic.app112.classes.enums.ChatState" />
     </fragment>
 </navigation>

@@ -221,5 +221,5 @@ enum class Subcategory(var idTitle: Int, var idIcon: Int, var category: Category
         R.string.txt_other,
         R.drawable.ic_subcategory_accident_other,
         null
-    ),
+    )
 }

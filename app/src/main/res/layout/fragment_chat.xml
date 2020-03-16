@@ -1,9 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!--suppress AndroidUnknownAttribute -->
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".screens.chat.ChatFragment">
 
     <data>
+
         <variable
             name="chatViewModel"
             type="com.teltronic.app112.screens.chat.ChatViewModel" />
@@ -11,13 +13,186 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <!-- TODO: Update blank fragment layout -->
-        <TextView
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/headerChat"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/hello_blank_fragment" />
+            android:layout_height="70dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/infoChat"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/black_overlay"
+                android:padding="@dimen/default_half_margin_size"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/stateChat"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0">
+
+                <ImageView
+                    android:id="@+id/ivCategory"
+                    imageResource="@{chatViewModel.subcategory.category.idIcon}"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:contentDescription="@string/content_description_category_icon"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@drawable/ic_accident_white" />
+
+                <TextView
+                    android:id="@+id/tvCategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/default_half_margin_size"
+                    android:text="@{chatViewModel.subcategory.category.idTitle}"
+                    android:textColor="@color/colorWhite"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/ivCategory"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="@string/txt_accident" />
+
+                <TextView
+                    android:id="@+id/tvLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Zaragoza, 50014"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toTopOf="@+id/tvDate"
+                    app:layout_constraintStart_toStartOf="@+id/tvDate"
+                    tools:text="Zaragoza, 50014" />
+
+                <TextView
+                    android:id="@+id/tvDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/default_half_margin_size"
+                    android:text="16/03/2020"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ivDateHour"
+                    tools:text="16/03/2020" />
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:contentDescription="@string/content_description_location_icon"
+                    android:src="@drawable/ic_location_on_white"
+                    app:layout_constraintBottom_toBottomOf="@+id/tvLocation"
+                    app:layout_constraintEnd_toEndOf="@+id/ivDateHour"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="@+id/ivDateHour"
+                    app:layout_constraintTop_toTopOf="@+id/tvLocation" />
+
+                <TextView
+                    android:id="@+id/tvHour"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/default_half_margin_size"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/tvDate"
+                    app:layout_constraintStart_toEndOf="@+id/tvDate"
+                    tools:text="15:55" />
+
+                <ImageView
+                    android:id="@+id/ivDateHour"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:contentDescription="@string/content_description_date_time_icon"
+                    android:src="@drawable/ic_calendar_time"
+                    android:tint="@color/colorWhite"
+                    app:layout_constraintBottom_toBottomOf="@+id/tvDate"
+                    app:layout_constraintStart_toStartOf="@+id/tvCategory"
+                    app:layout_constraintTop_toTopOf="@+id/tvDate" />
+
+                <TextView
+                    android:id="@+id/tvSubcategory"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/default_half_margin_size"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@{chatViewModel.subcategory.idTitle}"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="12sp"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/tvCategory"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tvCategory"
+                    tools:text="@string/subcategory_accident_car_without_injured" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/stateChat"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:padding="@dimen/default_half_margin_size"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1.3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/ivChatState"
+                    colorFilter="@{chatViewModel.idColorResource}"
+                    imageResource="@{chatViewModel.chatState.idIcon}"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="@dimen/default_half_margin_size"
+                    android:contentDescription="@string/content_description_subcategory_icon"
+                    app:layout_constraintBottom_toTopOf="@+id/tvChatState"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@drawable/ic_calendar_time"
+                    tools:tint="@color/colorGreen" />
+
+                <TextView
+                    android:id="@+id/tvChatState"
+                    textColor="@{chatViewModel.idColorResource}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{chatViewModel.chatState.idTitle}"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:text="@string/chat_state_in_progress"
+                    tools:textColor="@color/colorGreen" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/bodyChat"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/footerChat"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/headerChat">
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/footerChat"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

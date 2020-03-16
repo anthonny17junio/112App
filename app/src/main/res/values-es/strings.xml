@@ -92,6 +92,14 @@
     <string name="txt_medical_urgency">Urgencia médica</string>
     <string name="txt_other">Otro</string>
 
+    <!--SCREEN CHAT-->
+    <string name="chat_state_in_progress">En proceso</string>
+    <string name="chat_state_in_processed">Procesado</string>
+    <string name="content_description_category_icon">Icono de categoría</string>
+    <string name="content_description_location_icon">Icono de ubicación</string>
+    <string name="content_description_date_time_icon">Icono de fecha y hora</string>
+    <string name="content_description_chat_state_icon">Icono del estado del chat</string>
+
     <!--SCREEN SUBCATEGORIES-->
     <string name="content_description_btn_crime">Botón crimen</string>
     <string name="content_description_btn_accident">Botón accidente</string>

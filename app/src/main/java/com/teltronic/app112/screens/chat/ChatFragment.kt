@@ -31,7 +31,10 @@ class ChatFragment : Fragment() {
             false
         )
         //Inicializo el viewModel
-        val viewModelFactory = ChatViewModelFactory()
+        val args = ChatFragmentArgs.fromBundle(arguments!!)
+        val subcategory = args.subcategory
+        val chatState = args.chatState
+        val viewModelFactory = ChatViewModelFactory(this, subcategory, chatState)
         viewModel = ViewModelProvider(this, viewModelFactory).get(ChatViewModel::class.java)
 
         //"Uno" el layout con esta clase por medio del binding
@@ -41,8 +44,10 @@ class ChatFragment : Fragment() {
 
         setHasOptionsMenu(true) //Habilita el icono de la derecha
         //Retorno el binding root (no el inflater)
+
         return binding.root
     }
+
 
     //Inicia el menú de la derecha (en este caso solo es un icono)
     override fun onCreateOptionsMenu(

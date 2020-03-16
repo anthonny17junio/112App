@@ -76,11 +76,6 @@ class NewChatFragment : Fragment() {
                 }
             }
         )
-
-        binding.btnCrime.setImageResource(viewModel.idCrimeIcon.value!!)
-        binding.btnAccident.setImageResource(viewModel.idAccidentIcon.value!!)
-        binding.btnMedicalUrgency.setImageResource(viewModel.idMedicalUrgencyIcon.value!!)
-        binding.btnOther.setImageResource(viewModel.idOtherIcon.value!!)
     }
 
     private fun configureNavigateToConfirmChatObserver() {

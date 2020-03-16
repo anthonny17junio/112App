@@ -100,6 +100,14 @@
     <string name="txt_medical_urgency">Medical urgency</string>
     <string name="txt_other">Other</string>
 
+    <!--SCREEN CHAT-->
+    <string name="chat_state_in_progress">In progress</string>
+    <string name="chat_state_in_processed">Processed</string>
+    <string name="content_description_category_icon">Category icon</string>
+    <string name="content_description_location_icon">Location icon</string>
+    <string name="content_description_date_time_icon">Date and time icon</string>
+    <string name="content_description_chat_state_icon">Chat state icon</string>
+
     <!--SCREEN SUBCATEGORIES-->
     <string name="content_description_btn_crime">Crime button</string>
     <string name="content_description_btn_accident">Accident button</string>

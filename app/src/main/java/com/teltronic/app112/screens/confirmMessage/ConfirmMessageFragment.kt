@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 
 import com.teltronic.app112.R
+import com.teltronic.app112.classes.ChatState
 import com.teltronic.app112.databinding.FragmentConfirmMessageBinding
 
 /**
@@ -39,10 +40,7 @@ class ConfirmMessageFragment : Fragment() {
         val args = ConfirmMessageFragmentArgs.fromBundle(arguments!!)
         val subcategory = args.subcategory
         val viewModelFactory = ConfirmMessageViewModelFactory(subcategory, activity as Activity)
-        viewModel =
-            ViewModelProvider(this, viewModelFactory).get(ConfirmMessageViewModel::class.java)
-
-        binding.imgSubcategory.setImageResource(subcategory.idIcon)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(ConfirmMessageViewModel::class.java)
 
         //"Uno" el layout con esta clase por medio del binding
         binding.confirmMessageViewModel = viewModel
@@ -62,17 +60,12 @@ class ConfirmMessageFragment : Fragment() {
         binding.imgInfoRealTime.setOnClickListener {
             // Initialize a new instance of
             val builder = AlertDialog.Builder(activity)
-
             // Set the alert dialog title
             builder.setTitle(resources.getString(R.string.txt_chk_location))
-
             // Display a message on alert dialog
             builder.setMessage(resources.getString(R.string.txt_chk_location_info))
-
-
             // Finally, make the alert dialog using builder
             val dialog: AlertDialog = builder.create()
-
             // Display the alert dialog on app interface
             dialog.show()
         }
@@ -90,7 +83,10 @@ class ConfirmMessageFragment : Fragment() {
             Observer { shouldNavigate ->
                 if (shouldNavigate) {
                     val actionNavigate =
-                        ConfirmMessageFragmentDirections.actionConfirmMessageFragmentToChatFragment()
+                        ConfirmMessageFragmentDirections.actionConfirmMessageFragmentToChatFragment(
+                            viewModel.subcategory.value!!,
+                            ChatState.IN_PROGRESS
+                        )
                     findNavController().navigate(actionNavigate)
                     viewModel.navigateToChatComplete()
                 }
@@ -111,7 +107,8 @@ class ConfirmMessageFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.homeIconItem -> {
-                val actionNavigate = ConfirmMessageFragmentDirections.actionConfirmMessageFragmentToMainFragment()
+                val actionNavigate =
+                    ConfirmMessageFragmentDirections.actionConfirmMessageFragmentToMainFragment()
                 findNavController().navigate(actionNavigate)
                 true
             }

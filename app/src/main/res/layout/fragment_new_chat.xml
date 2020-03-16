@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--suppress AndroidUnknownAttribute -->
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -44,6 +45,7 @@
                 <ImageButton
                     android:id="@+id/btnCrime"
                     style="@style/btnMainIconButtons"
+                    imageResource="@{newChatViewModel.idCrimeIcon}"
                     android:layout_marginTop="50dp"
                     android:contentDescription="@string/content_description_btn_crime"
                     android:onClick="@{()->newChatViewModel.navigateToCategory(category.CRIME)}"
@@ -69,6 +71,7 @@
                 <ImageButton
                     android:id="@+id/btnAccident"
                     style="@style/btnMainIconButtons"
+                    imageResource="@{newChatViewModel.idAccidentIcon}"
                     android:contentDescription="@string/content_description_btn_accident"
                     android:onClick="@{()->newChatViewModel.navigateToCategory(category.ACCIDENT)}"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -93,6 +96,7 @@
                 <ImageButton
                     android:id="@+id/btnMedicalUrgency"
                     style="@style/btnMainIconButtons"
+                    imageResource="@{newChatViewModel.idMedicalUrgencyIcon}"
                     android:layout_marginTop="@dimen/default_double_margin_size"
                     android:contentDescription="@string/content_description_btn_medical_urgency"
                     android:onClick="@{()->newChatViewModel.navigateToCategory(category.MEDICAL_URGENCY)}"
@@ -118,6 +122,7 @@
                 <ImageButton
                     android:id="@+id/btnOther"
                     style="@style/btnMainIconButtons"
+                    imageResource="@{newChatViewModel.idOtherIcon}"
                     android:contentDescription="@string/content_description_other"
                     android:onClick="@{()->newChatViewModel.navigateToConfirmChat()}"
                     app:layout_constraintEnd_toEndOf="@+id/btnAccident"

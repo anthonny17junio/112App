@@ -16,7 +16,6 @@ class MedicalInfoViewModel(
     application: Application,
     private val binding: FragmentMedicalInfoBinding
 ) : AndroidViewModel(application) {
-    private var _application: Application
     //Permite administrar las co-rutinas, nos permite cancelar todas las co-rutinas cuando este view model se destruya
     //y así evitar errores cuando la co-rutina desee retornar algún valor y ya no exista el view model
     private var viewModelJob = Job()
@@ -39,7 +38,6 @@ class MedicalInfoViewModel(
 
     init {
         enableInterface()
-        _application = application
     }
 
     override fun onCleared() {

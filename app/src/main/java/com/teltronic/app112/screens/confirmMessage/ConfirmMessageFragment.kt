@@ -1,7 +1,6 @@
 package com.teltronic.app112.screens.confirmMessage
 
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
@@ -39,7 +38,8 @@ class ConfirmMessageFragment : Fragment() {
         //Inicializo el viewModel
         val args = ConfirmMessageFragmentArgs.fromBundle(arguments!!)
         val subcategory = args.subcategory
-        val viewModelFactory = ConfirmMessageViewModelFactory(subcategory, activity as Activity)
+        val application = requireNotNull(this.activity).application
+        val viewModelFactory = ConfirmMessageViewModelFactory(subcategory, application)
         viewModel = ViewModelProvider(this, viewModelFactory).get(ConfirmMessageViewModel::class.java)
 
         //"Uno" el layout con esta clase por medio del binding

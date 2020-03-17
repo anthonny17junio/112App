@@ -60,9 +60,9 @@ object GoogleApiPeopleHelper {
     }
 
     //Desde UserProfileViewModel llega un fragment
-    fun googleAuth(resultCode: Int, activity: Fragment) {
+    fun googleAuth(resultCode: Int, fragment: Fragment) {
             val intent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient)
-            activity.startActivityForResult(intent, resultCode)
+            fragment.startActivityForResult(intent, resultCode)
     }
 
     //Obtiene el servicio de People Api PeopleAPI

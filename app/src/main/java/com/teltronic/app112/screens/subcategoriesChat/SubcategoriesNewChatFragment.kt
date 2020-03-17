@@ -1,7 +1,6 @@
 package com.teltronic.app112.screens.subcategoriesChat
 
 
-import android.app.Activity
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -39,7 +38,8 @@ class SubcategoriesNewChatFragment : Fragment() {
         val args = SubcategoriesNewChatFragmentArgs.fromBundle(arguments!!)
         val category = args.category
 
-        val viewModelFactory = SubcategoriesNewChatViewModelFactory(category, activity as Activity)
+        val application = requireNotNull(this.activity).application
+        val viewModelFactory = SubcategoriesNewChatViewModelFactory(category, application)
         viewModel =
             ViewModelProvider(this, viewModelFactory).get(SubcategoriesNewChatViewModel::class.java)
 

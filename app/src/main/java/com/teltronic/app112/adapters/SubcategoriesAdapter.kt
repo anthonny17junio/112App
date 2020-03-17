@@ -1,7 +1,7 @@
 package com.teltronic.app112.adapters
 
 import android.annotation.SuppressLint
-import android.app.Activity
+import android.app.Application
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +13,7 @@ import com.teltronic.app112.R
 import com.teltronic.app112.classes.enums.Subcategory
 
 class SubcategoriesListAdapter(
-    private var activity: Activity,
+    private var activity: Application,
     private var subcategories: List<Subcategory>
 ) : BaseAdapter() {
 

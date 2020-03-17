@@ -1,16 +1,16 @@
 package com.teltronic.app112.screens.subcategoriesChat
 
-import android.app.Activity
+import android.app.Application
 import android.widget.ListAdapter
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.teltronic.app112.adapters.SubcategoriesListAdapter
 import com.teltronic.app112.classes.enums.Category
 import com.teltronic.app112.classes.Subcategories
 import com.teltronic.app112.classes.enums.Subcategory
 
-class SubcategoriesNewChatViewModel(category: Category, activity: Activity) : ViewModel() {
+class SubcategoriesNewChatViewModel(category: Category, application: Application) : AndroidViewModel(application) {
     private var _listSubcategories = MutableLiveData<List<Subcategory>>()
 
     private var _subcategoryNavigate = MutableLiveData<Subcategory>()
@@ -26,7 +26,7 @@ class SubcategoriesNewChatViewModel(category: Category, activity: Activity) : Vi
         _listSubcategories.value = Subcategories(category).listSubcategories
         _subcategoryNavigate.value = null
         //Inicializo el adaptador para el list view de subcategorías
-        _listAdapter.value = SubcategoriesListAdapter(activity, _listSubcategories.value!!)
+        _listAdapter.value = SubcategoriesListAdapter(getApplication(), _listSubcategories.value!!)
     }
 
     fun navigateSubcategoryComplete() {

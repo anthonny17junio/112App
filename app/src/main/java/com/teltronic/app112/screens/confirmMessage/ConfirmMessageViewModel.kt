@@ -1,12 +1,12 @@
 package com.teltronic.app112.screens.confirmMessage
 
-import android.app.Activity
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.teltronic.app112.classes.enums.Subcategory
 
-class ConfirmMessageViewModel(subcat: Subcategory, activity: Activity) : ViewModel() {
+class ConfirmMessageViewModel(subcat: Subcategory, application: Application) : AndroidViewModel(application) {
 
     private val _strCategory = MutableLiveData<String>()
     val strCategory: LiveData<String>
@@ -24,7 +24,7 @@ class ConfirmMessageViewModel(subcat: Subcategory, activity: Activity) : ViewMod
         _subcategory.value = subcat
         val category = subcat.category
         if (category != null) {
-            _strCategory.value = activity.resources.getString(category.idTitle)
+            _strCategory.value = application.getString(category.idTitle)
         } else {
             _strCategory.value = ""
         }

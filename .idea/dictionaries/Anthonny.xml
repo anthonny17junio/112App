@@ -3,28 +3,37 @@
     <words>
       <w>aaaa</w>
       <w>abierto</w>
+      <w>acceda</w>
+      <w>acceder</w>
       <w>accidente</w>
       <w>acepto</w>
       <w>acerca</w>
       <w>acoso</w>
       <w>actualiza</w>
+      <w>actualización</w>
+      <w>actualizado</w>
       <w>acuático</w>
       <w>adaptador</w>
       <w>adicionales</w>
       <w>adipiscing</w>
       <w>aditional</w>
+      <w>administrar</w>
       <w>agresión</w>
       <w>ahora</w>
       <w>algo</w>
       <w>alguna</w>
+      <w>algún</w>
       <w>aliqua</w>
       <w>aliquip</w>
       <w>amet</w>
       <w>analizar</w>
       <w>anthonny</w>
       <w>aplicación</w>
+      <w>aquí</w>
       <w>asalto</w>
       <w>ascensor</w>
+      <w>asegura</w>
+      <w>asgura</w>
       <w>ataque</w>
       <w>atraco</w>
       <w>atragantamiento</w>
@@ -39,6 +48,8 @@
       <w>biométrica</w>
       <w>biométricamente</w>
       <w>birtday</w>
+      <w>bloque</w>
+      <w>bloquea</w>
       <w>borrar</w>
       <w>botones</w>
       <w>botón</w>
@@ -47,6 +58,7 @@
       <w>cambia</w>
       <w>cambio</w>
       <w>cambios</w>
+      <w>cancelar</w>
       <w>cargar</w>
       <w>caso</w>
       <w>cbivnpvfi</w>
@@ -72,6 +84,9 @@
       <w>convertir</w>
       <w>convulsiones</w>
       <w>coordenadas</w>
+      <w>costoso</w>
+      <w>crear</w>
+      <w>cual</w>
       <w>cuando</w>
       <w>cuenta</w>
       <w>culpa</w>
@@ -85,6 +100,7 @@
       <w>debería</w>
       <w>debido</w>
       <w>debo</w>
+      <w>defecto</w>
       <w>delito</w>
       <w>demás</w>
       <w>derecha</w>
@@ -93,10 +109,14 @@
       <w>descomentar</w>
       <w>desde</w>
       <w>desea</w>
+      <w>desee</w>
       <w>deseo</w>
       <w>deserunt</w>
+      <w>deshabilito</w>
       <w>desmayo</w>
       <w>después</w>
+      <w>destruya</w>
+      <w>determina</w>
       <w>determinado</w>
       <w>dicho</w>
       <w>diferente</w>
@@ -108,23 +128,31 @@
       <w>edificio</w>
       <w>editar</w>
       <w>eiusmod</w>
+      <w>ejecución</w>
       <w>ejecuta</w>
+      <w>ejecutamos</w>
+      <w>ejecutando</w>
+      <w>ejecutará</w>
       <w>ejemplo</w>
       <w>electrocución</w>
       <w>elit</w>
+      <w>empezaron</w>
       <w>empiezo</w>
       <w>encerrado</w>
       <w>enim</w>
       <w>entra</w>
       <w>enviar</w>
+      <w>errores</w>
       <w>escolar</w>
       <w>españa</w>
       <w>español</w>
       <w>esse</w>
+      <w>estamos</w>
       <w>este</w>
       <w>esto</w>
       <w>estoy</w>
       <w>está</w>
+      <w>esté</w>
       <w>evitar</w>
       <w>excepteur</w>
       <w>exercitation</w>
@@ -133,6 +161,7 @@
       <w>existentes</w>
       <w>extraviado</w>
       <w>falla</w>
+      <w>falta</w>
       <w>fecha</w>
       <w>foto</w>
       <w>fractura</w>
@@ -146,16 +175,20 @@
       <w>googleusercontent</w>
       <w>guardado</w>
       <w>guardados</w>
+      <w>guardando</w>
       <w>guardar</w>
       <w>género</w>
       <w>habilita</w>
       <w>habilitada</w>
+      <w>habilito</w>
       <w>hace</w>
       <w>hacer</w>
       <w>haro</w>
       <w>haya</w>
       <w>hemorragia</w>
       <w>heridos</w>
+      <w>hilo</w>
+      <w>hilos</w>
       <w>huella</w>
       <w>icono</w>
       <w>idioma</w>
@@ -172,13 +205,16 @@
       <w>iniciado</w>
       <w>inicializa</w>
       <w>inicializan</w>
+      <w>inicializar</w>
       <w>inicializo</w>
       <w>iniciar</w>
       <w>inminente</w>
       <w>innecesariamente</w>
+      <w>inserta</w>
       <w>instanciar</w>
       <w>intentar</w>
       <w>intento</w>
+      <w>interfaz</w>
       <w>intoxicación</w>
       <w>irure</w>
       <w>labore</w>
@@ -194,6 +230,7 @@
       <w>línea</w>
       <w>magna</w>
       <w>malpica</w>
+      <w>mantiene</w>
       <w>mapa</w>
       <w>medio</w>
       <w>mensaje</w>
@@ -203,8 +240,10 @@
       <w>modificarlo</w>
       <w>modo</w>
       <w>mollit</w>
+      <w>muchas</w>
       <w>muestra</w>
       <w>médica</w>
+      <w>métodos</w>
       <w>módo</w>
       <w>móvil</w>
       <w>nacimiento</w>
@@ -215,6 +254,7 @@
       <w>navego</w>
       <w>navigations</w>
       <w>necesario</w>
+      <w>necesita</w>
       <w>nisi</w>
       <w>nombre</w>
       <w>nostrud</w>
@@ -247,10 +287,12 @@
       <w>pecho</w>
       <w>pedido</w>
       <w>pedir</w>
+      <w>pedirlo</w>
       <w>pelea</w>
       <w>perfil</w>
       <w>permiso</w>
       <w>permisos</w>
+      <w>permite</w>
       <w>persmisos</w>
       <w>pida</w>
       <w>pide</w>
@@ -266,6 +308,7 @@
       <w>presionar</w>
       <w>previamente</w>
       <w>primera</w>
+      <w>procesamiento</w>
       <w>programar</w>
       <w>proident</w>
       <w>puede</w>
@@ -285,19 +328,28 @@
       <w>requisitos</w>
       <w>rescate</w>
       <w>respirar</w>
+      <w>resultado</w>
+      <w>retornar</w>
       <w>retorno</w>
       <w>reverte</w>
       <w>revisar</w>
       <w>robo</w>
+      <w>rutina</w>
+      <w>rutinas</w>
       <w>salvamento</w>
       <w>sanl</w>
+      <w>sentido</w>
       <w>servicio</w>
+      <w>será</w>
       <w>sesión</w>
       <w>setea</w>
       <w>seteo</w>
       <w>siempre</w>
+      <w>significa</w>
       <w>sint</w>
       <w>sistema</w>
+      <w>snackbar</w>
+      <w>sobre</w>
       <w>solicita</w>
       <w>subcat</w>
       <w>subcategory_</w>
@@ -309,7 +361,9 @@
       <w>tengo</w>
       <w>termina</w>
       <w>tiene</w>
+      <w>tienen</w>
       <w>tienes</w>
+      <w>todas</w>
       <w>todos</w>
       <w>trabaja</w>
       <w>trae</w>
@@ -324,6 +378,8 @@
       <w>usarla</w>
       <w>usuario</w>
       <w>vandalismo</w>
+      <w>varias</w>
+      <w>veces</w>
       <w>vehículo</w>
       <w>velit</w>
       <w>veniam</w>

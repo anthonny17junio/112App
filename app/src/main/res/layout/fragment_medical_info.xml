@@ -15,14 +15,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="@{medicalInfoViewModel.progressbarStyle}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <ScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginBottom="@dimen/default_margin_size"
             app:layout_constraintBottom_toTopOf="@+id/btnCancel"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/progressBar">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -46,10 +58,12 @@
                     android:layout_height="80dp"
                     android:layout_marginStart="@dimen/default_margin_size"
                     android:ems="10"
+                    android:enabled="@{medicalInfoViewModel.boolEnableInterface}"
                     android:gravity="start|top"
                     android:hint="@string/hint_allergy"
                     android:importantForAutofill="no"
-                    android:inputType="textMultiLine" />
+                    android:inputType="textMultiLine"
+                    android:text="@{medicalInfoViewModel.medicalInfo.allergies}" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -64,10 +78,12 @@
                     android:layout_height="80dp"
                     android:layout_marginStart="@dimen/default_margin_size"
                     android:ems="10"
+                    android:enabled="@{medicalInfoViewModel.boolEnableInterface}"
                     android:gravity="start|top"
                     android:hint="@string/hint_disease"
                     android:importantForAutofill="no"
-                    android:inputType="textMultiLine" />
+                    android:inputType="textMultiLine"
+                    android:text="@{medicalInfoViewModel.medicalInfo.diseases}" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -82,10 +98,12 @@
                     android:layout_height="80dp"
                     android:layout_marginStart="@dimen/default_margin_size"
                     android:ems="10"
+                    android:enabled="@{medicalInfoViewModel.boolEnableInterface}"
                     android:gravity="start|top"
                     android:hint="@string/hint_disability"
                     android:importantForAutofill="no"
-                    android:inputType="textMultiLine" />
+                    android:inputType="textMultiLine"
+                    android:text="@{medicalInfoViewModel.medicalInfo.disabilities}" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -100,10 +118,12 @@
                     android:layout_height="80dp"
                     android:layout_marginStart="@dimen/default_margin_size"
                     android:ems="10"
+                    android:enabled="@{medicalInfoViewModel.boolEnableInterface}"
                     android:gravity="start|top"
                     android:hint="@string/hint_medicines"
                     android:importantForAutofill="no"
-                    android:inputType="textMultiLine" />
+                    android:inputType="textMultiLine"
+                    android:text="@{medicalInfoViewModel.medicalInfo.medications}" />
 
             </LinearLayout>
 
@@ -144,6 +164,8 @@
             android:layout_marginEnd="@dimen/default_margin_size"
             android:layout_marginBottom="@dimen/default_margin_size"
             android:drawableStart="@drawable/ic_save_white"
+            android:enabled="@{medicalInfoViewModel.boolEnableInterface}"
+            android:onClick="@{()->medicalInfoViewModel.saveMedicalInfo()}"
             android:text="@string/txt_save"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"

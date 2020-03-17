@@ -26,17 +26,13 @@ android {
     dataBinding {
         enabled = true
     }
-
-
 }
-
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    def version_navigation = "2.2.1"
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
@@ -51,19 +47,22 @@ dependencies {
     implementation "com.google.android.material:material:1.1.0"
     implementation 'com.jakewharton.timber:timber:4.7.1' //Timber  (clase 4 lección 5)
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-//Para generar viewmodels (clase 5 lección 8)
+    //Para generar viewmodels (clase 5 lección 8)
     implementation 'de.hdodenhof:circleimageview:3.0.0' //Para imagenes circulares
     implementation "androidx.preference:preference-ktx:1.1.0" //Para sharedPreferences
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.google.android.gms:play-services-location:17.0.0'//Para google maps
     implementation 'androidx.biometric:biometric:1.0.1' //Para autenticación biométrica
-//    implementation 'com.google.api-client:google-api-client-android:1.23.0'
+    //implementation 'com.google.api-client:google-api-client-android:1.23.0'
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
 
 
     //Para obtener información de la cuenta de google (PEOPLE API)
-    def version_google_api = "1.23.0"
     implementation "com.google.api-client:google-api-client:$version_google_api"
-    implementation "com.google.oauth-client:google-oauth-client-jetty:1.23.0"
-    implementation "com.google.apis:google-api-services-people:v1-rev277-1.23.0"
+    implementation "com.google.oauth-client:google-oauth-client-jetty:$version_google_api"
+    implementation "com.google.apis:google-api-services-people:v1-rev277-$version_google_api"
+
+    //Room db
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
 }

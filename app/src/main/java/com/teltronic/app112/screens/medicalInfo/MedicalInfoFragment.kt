@@ -5,10 +5,14 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 
 import com.teltronic.app112.R
+import com.teltronic.app112.database.DatabaseApp
 import com.teltronic.app112.databinding.FragmentMedicalInfoBinding
 
 /**
@@ -32,7 +36,10 @@ class MedicalInfoFragment : Fragment() {
         )
 
         //Inicializo el viewModel
-        viewModel = ViewModelProvider(this).get(MedicalInfoViewModel::class.java)
+        val application = requireNotNull(this.activity).application
+        val dataSource = DatabaseApp.getInstance(application).medicalInfoDao
+        val viewModelFactory = MedicalInfoViewModelFactory(dataSource, application, binding)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(MedicalInfoViewModel::class.java)
 
         //"Uno" el layout con esta clase por medio del binding
         binding.medicalInfoViewModel = viewModel
@@ -40,6 +47,8 @@ class MedicalInfoFragment : Fragment() {
         binding.lifecycleOwner = this
 
         configureBackButton()
+        configureSnackbarEventObserver()
+        configureEnableInterfaceObserver()
         setHasOptionsMenu(true) //Habilita el icono de la derecha
         //Retorno el binding root (no el inflater)
         return binding.root
@@ -64,12 +73,40 @@ class MedicalInfoFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.homeIconItem -> {
-                val actionNavigate = MedicalInfoFragmentDirections.actionMedicalInfoFragmentToMainFragment()
+                val actionNavigate =
+                    MedicalInfoFragmentDirections.actionMedicalInfoFragmentToMainFragment()
                 findNavController().navigate(actionNavigate)
                 true
             }
             else ->
                 false
         }
+    }
+
+    private fun configureSnackbarEventObserver() {
+        viewModel.showSnackbarEvent.observe(
+            this as LifecycleOwner, Observer { shouldShow ->
+                if (shouldShow) {
+                    Snackbar.make(
+                        activity!!.findViewById(android.R.id.content),
+                        getString(R.string.message_medical_information_saved),
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                    viewModel.doneShowingSnackbar()
+                }
+            }
+        )
+    }
+
+    private fun configureEnableInterfaceObserver() {
+//        viewModel.boolEnableInterface.observe(
+//            this as LifecycleOwner, Observer { isEnabled ->
+//                if (isEnabled) { //Si la interfaz SI está habilitada NO se muestra el progress bar
+//                    binding.progressBar.visibility = View.INVISIBLE
+//                } else { //Si la interfaz está NO habilitada SI se muestra el progress bar (se está guardando en la base de datos)
+//                    binding.progressBar.visibility = View.VISIBLE
+//                }
+//            }
+//        )
     }
 }

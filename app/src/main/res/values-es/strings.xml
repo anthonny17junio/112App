@@ -26,7 +26,7 @@
 
 
     <!--OPCIONES DEL MENÚ LATERAL-->
-    <string name="edit_profile">Editar perfil</string>
+    <string name="edit_profile">Perfil de usuario</string>
     <string name="medical_info">Información médica</string>
     <string name="configuration">Configuración</string>
     <string name="legal_notice">Aviso legal</string>
@@ -70,6 +70,7 @@
     <string name="hint_disability">Ej: Discapacidad auditiva, motriz…</string>
     <string name="title_medicine">¿Está tomando medicamentos?</string>
     <string name="hint_medicines">Ej: Insulina</string>
+    <string name="message_medical_information_saved">Información médica guardada</string>
 
     <!--SCREEN CONFIG-->
     <string name="language">Idioma</string>

@@ -1,7 +1,6 @@
 package com.teltronic.app112.classes.enums
 
 import com.teltronic.app112.R
-import com.teltronic.app112.classes.enums.Category
 
 enum class Subcategory(var idTitle: Int, var idIcon: Int, var category: Category?) {
     //*************************************************************

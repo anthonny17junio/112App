@@ -5,7 +5,6 @@ import androidx.room.*
 
 @Dao
 interface MedicalInfoDao {
-
     @Insert
     fun insert(medicalInfo: MedicalInfoEntity)
 
@@ -14,7 +13,4 @@ interface MedicalInfoDao {
 
     @Query("SELECT * FROM tb_medical_information LIMIT 1")
     fun get(): LiveData<MedicalInfoEntity?>
-
-    @Query("DELETE FROM tb_medical_information")
-    fun delete()
 }

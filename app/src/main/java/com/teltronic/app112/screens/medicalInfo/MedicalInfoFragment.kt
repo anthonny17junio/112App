@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 
 import com.teltronic.app112.R
-import com.teltronic.app112.database.DatabaseApp
+import com.teltronic.app112.database.room.DatabaseApp
 import com.teltronic.app112.databinding.FragmentMedicalInfoBinding
 
 /**
@@ -37,7 +37,7 @@ class MedicalInfoFragment : Fragment() {
 
         //Inicializo el viewModel
         val application = requireNotNull(this.activity).application
-        val dataSource = DatabaseApp.getInstance(application).medicalInfoDao
+        val dataSource = DatabaseApp.getInstance(application).medicalInfoDao //QUITAR ESTO DE AUÍ Y MOVERLO SOLO AL VIEW MODEL
         val viewModelFactory = MedicalInfoViewModelFactory(dataSource, application, binding)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MedicalInfoViewModel::class.java)
 

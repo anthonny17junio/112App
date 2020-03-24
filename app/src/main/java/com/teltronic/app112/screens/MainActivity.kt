@@ -23,7 +23,10 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.GoogleApiClient
 import com.teltronic.app112.R
-import com.teltronic.app112.classes.*
+import com.teltronic.app112.classes.DownloadImageTask
+import com.teltronic.app112.classes.GoogleApiPeopleHelper
+import com.teltronic.app112.classes.Phone
+import com.teltronic.app112.classes.Preferences
 import com.teltronic.app112.classes.enums.IntCodes
 import timber.log.Timber
 import java.lang.Exception
@@ -55,6 +58,8 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedList
         configureLateralMenu()
         configureNavigationObservers()
     }
+
+
 
     //Menú lateral
     private fun configureLateralMenu() {

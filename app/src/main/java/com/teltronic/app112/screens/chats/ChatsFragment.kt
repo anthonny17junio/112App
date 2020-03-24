@@ -1,6 +1,6 @@
 package com.teltronic.app112.screens.chats
 
-
+import android.app.Activity
 import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil
@@ -17,11 +17,8 @@ import com.teltronic.app112.R
  */
 class ChatsFragment : Fragment() {
 
-
-
     private lateinit var binding: FragmentChatsBinding
     private lateinit var viewModel: ChatsViewModel
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,7 +32,8 @@ class ChatsFragment : Fragment() {
             false
         )
         //Inicializo el viewModel
-        viewModel = ViewModelProvider(this).get(ChatsViewModel::class.java)
+        val viewModelFactory = ChatsViewModelFactory(binding, activity as Activity)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(ChatsViewModel::class.java)
 
         //"Uno" el layout con esta clase por medio del binding
         binding.chatsViewModel = viewModel

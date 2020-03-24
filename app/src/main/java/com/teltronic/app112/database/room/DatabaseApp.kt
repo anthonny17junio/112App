@@ -1,11 +1,11 @@
-package com.teltronic.app112.database
+package com.teltronic.app112.database.room
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.teltronic.app112.database.medicalInfo.MedicalInfoDao
-import com.teltronic.app112.database.medicalInfo.MedicalInfoEntity
+import com.teltronic.app112.database.room.medicalInfo.MedicalInfoDao
+import com.teltronic.app112.database.room.medicalInfo.MedicalInfoEntity
 
 /*
 En entities van todas las tablas (entities)  de la base de datos
@@ -15,17 +15,18 @@ exportSchema es true por defecto
 abstract class DatabaseApp : RoomDatabase() {
     abstract val medicalInfoDao: MedicalInfoDao
 
+    //Permite acceder a los métodos para crear u obtener la base de datos sin instanciar la clase
     companion object {
-        //Permite acceder a los métodos para crear u obtener la base de datos sin instanciar la clase
 
         //Volatile asgura que el valor de INSTANCE siempre esté actualizado en todos los hilos de ejecución
         //(un cambio en un hilo de ejecución será visible en todos los demás hilos)
         @Volatile
-        private var INSTANCE: DatabaseApp? = null //Con esto se evita inicializar la BD varias veces, lo cual es costoso
+        private var INSTANCE: DatabaseApp? = null
 
+        //Con esto se evita inicializar la BD varias veces, lo cual es costoso
         fun getInstance(context: Context): DatabaseApp {
+            //synchronized asegura de que solo un hilo a la vez acceda a este bloque de código
             synchronized(this) {
-                //Asegura de que solo un hilo a la vez acceda a este bloque de código
                 var instance = INSTANCE
 
                 if (instance == null) {

@@ -1,4 +1,4 @@
-package com.teltronic.app112.database.medicalInfo
+package com.teltronic.app112.database.room.medicalInfo
 
 import androidx.lifecycle.LiveData
 import androidx.room.*

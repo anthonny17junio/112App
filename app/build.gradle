@@ -26,18 +26,27 @@ android {
     dataBinding {
         enabled = true
     }
+
+    compileOptions { //Sin esto no funciona rethinkdb implementation (min api 26)
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 repositories {
     mavenCentral()
 }
 
+configurations{ //Sin esto no funciona rethinkdb implementation (duplicate hamcrest)
+    compile.exclude group: "junit", module: "junit"
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.core:core-ktx:1.2.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
@@ -65,4 +74,7 @@ dependencies {
     //Room db
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
+
+    //Rethink DB
+    implementation group: 'com.rethinkdb', name: 'rethinkdb-driver', version: '2.3.3'
 }

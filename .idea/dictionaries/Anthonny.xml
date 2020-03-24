@@ -2,6 +2,7 @@
   <dictionary name="Anthonny">
     <words>
       <w>aaaa</w>
+      <w>abajo</w>
       <w>abierto</w>
       <w>acceda</w>
       <w>acceder</w>
@@ -67,6 +68,7 @@
       <w>cillum</w>
       <w>circulares</w>
       <w>clase</w>
+      <w>comentar</w>
       <w>commodo</w>
       <w>comprobar</w>
       <w>comprueba</w>
@@ -81,10 +83,13 @@
       <w>consistente</w>
       <w>constraintlayout</w>
       <w>contacto</w>
+      <w>controlar</w>
       <w>convertir</w>
       <w>convulsiones</w>
       <w>coordenadas</w>
       <w>costoso</w>
+      <w>crea</w>
+      <w>creado</w>
       <w>crear</w>
       <w>cual</w>
       <w>cuando</w>
@@ -122,6 +127,7 @@
       <w>diferente</w>
       <w>dificultad</w>
       <w>directamente</w>
+      <w>documentos</w>
       <w>dolore</w>
       <w>donde</w>
       <w>duis</w>
@@ -135,6 +141,8 @@
       <w>ejecutará</w>
       <w>ejemplo</w>
       <w>electrocución</w>
+      <w>elimina</w>
+      <w>eliminar</w>
       <w>elit</w>
       <w>empezaron</w>
       <w>empiezo</w>
@@ -144,8 +152,10 @@
       <w>enviar</w>
       <w>errores</w>
       <w>escolar</w>
+      <w>escucha</w>
       <w>españa</w>
       <w>español</w>
+      <w>espera</w>
       <w>esse</w>
       <w>estamos</w>
       <w>este</w>
@@ -167,6 +177,7 @@
       <w>fractura</w>
       <w>fuera</w>
       <w>fugiat</w>
+      <w>funciona</w>
       <w>funcione</w>
       <w>función</w>
       <w>generar</w>
@@ -222,12 +233,15 @@
       <w>laborum</w>
       <w>lección</w>
       <w>lenguaje</w>
+      <w>lista</w>
       <w>llamada</w>
       <w>llega</w>
       <w>localización</w>
       <w>logueado</w>
       <w>loguearse</w>
+      <w>lugar</w>
       <w>línea</w>
+      <w>líneas</w>
       <w>magna</w>
       <w>malpica</w>
       <w>mantiene</w>
@@ -240,6 +254,7 @@
       <w>modificarlo</w>
       <w>modo</w>
       <w>mollit</w>
+      <w>moverlo</w>
       <w>muchas</w>
       <w>muestra</w>
       <w>médica</w>
@@ -274,12 +289,15 @@
       <w>otras</w>
       <w>otro</w>
       <w>otros</w>
+      <w>palabra</w>
+      <w>palabras</w>
       <w>pantalla</w>
       <w>pantallas</w>
       <w>pariatur</w>
       <w>parto</w>
       <w>parálisis</w>
       <w>parámetro</w>
+      <w>pasa</w>
       <w>pasar</w>
       <w>pase</w>
       <w>patrón</w>
@@ -298,6 +316,7 @@
       <w>pide</w>
       <w>pides</w>
       <w>pido</w>
+      <w>plabras</w>
       <w>polígono</w>
       <w>poner</w>
       <w>porque</w>
@@ -316,6 +335,7 @@
       <w>quemadura</w>
       <w>quiere</w>
       <w>quis</w>
+      <w>quitar</w>
       <w>radicalismos</w>
       <w>radicalisms</w>
       <w>realiza</w>
@@ -329,6 +349,7 @@
       <w>rescate</w>
       <w>respirar</w>
       <w>resultado</w>
+      <w>rethinkdb</w>
       <w>retornar</w>
       <w>retorno</w>
       <w>reverte</w>
@@ -375,6 +396,7 @@
       <w>ubicación</w>
       <w>ullamco</w>
       <w>urgencia</w>
+      <w>usado</w>
       <w>usarla</w>
       <w>usuario</w>
       <w>vandalismo</w>
@@ -392,6 +414,7 @@
       <w>volver</w>
       <w>vuelva</w>
       <w>zaragoza</w>
+      <w>índice</w>
     </words>
   </dictionary>
 </component>

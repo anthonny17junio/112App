@@ -3,7 +3,7 @@ package com.teltronic.app112.screens.medicalInfo
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.teltronic.app112.database.medicalInfo.MedicalInfoDao
+import com.teltronic.app112.database.room.medicalInfo.MedicalInfoDao
 import com.teltronic.app112.databinding.FragmentMedicalInfoBinding
 
 class MedicalInfoViewModelFactory(

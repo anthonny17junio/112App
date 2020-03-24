@@ -5,8 +5,8 @@ import android.view.View
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.teltronic.app112.database.medicalInfo.MedicalInfoDao
-import com.teltronic.app112.database.medicalInfo.MedicalInfoEntity
+import com.teltronic.app112.database.room.medicalInfo.MedicalInfoDao
+import com.teltronic.app112.database.room.medicalInfo.MedicalInfoEntity
 import com.teltronic.app112.databinding.FragmentMedicalInfoBinding
 import kotlinx.coroutines.*
 import java.util.concurrent.TimeUnit
@@ -62,7 +62,13 @@ class MedicalInfoViewModel(
             val strDisabilities = binding.etDisability.text.toString()
             val strMedications = binding.etMedicine.text.toString()
             val medicalInfoInsert =
-                MedicalInfoEntity(1, strAllergies, strDiseases, strDisabilities, strMedications)
+                MedicalInfoEntity(
+                    1,
+                    strAllergies,
+                    strDiseases,
+                    strDisabilities,
+                    strMedications
+                )
             insertToDatabase(medicalInfoInsert)
             //medicalInfo = getMedicalInfoFromDatabase() //Esto no hace falta debido a que es un live data
         }
@@ -72,7 +78,7 @@ class MedicalInfoViewModel(
         //Ejecutamos una co-rutina en el hilo IO (Input Output)
         withContext(Dispatchers.IO) {
             disableInterface() //Deshabilito la interfaz
-            //TODO - borrar este sleep
+
             TimeUnit.MILLISECONDS.sleep(3000L) //Si se pone código aquí NO se bloquea UI (porque estamos en Dispatchers.IO)
             if (medicalInfo.value == null) {
                 //Si no existe medicalInfo se inserta

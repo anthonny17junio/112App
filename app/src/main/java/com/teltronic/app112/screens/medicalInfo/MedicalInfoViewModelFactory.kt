@@ -7,14 +7,13 @@ import com.teltronic.app112.database.room.medicalInfo.MedicalInfoDao
 import com.teltronic.app112.databinding.FragmentMedicalInfoBinding
 
 class MedicalInfoViewModelFactory(
-    private val dataSource: MedicalInfoDao,
     private val application: Application,
     private val binding: FragmentMedicalInfoBinding
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(MedicalInfoViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return MedicalInfoViewModel(dataSource, application, binding) as T
+            return MedicalInfoViewModel(application, binding) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

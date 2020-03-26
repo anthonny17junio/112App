@@ -46,6 +46,7 @@ object Phone {
         )
     }
 
+
     //Revisar onRequestPermissionsResult en MainActivity.kt
     fun makeActionRequestPermissionsResult(
         activity: Activity, requestCode: Int, grantResults: IntArray
@@ -58,7 +59,8 @@ object Phone {
                     Toast.makeText(activity, R.string.txt_permission_call, Toast.LENGTH_LONG).show()
                 }
             }
-            PermissionsApp.FINE_LOCATION.code -> {
+
+            PermissionsApp.FINE_LOCATION_FROM_MAIN_FRAGMENT.code -> {
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                     //Si acepto los permisos navego a "location screen"
                     val actionNavigate =
@@ -68,6 +70,19 @@ object Phone {
                 } else {
                     Toast.makeText(activity, R.string.txt_permission_location, Toast.LENGTH_LONG)
                         .show()
+                }
+            }
+
+            PermissionsApp.FINE_LOCATION_FROM_CONFIRM_MESSAGE_FRAGMENT.code -> {
+                activity.runOnUiThread {
+                    if ((grantResults.isEmpty() || grantResults[0] == PackageManager.PERMISSION_DENIED)) {
+                        Toast.makeText(
+                                activity,
+                                R.string.txt_permission_location,
+                                Toast.LENGTH_LONG
+                            )
+                            .show()
+                    }
                 }
             }
         }

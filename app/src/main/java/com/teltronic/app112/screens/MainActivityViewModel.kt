@@ -5,7 +5,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.rethinkdb.net.Connection
 import com.teltronic.app112.classes.GoogleApiPeopleHelper
+import com.teltronic.app112.database.rethink.DatabaseRethink
+import com.teltronic.app112.database.rethink.tb_users.UsersRethink
+import com.teltronic.app112.database.room.DatabaseApp
+import com.teltronic.app112.database.room.DatabaseRoomHelper
+import com.teltronic.app112.database.room.configurations.ConfigurationsEntity
+import kotlinx.coroutines.*
 
 class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
     private var _activity: MainActivity = activityParam
@@ -35,18 +42,22 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
     private var _boolNavigateToMedicalInfo = MutableLiveData<Boolean>()
     val boolNavigateToMedicalInfo: LiveData<Boolean>
         get() = _boolNavigateToMedicalInfo
+
     //Configuration
     private var _boolNavigateToConfiguration = MutableLiveData<Boolean>()
     val boolNavigateToConfiguration: LiveData<Boolean>
         get() = _boolNavigateToConfiguration
+
     //Legal notice
     private var _boolNavigateToLegalNotice = MutableLiveData<Boolean>()
     val boolNavigateToLegalNotice: LiveData<Boolean>
         get() = _boolNavigateToLegalNotice
+
     //About
     private var _boolNavigateToAbout = MutableLiveData<Boolean>()
     val boolNavigateToAbout: LiveData<Boolean>
         get() = _boolNavigateToAbout
+
     //Google session
     private var _boolGoogleAuthenticated =
         MutableLiveData<Boolean>() //Indica si está autenticado o no con una cuenta de google
@@ -172,6 +183,32 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
     //Google authentication
     fun authenticationWithGoogleComplete() {
         _boolGoogleAuthenticated.value = true
+    }
+
+    //Después de esta función, en tb_configurations (ROOM)
+    //se encontrará el id que existe en rethinkDB correspondiente al usuario
+    //que se acaba de loguear con la cuenta de google
+    fun getIdUserRethinkDbAfterGoogleAuth() {
+        //Obtener el id de google (nunca será null)
+        val account = GoogleSignIn.getLastSignedInAccount(_activity)
+        val googleId = requireNotNull(requireNotNull(account).id)
+
+        var viewModelJob = Job()
+        val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+        uiScope.launch {
+            getIdRethinkDbIOAfterGoogleAuth(googleId)
+        }
+    }
+
+    private suspend fun getIdRethinkDbIOAfterGoogleAuth(googleId: String) {
+        withContext(Dispatchers.IO) {
+
+            val con = DatabaseRethink.getConnection()
+            if (con != null) {
+                //Se asegura que estén sincronizados los id de usuario de google con room y con rethinkdb
+                DatabaseRoomHelper.getOrInsertSynchronizedRethinkId(con, _activity)
+            }
+        }
     }
 
 }

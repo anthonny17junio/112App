@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.teltronic.app112.database.room.configurations.ConfigurationsDao
 import com.teltronic.app112.database.room.configurations.ConfigurationsEntity
 import com.teltronic.app112.database.room.medicalInfo.MedicalInfoDao
 import com.teltronic.app112.database.room.medicalInfo.MedicalInfoEntity
@@ -12,10 +13,14 @@ import com.teltronic.app112.database.room.medicalInfo.MedicalInfoEntity
 En entities van todas las tablas (entities)  de la base de datos
 exportSchema es true por defecto
  */
-@Database(entities = [MedicalInfoEntity::class], version = 1, exportSchema = false)
+@Database(
+    entities = [MedicalInfoEntity::class, ConfigurationsEntity::class],
+    version = 2,
+    exportSchema = false
+)
 abstract class DatabaseApp : RoomDatabase() {
     abstract val medicalInfoDao: MedicalInfoDao
-    abstract val configurationsEntity: ConfigurationsEntity
+    abstract val configurationsDao: ConfigurationsDao
 
     //Permite acceder a los métodos para crear u obtener la base de datos sin instanciar la clase
     companion object {

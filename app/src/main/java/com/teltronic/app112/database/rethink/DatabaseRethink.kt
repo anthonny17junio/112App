@@ -1,7 +1,10 @@
 package com.teltronic.app112.database.rethink
 
 import com.rethinkdb.RethinkDB
+import com.rethinkdb.gen.exc.ReqlDriverError
 import com.rethinkdb.net.Connection
+import com.teltronic.app112.classes.enums.NamesRethinkdb
+import java.util.concurrent.TimeUnit
 
 abstract class DatabaseRethink {
     //Permite acceder a los métodos para crear u obtener la base de datos sin instanciar la clase
@@ -12,22 +15,77 @@ abstract class DatabaseRethink {
         private var CONNECTION: Connection? = null
 
         //Con esto se evita inicializar la BD varias veces, lo cual es costoso
-        fun getConnection(): Connection {
+        fun getConnection(): Connection? {
             //synchronized asegura de que solo un hilo a la vez acceda a este bloque de código
             synchronized(this) {
                 var connection = CONNECTION
 
                 //rethinkdb.exe --bind all --initial-password "123456789"
                 if (connection == null) {
-                    val db = RethinkDB.r
-                    //Aquí controlar que pasa si no hay internet
-                    connection = db.connection().hostname("192.168.43.210").port(28015)
-                        .user("admin", "123456789").connect()
+                    val r = RethinkDB.r
+                    try {
+                        connection = r.connection().hostname("192.168.43.210").port(28015)
+                            .user("admin", "123456789").connect()
+                    } catch (e: ReqlDriverError) {
+                        //No se puede establecer la conexión
+                        return null
+                    }
                     CONNECTION = connection
+
+                    //TODO - BORRAR ESTO, NO DEBERÍA ESTAR AQUÍ (SOLO SE DEBERÍA EJECUTAR UNA VEZ Y NUNCA MÁS)
+                    verifyAllDatabase(r, connection)
                 }
-                requireNotNull(connection) // TODO - Qué pasa si no hay internet? está bien este not null aquí o debería ir en otro lugar
-                return connection
+                return connection!!
             }
         }
+
+        private fun verifyAllDatabase(r: RethinkDB, con: Connection) {
+//            r.dbDrop(NamesRethinkdb.DATABASE.text).run<Any>(con) //Elimina la base de datos
+            verifyDatabase(r, con)
+            verifyTbUsers(r, con)
+        }
+
+        private fun verifyDatabase(r: RethinkDB, con: Connection) {
+            val dataBases = r.dbList().run(con) as ArrayList<String>
+
+            var existe = false
+            for (dataBase in dataBases) {
+                if (dataBase == NamesRethinkdb.DATABASE.text) {
+                    existe = true
+                    break
+                }
+            }
+
+            if (!existe) {
+                r.dbCreate(NamesRethinkdb.DATABASE.text).run<Any>(con)
+            }
+        }
+
+        private fun verifyTbUsers(r: RethinkDB, con: Connection) {
+            val tables =
+                r.db(NamesRethinkdb.DATABASE.text).tableList().run(con) as ArrayList<String>
+
+            var existe = false
+            for (table in tables) {
+                if (table == NamesRethinkdb.TB_USERS.text) {
+                    existe = true
+                    break
+                }
+            }
+
+            if (!existe) {
+                r.db(NamesRethinkdb.DATABASE.text).tableCreate(NamesRethinkdb.TB_USERS.text)
+                    .run(con) as Any
+//                //Crea el índice
+//                r.table(NamesRethinkdb.TB_USERS.text).indexCreate("creation_time").run(con) as Any
+//                //Espera a que el índice esté creado para ser usado
+//                r.table(NamesRethinkdb.TB_USERS.text).indexWait("creation_time").run(con) as Any
+//                //Crea el índice
+//                r.table(NamesRethinkdb.TB_USERS.text).indexCreate("last_access_time").run(con) as Any
+//                //Espera a que el índice esté creado para ser usado
+//                r.table(NamesRethinkdb.TB_USERS.text).indexWait("last_access_time").run(con) as Any
+            }
+        }
+
     }
 }

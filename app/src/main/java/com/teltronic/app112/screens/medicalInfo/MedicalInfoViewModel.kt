@@ -5,6 +5,7 @@ import android.view.View
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.teltronic.app112.database.room.DatabaseApp
 import com.teltronic.app112.database.room.medicalInfo.MedicalInfoDao
 import com.teltronic.app112.database.room.medicalInfo.MedicalInfoEntity
 import com.teltronic.app112.databinding.FragmentMedicalInfoBinding
@@ -12,7 +13,6 @@ import kotlinx.coroutines.*
 import java.util.concurrent.TimeUnit
 
 class MedicalInfoViewModel(
-    private val database: MedicalInfoDao,
     application: Application,
     private val binding: FragmentMedicalInfoBinding
 ) : AndroidViewModel(application) {
@@ -31,6 +31,8 @@ class MedicalInfoViewModel(
     private var _showSnackbarEvent = MutableLiveData<Boolean>()
     val showSnackbarEvent: LiveData<Boolean>
         get() = _showSnackbarEvent
+
+    private val dataSource = DatabaseApp.getInstance(application).medicalInfoDao
 
     fun doneShowingSnackbar() {
         _showSnackbarEvent.value = false
@@ -51,7 +53,7 @@ class MedicalInfoViewModel(
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     var medicalInfo: LiveData<MedicalInfoEntity?> =
-        database.get() //Al ser un liveData no se necesita volver a pedirlo (ya que siempre se mantiene actualizado)
+        dataSource.get() //Al ser un liveData no se necesita volver a pedirlo (ya que siempre se mantiene actualizado)
 
     fun saveMedicalInfo() {
         //Ejecutamos una co-rutina en el hilo principal
@@ -82,10 +84,10 @@ class MedicalInfoViewModel(
             TimeUnit.MILLISECONDS.sleep(3000L) //Si se pone código aquí NO se bloquea UI (porque estamos en Dispatchers.IO)
             if (medicalInfo.value == null) {
                 //Si no existe medicalInfo se inserta
-                database.insert(medicalInfoInsert)
+                dataSource.insert(medicalInfoInsert)
             } else {
                 //Si existe se actualiza
-                database.update(medicalInfoInsert)
+                dataSource.update(medicalInfoInsert)
             }
             enableInterface() //Habilito la interfaz
             _showSnackbarEvent.postValue(true)

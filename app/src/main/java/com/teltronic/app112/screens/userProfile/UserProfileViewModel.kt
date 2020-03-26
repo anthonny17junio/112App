@@ -59,7 +59,7 @@ class UserProfileViewModel(fragment: Fragment) : ViewModel() {
 
             //Inicia el intent para descargar los demás datos (fecha de nacimiento y género)
             GoogleApiPeopleHelper.googleAuth(
-                IntCodes.CODE_REQUEST_GOOGLE_AUTH_FRAGMENT_PROFILE.code,
+                IntCodes.CODE_REQUEST_API_PEOPLE_GOOGLE_AUTH_FRAGMENT_PROFILE.code,
                 fragment
             )
         }

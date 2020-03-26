@@ -148,7 +148,7 @@
     <string name="subcategory_medical_urgency_animal_attack">Ataque de animal</string>
 
     <!--CONFIRMATION SCREEN-->
-    <string name="inform_format" >Informar %s</string>
+    <string name="inform_format">Informar %s</string>
     <string name="txt_confirm">Confirmar</string>
     <string name="txt_cancel">Cancelar</string>
     <string name="content_description_confirmation_image">Logo de emergencia</string>
@@ -163,4 +163,7 @@
     <string name="gender_other">Otro</string>
     <string name="gender_unknown">Desconocido</string>
 
+    <!--ERRORS-->
+    <string name="no_database_connection">No existe conexión con la base de datos</string>
+    <string name="error_getting_user">Error al obtener el usuario</string>
 </resources>

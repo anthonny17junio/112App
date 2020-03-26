@@ -5,6 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "tb_configurations")
 data class ConfigurationsEntity(
-    @PrimaryKey val id: Int = 0,
+    @PrimaryKey
+    val id: Int = 0,
     var id_rethink: String = ""
 )

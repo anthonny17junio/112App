@@ -1,9 +1,7 @@
 package com.teltronic.app112.database.room.configurations
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.lifecycle.LiveData
+import androidx.room.*
 
 @Dao
 interface ConfigurationsDao {
@@ -15,4 +13,10 @@ interface ConfigurationsDao {
 
     @Query("SELECT * FROM tb_configurations LIMIT 1")
     fun get(): ConfigurationsEntity
+
+    @Delete
+    fun delete(configurations: ConfigurationsEntity)
+
+    @Query("DELETE FROM tb_configurations")
+    fun deleteAll()
 }

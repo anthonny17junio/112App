@@ -57,7 +57,7 @@ class UserProfileFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
-                IntCodes.CODE_REQUEST_GOOGLE_AUTH_FRAGMENT_PROFILE.code -> { //Al loguearse después de dar click en el perfil de usuario
+                IntCodes.CODE_REQUEST_API_PEOPLE_GOOGLE_AUTH_FRAGMENT_PROFILE.code -> { //Al loguearse después de dar click en el perfil de usuario
                     val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
                     if (result.isSuccess) {
                         val account = result.signInAccount

@@ -96,21 +96,22 @@ class MainFragment : Fragment() {
                             R.string.location_no_enabled,
                             Toast.LENGTH_LONG
                         ).show()
-                    } else
-                        if (Phone.existPermission(
-                                activity,
-                                PermissionsApp.FINE_LOCATION
-                            )
-                        ) {
-                            //Si tienes permisos de localización navegas a location screen
-                            val actionNavigate =
-                                MainFragmentDirections.actionMainFragmentToLocationFragment()
-                            findNavController().navigate(actionNavigate)
-                        } else {
-                            //Si no tienes permisos de localización los pides
-                            Phone.askPermission(activity!!,
-                                PermissionsApp.FINE_LOCATION)
-                        }
+                    } else if (Phone.existPermission(
+                            activity,
+                            PermissionsApp.FINE_LOCATION_FROM_MAIN_FRAGMENT
+                        )
+                    ) {
+                        //Si tienes permisos de localización navegas a location screen
+                        val actionNavigate =
+                            MainFragmentDirections.actionMainFragmentToLocationFragment()
+                        findNavController().navigate(actionNavigate)
+                    } else {
+                        //Si no tienes permisos de localización los pides
+                        Phone.askPermission(
+                            activity!!,
+                            PermissionsApp.FINE_LOCATION_FROM_MAIN_FRAGMENT
+                        )
+                    }
                     viewModel.onNavigateToLocationComplete()
                 }
             })

@@ -37,8 +37,7 @@ class MedicalInfoFragment : Fragment() {
 
         //Inicializo el viewModel
         val application = requireNotNull(this.activity).application
-        val dataSource = DatabaseApp.getInstance(application).medicalInfoDao //QUITAR ESTO DE AUÍ Y MOVERLO SOLO AL VIEW MODEL
-        val viewModelFactory = MedicalInfoViewModelFactory(dataSource, application, binding)
+        val viewModelFactory = MedicalInfoViewModelFactory(application, binding)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MedicalInfoViewModel::class.java)
 
         //"Uno" el layout con esta clase por medio del binding

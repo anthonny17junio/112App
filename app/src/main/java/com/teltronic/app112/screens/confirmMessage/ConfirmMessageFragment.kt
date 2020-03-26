@@ -10,6 +10,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 
 import com.teltronic.app112.R
 import com.teltronic.app112.classes.enums.ChatState
@@ -38,9 +39,10 @@ class ConfirmMessageFragment : Fragment() {
         //Inicializo el viewModel
         val args = ConfirmMessageFragmentArgs.fromBundle(arguments!!)
         val subcategory = args.subcategory
-        val application = requireNotNull(this.activity).application
-        val viewModelFactory = ConfirmMessageViewModelFactory(subcategory, application)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(ConfirmMessageViewModel::class.java)
+        val act = requireNotNull(activity)
+        val viewModelFactory = ConfirmMessageViewModelFactory(subcategory, act)
+        viewModel =
+            ViewModelProvider(this, viewModelFactory).get(ConfirmMessageViewModel::class.java)
 
         //"Uno" el layout con esta clase por medio del binding
         binding.confirmMessageViewModel = viewModel
@@ -51,10 +53,27 @@ class ConfirmMessageFragment : Fragment() {
         configureInfoRealtime()
         configureBackButton()
         configureConfirmButtonObserver()
+        configureErrorCreateChatObserver()
         //Retorno el binding root (no el inflater)
         return binding.root
     }
 
+    private fun configureErrorCreateChatObserver() {
+        viewModel.strErrorCreateChat.observe(
+            this as LifecycleOwner,
+            Observer { strError ->
+                if (strError != "") {
+                    Snackbar.make(
+                        activity!!.findViewById(android.R.id.content),
+                        strError,
+//                        getString(R.string.message_medical_information_saved),
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                    viewModel.clearStrErrorCreateChat()
+                }
+            }
+        )
+    }
 
     private fun configureInfoRealtime() {
         binding.imgInfoRealTime.setOnClickListener {

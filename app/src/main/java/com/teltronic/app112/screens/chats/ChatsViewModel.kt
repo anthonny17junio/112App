@@ -21,6 +21,7 @@ class ChatsViewModel(private val binding: FragmentChatsBinding, private val acti
 
     private val job = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + job)
+    private lateinit var cursorChanges: Cursor<*>
 
     override fun onCleared() {
         super.onCleared()
@@ -45,10 +46,14 @@ class ChatsViewModel(private val binding: FragmentChatsBinding, private val acti
         withContext(Dispatchers.IO) {
             val con = DatabaseRethink.getConnection()
             val rethinkDB = RethinkDB.r
-            val cursorChanges = rethinkDB.table("tb_palabras").changes().run(con) as Cursor<*>
+            cursorChanges = rethinkDB.table("tb_palabras").changes().run(con) as Cursor<*>
 
             for (change in cursorChanges) { //Esto se ejecutará cada vez que haya un cambio en la tabla "tb_palabras"
-                getPalabrasIO()
+                if (job.isActive) { //REVISAR SI HAY COMO CANCELAR ELTE CURSOR
+                    getPalabrasIO()
+                } else {
+                    cursorChanges.close()
+                }
             }
         }
     }

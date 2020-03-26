@@ -60,7 +60,6 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedList
     }
 
 
-
     //Menú lateral
     private fun configureLateralMenu() {
         drawerLayout = binding.drawerLayout
@@ -393,6 +392,11 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedList
 //                }
 //                IntCodes.CODE_REQUEST_GOOGLE_AUTH_FRAGMENT_PROFILE.code -> { //Al loguearse por primera vez (sin dar click a nada previamente)
 
+            }
+
+            //Si está autenticado obtener el id de rethinkDB
+            if (requestCode == IntCodes.CODE_REQUEST_GOOGLE_AUTH_EDIT_PROFILE.code || requestCode == IntCodes.CODE_REQUEST_GOOGLE_AUTH_MAIN.code) {
+                viewModel.getIdUserRethinkDbAfterGoogleAuth()
             }
             viewModel.authenticationWithGoogleComplete()
         }

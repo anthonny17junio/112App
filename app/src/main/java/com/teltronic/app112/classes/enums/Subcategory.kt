@@ -1,6 +1,5 @@
 package com.teltronic.app112.classes.enums
 
-import com.rethinkdb.gen.ast.Sub
 import com.teltronic.app112.R
 
 enum class Subcategory(var idTitle: Int, var idIcon: Int, var category: Category?, val id: Int) {
@@ -286,14 +285,16 @@ enum class Subcategory(var idTitle: Int, var idIcon: Int, var category: Category
         R.drawable.ic_subcategory_accident_other,
         Category.OTHER,
         34
-    )
-}
+    );
 
-//fun getById(id: Int): Subcategory? {
-//    for (subcat in Subcategory.values()) {
-//        if(subcat.id==id){
-//            return subcat
-//        }
-//    }
-//    return null
-//}
+    companion object {
+        fun getById(id: Int): Subcategory? {
+            for (subcat in values()) {
+                if (subcat.id == id) {
+                    return subcat
+                }
+            }
+            return null
+        }
+    }
+}

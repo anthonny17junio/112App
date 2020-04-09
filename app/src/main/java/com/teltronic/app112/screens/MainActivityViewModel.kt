@@ -3,12 +3,14 @@ package com.teltronic.app112.screens
 import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.rethinkdb.net.Connection
+import com.rethinkdb.RethinkDB
+import com.rethinkdb.net.Cursor
 import com.teltronic.app112.classes.GoogleApiPeopleHelper
+import com.teltronic.app112.classes.enums.NamesRethinkdb
 import com.teltronic.app112.database.rethink.DatabaseRethink
-import com.teltronic.app112.database.rethink.tb_users.UsersRethink
 import com.teltronic.app112.database.room.DatabaseApp
 import com.teltronic.app112.database.room.DatabaseRoomHelper
 import com.teltronic.app112.database.room.configurations.ConfigurationsEntity
@@ -33,6 +35,7 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
     private var _profileImage = MutableLiveData<Bitmap>()
     val profileImage: LiveData<Bitmap>
         get() = _profileImage
+
 
     //Medical info
     private var _boolTryNavigateToMedicalInfo = MutableLiveData<Boolean>()
@@ -69,6 +72,11 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
     val shouldAskGoogleAuth: LiveData<Boolean>
         get() = _shouldAskGoogleAuth
 
+    var configurations: LiveData<ConfigurationsEntity>
+
+    private val job = Job()
+    private val uiScope = CoroutineScope(Dispatchers.Main + job)
+    private lateinit var cursorChangesTbChats: Cursor<*>
 
     init {
         //Esto se inicia cuando se presiona el botón para ir a user profile
@@ -86,7 +94,67 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
         _shouldAskGoogleAuth.value = true
 
         GoogleApiPeopleHelper.initGoogleApiClient(_activity)
+
+        val dataSource = DatabaseApp.getInstance(_activity.application).configurationsDao
+        configurations = dataSource.getLiveData()
+        configurationsObserver()
     }
+
+    private fun configurationsObserver() {
+        //Cuando existe un id logueado en la base de datos se
+        //escucha de Rethinkdb los cambios a las tablas de los chats
+        configurations.observe(_activity, Observer { configurations ->
+            if (configurations != null) {
+                val idUser = configurations.id_rethink
+                uiScope.launch {
+                    //Aquí se debe configurar un listener para escuchar los cambios de los chats
+                    subscribeToChangesTbChatsIO(idUser)
+                }
+            }
+        })
+    }
+
+    private suspend fun subscribeToChangesTbChatsIO(idUser: String) {
+        withContext(Dispatchers.IO) {
+            val con = DatabaseRethink.getConnection()
+            val r = RethinkDB.r
+            val table = r.db(NamesRethinkdb.DATABASE.text).table(NamesRethinkdb.TB_CHATS.text)
+                .getAll(idUser).optArg("index", "id_user")
+
+            if (con != null) {
+                cursorChangesTbChats = table.changes().run(con) as Cursor<*>
+                for (change in cursorChangesTbChats) { //Esto se ejecutará cada vez que haya un cambio en la tabla "tb_chats"
+                    if (job.isActive) {
+                        //gestionar cambios
+                        //getPalabrasIO()
+                    } else {
+                        cursorChangesTbChats.close()
+                    }
+                }
+            }
+        }
+    }
+
+//    private suspend fun getPalabrasIO() {
+//        withContext(Dispatchers.IO) {
+//            val con = DatabaseRethink.getConnection()
+//            val rethinkDB = RethinkDB.r
+//
+//            val cursor =
+//                rethinkDB.table("tb_palabras").orderBy().optArg("index", "time")
+//                    .run(con) as Cursor<HashMap<*, *>>
+//            val list = cursor.bufferedItems()
+//
+//            var palabras = ""
+//            for (item in list) {
+//                val jsonObject = item as org.json.simple.JSONObject
+//                val palabra = jsonObject["palabra"] as String
+//                palabras += palabra + "\n"
+//            }
+//            _palabras.postValue(palabras)
+//        }
+//    }
+
 
     fun googleAuthAsked() {
         _shouldAskGoogleAuth.value = false
@@ -188,25 +256,39 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
     //Después de esta función, en tb_configurations (ROOM)
     //se encontrará el id que existe en rethinkDB correspondiente al usuario
     //que se acaba de loguear con la cuenta de google
-    fun getIdUserRethinkDbAfterGoogleAuth() {
+    fun syncDatabasesAfterGoogleAuth() {
         //Obtener el id de google (nunca será null)
         val account = GoogleSignIn.getLastSignedInAccount(_activity)
-        val googleId = requireNotNull(requireNotNull(account).id)
+        requireNotNull(account)
 
-        var viewModelJob = Job()
+        val viewModelJob = Job()
         val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
         uiScope.launch {
-            getIdRethinkDbIOAfterGoogleAuth(googleId)
+            syncDatabasesAfterGoogleAuthIO()
         }
     }
 
-    private suspend fun getIdRethinkDbIOAfterGoogleAuth(googleId: String) {
+    private suspend fun syncDatabasesAfterGoogleAuthIO() {
         withContext(Dispatchers.IO) {
 
             val con = DatabaseRethink.getConnection()
             if (con != null) {
+                val dataSourceConfigurations =
+                    DatabaseApp.getInstance(_activity.application).configurationsDao
+                val configurations = dataSourceConfigurations.get()
+                val idRoom = configurations.id_rethink
+
                 //Se asegura que estén sincronizados los id de usuario de google con room y con rethinkdb
-                DatabaseRoomHelper.getOrInsertSynchronizedRethinkId(con, _activity)
+                val idSync = DatabaseRoomHelper.getOrInsertSynchronizedRethinkId(con, _activity)
+
+                if (idRoom != idSync) {
+                    //Si el id que estaba en room no es igual con el id sincronizado, eliminar lo que había antes en tb_chats
+                    val dataSourceChats =
+                        DatabaseApp.getInstance(_activity.application).chatsDao
+
+                    dataSourceChats.deleteAll()
+
+                }
             }
         }
     }

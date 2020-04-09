@@ -19,4 +19,7 @@ interface ConfigurationsDao {
 
     @Query("DELETE FROM tb_configurations")
     fun deleteAll()
+
+    @Query("SELECT * FROM tb_configurations LIMIT 1")
+    fun getLiveData(): LiveData<ConfigurationsEntity>
 }

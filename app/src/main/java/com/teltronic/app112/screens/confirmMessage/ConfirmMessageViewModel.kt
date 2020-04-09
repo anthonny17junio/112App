@@ -1,21 +1,31 @@
 package com.teltronic.app112.screens.confirmMessage
 
+import android.app.Activity
+import android.location.Location
 import android.view.View
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.rethinkdb.net.Connection
 import com.teltronic.app112.R
 import com.teltronic.app112.classes.Phone
+import com.teltronic.app112.classes.enums.ChatState
 import com.teltronic.app112.classes.enums.PermissionsApp
 import com.teltronic.app112.classes.enums.Subcategory
 import com.teltronic.app112.database.rethink.DatabaseRethink
-import com.teltronic.app112.database.rethink.DatabaseRethinkHelper
+import com.teltronic.app112.database.rethink.tb_chats.ChatsRethink
 import com.teltronic.app112.database.room.DatabaseRoomHelper
+import com.teltronic.app112.databinding.FragmentConfirmMessageBinding
 import kotlinx.coroutines.*
 
-class ConfirmMessageViewModel(subcat: Subcategory, activity: FragmentActivity) :
+class ConfirmMessageViewModel(
+    subcat: Subcategory,
+    activity: FragmentActivity,
+    private val binding: FragmentConfirmMessageBinding
+) :
     ViewModel() {
 
     private val _application = activity.application
@@ -23,11 +33,6 @@ class ConfirmMessageViewModel(subcat: Subcategory, activity: FragmentActivity) :
     private val job = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + job)
 
-
-    override fun onCleared() {
-        super.onCleared()
-        job.cancel()
-    }
 
     private var _progressbarStyle = MutableLiveData<Int>()
     val progressbarStyle: LiveData<Int>
@@ -49,9 +54,14 @@ class ConfirmMessageViewModel(subcat: Subcategory, activity: FragmentActivity) :
     val strCategory: LiveData<String>
         get() = _strCategory
 
-    private val _boolNavigateToChat = MutableLiveData<Boolean>()
-    val boolNavigateToChat: LiveData<Boolean>
-        get() = _boolNavigateToChat
+    private val _idChatToNavigate = MutableLiveData<String>()
+    val idChatToNavigate: LiveData<String>
+        get() = _idChatToNavigate
+
+    override fun onCleared() {
+        super.onCleared()
+        job.cancel()
+    }
 
     init {
         enableInterface()
@@ -64,29 +74,59 @@ class ConfirmMessageViewModel(subcat: Subcategory, activity: FragmentActivity) :
             _strCategory.value = ""
         }
 
-        _boolNavigateToChat.value = false
+        _idChatToNavigate.value = null
     }
 
     fun tryCreateNewChat() {
-        uiScope.launch {
-            tryCreateNewChatIO()
+        val mFusedLocationClient: FusedLocationProviderClient =
+            LocationServices.getFusedLocationProviderClient(_activity as Activity)
+
+        mFusedLocationClient.lastLocation.addOnCompleteListener(_activity as Activity) { task ->
+            val location: Location? = task.result
+            var lat = -1.0
+            var long = -1.0
+
+            //Aunque no pueda obtener la ubicación podría crear el nuevo chat
+            if (location != null) {
+                lat = location.latitude
+                long = location.longitude
+            }
+
+            uiScope.launch {
+                tryCreateNewChatIO(lat, long)
+            }
         }
     }
 
-    private suspend fun tryCreateNewChatIO() {
+    private suspend fun tryCreateNewChatIO(lat: Double, long: Double) {
         withContext(Dispatchers.IO) {
             disableInterface()
             //Tener conexión con rethinkDB
             val con = DatabaseRethink.getConnection()
             if (con != null) {
                 //Tener una localización activa
-                val locationEnabled = isLocationEnabled()
+                val locationEnabled = activateLocation()
                 if (locationEnabled) {
                     //Tener un id de usuario válido
                     val idUser = DatabaseRoomHelper.getOrInsertSynchronizedRethinkId(con, _activity)
                     if (idUser != null) {
-                        //TODO: Crear el chat
-                        navigateToChat()
+                        //Tener un id de subcategoría
+                        val subcategory = _subcategory.value
+                        if (subcategory != null) {
+                            val idNewChat = createNewChat(subcategory, con, lat, long, idUser)
+
+                            if (idNewChat != null) {
+                                navigateToChat(idNewChat)
+                            } else {
+                                _strErrorCreateChat.postValue(
+                                    _application.getString(R.string.error_creating_chat)
+                                )
+                            }
+                        } else {
+                            _strErrorCreateChat.postValue(
+                                _application.getString(R.string.error_getting_subcategory)
+                            )
+                        }
                     } else {
                         _strErrorCreateChat.postValue(
                             _application.getString(R.string.error_getting_user)
@@ -103,7 +143,30 @@ class ConfirmMessageViewModel(subcat: Subcategory, activity: FragmentActivity) :
         }
     }
 
-    private fun isLocationEnabled(): Boolean {
+    private fun createNewChat(
+        subcategory: Subcategory,
+        con: Connection,
+        lat: Double,
+        long: Double,
+        idUser: String
+    ): String? {
+        val idSubcategory = subcategory.id
+        val realTimeSelected = binding.chkRealTimeLocation.isChecked
+
+        //Insert en rethink
+        return ChatsRethink.insertNewChat(
+            con,
+            idUser,
+            idSubcategory,
+            lat,
+            long,
+            realTimeSelected,
+            ChatState.IN_PROGRESS.id
+        )
+    }
+
+
+    private fun activateLocation(): Boolean {
         var locationEnabled = false
 
         if (!Phone.isLocationEnabled(_activity)) {
@@ -119,7 +182,7 @@ class ConfirmMessageViewModel(subcat: Subcategory, activity: FragmentActivity) :
         } else {
             //Si no tienes permisos de localización los pides
             Phone.askPermission(
-                _activity!!,
+                _activity,
                 PermissionsApp.FINE_LOCATION_FROM_CONFIRM_MESSAGE_FRAGMENT
             )
         }
@@ -127,12 +190,12 @@ class ConfirmMessageViewModel(subcat: Subcategory, activity: FragmentActivity) :
     }
 
 
-    fun navigateToChat() {
-        _boolNavigateToChat.postValue(true)
+    private fun navigateToChat(idChat: String) {
+        _idChatToNavigate.postValue(idChat)
     }
 
     fun navigateToChatComplete() {
-        _boolNavigateToChat.value = false
+        _idChatToNavigate.value = null
     }
 
     fun clearStrErrorCreateChat() {

@@ -1,3 +1,5 @@
+@file:Suppress("UNCHECKED_CAST")
+
 package com.teltronic.app112.database.rethink.tb_users
 
 import com.rethinkdb.RethinkDB
@@ -33,7 +35,7 @@ object UsersRethink {
         val list = cursor.bufferedItems()
         for (item in list) {
             val jsonObject = item as org.json.simple.JSONObject
-            val jsonElement = jsonObject["googleId"]
+            val jsonElement = jsonObject["id_google"]
             if (jsonElement != null)
                 return jsonElement as String
         }
@@ -44,12 +46,12 @@ object UsersRethink {
 
     //Obtiene el id de rethinkDB dado un googleId
     fun getIdUserByGoogleId(con: Connection, googleId: String): String? {
-        val cursor = table.filter { row: ReqlExpr -> row.g("googleId").eq(googleId) }
+        val cursor = table.filter { row: ReqlExpr -> row.g("id_google").eq(googleId) }
             .run<Cursor<HashMap<*, *>>>(con)
 
         val list = cursor.bufferedItems()
 //        if(list.size>1){
-//            throw error("googleId should be unique in database") //¿REMOVE DUPLICATES?
+//            throw error("id_google should be unique in database") //¿REMOVE DUPLICATES?
 //        }
         for (item in list) {
             val jsonObject = item as org.json.simple.JSONObject
@@ -62,32 +64,23 @@ object UsersRethink {
     //Inserta un nuevo usuario que NO está autenticado con google y devuelve el id
     fun insertNewUserWithoutGoogleId(con: Connection): String {
         val itemInserted = table.insert(
-                r.hashMap("timeCreated", r.now())
-                    .with("lastAccesss", r.now())
+                r.hashMap("creation_time", r.now())
+                    .with("last_access", r.now())
             )
             .run<HashMap<*, *>>(con)
 
-        val idRethinkDbInserted = (itemInserted.get("generated_keys") as ArrayList<String>).get(0)
-        requireNotNull(idRethinkDbInserted)
-        return idRethinkDbInserted
+        return (itemInserted["generated_keys"] as ArrayList<String>)[0]
     }
 
     //Inserta un nuevo usuario que está autenticado con google y devuelve el id
     fun insertNewUserWithGoogleId(con: Connection, googleId: String): String {
         val itemInserted = table.insert(
-                r.hashMap("googleId", googleId)
-                    .with("timeCreated", r.now())
-                    .with("lastAccesss", r.now())
+                r.hashMap("id_google", googleId)
+                    .with("creation_time", r.now())
+                    .with("last_access", r.now())
             )
             .run<HashMap<*, *>>(con)
 
-        val idRethinkDbInserted = (itemInserted.get("generated_keys") as ArrayList<String>).get(0)
-        requireNotNull(idRethinkDbInserted)
-        return idRethinkDbInserted
-    }
-
-    fun getUserById(con: Connection, id: String): UserEntity? {
-        val item = r.table(NamesRethinkdb.TB_USERS.text).get(id).run<Any>(con)
-        return null
+        return (itemInserted["generated_keys"] as ArrayList<String>)[0]
     }
 }

@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.teltronic.app112.screens
 
 import android.app.Activity
@@ -396,7 +398,7 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedList
 
             //Si está autenticado obtener el id de rethinkDB
             if (requestCode == IntCodes.CODE_REQUEST_GOOGLE_AUTH_EDIT_PROFILE.code || requestCode == IntCodes.CODE_REQUEST_GOOGLE_AUTH_MAIN.code) {
-                viewModel.getIdUserRethinkDbAfterGoogleAuth()
+                viewModel.syncDatabasesAfterGoogleAuth()
             }
             viewModel.authenticationWithGoogleComplete()
         }

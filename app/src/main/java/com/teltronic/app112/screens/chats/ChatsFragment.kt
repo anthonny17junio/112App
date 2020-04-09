@@ -1,15 +1,18 @@
 package com.teltronic.app112.screens.chats
 
-import android.app.Activity
 import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 
 import com.teltronic.app112.databinding.FragmentChatsBinding
 import com.teltronic.app112.R
+import com.teltronic.app112.adapters.ChatsAdapter
 
 
 /**
@@ -19,6 +22,8 @@ class ChatsFragment : Fragment() {
 
     private lateinit var binding: FragmentChatsBinding
     private lateinit var viewModel: ChatsViewModel
+    private lateinit var snackbar: Snackbar
+    private lateinit var adapter: ChatsAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,7 +37,7 @@ class ChatsFragment : Fragment() {
             false
         )
         //Inicializo el viewModel
-        val viewModelFactory = ChatsViewModelFactory(binding, activity as Activity)
+        val viewModelFactory = ChatsViewModelFactory(this)
         viewModel = ViewModelProvider(this, viewModelFactory).get(ChatsViewModel::class.java)
 
         //"Uno" el layout con esta clase por medio del binding
@@ -43,7 +48,53 @@ class ChatsFragment : Fragment() {
         setHasOptionsMenu(true) //Habilita el icono de la derecha
         //Retorno el binding root (no el inflater)
 
+        adapter = ChatsAdapter(this.context!!)
+        binding.rvChats.adapter = adapter
+
+        configureErrorObserver()
+        configChatsObserver()
+
         return binding.root
+    }
+
+    override fun onDestroy() {
+        hideSnackbar()
+        super.onDestroy()
+    }
+
+    private fun configChatsObserver() {
+        viewModel.chats.observe(
+            this as LifecycleOwner,
+            Observer { chats ->
+                chats?.let {
+                    adapter.data = chats
+                }
+            }
+        )
+    }
+
+    private fun configureErrorObserver() {
+        viewModel.strError.observe(
+            this as LifecycleOwner,
+            Observer { strError ->
+                if (strError != "") {
+                    snackbar =
+                        Snackbar.make(
+                            activity!!.findViewById(android.R.id.content),
+                            strError,
+                            Snackbar.LENGTH_INDEFINITE
+                        )
+                    snackbar.show()
+                } else {
+                    hideSnackbar()
+                }
+            }
+        )
+    }
+
+    private fun hideSnackbar() {
+        if (::snackbar.isInitialized)
+            snackbar.dismiss()
     }
 
     //Inicia el menú de la derecha (en este caso solo es un icono)

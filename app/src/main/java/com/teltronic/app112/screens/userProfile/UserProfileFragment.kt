@@ -59,7 +59,7 @@ class UserProfileFragment : Fragment() {
             when (requestCode) {
                 IntCodes.CODE_REQUEST_API_PEOPLE_GOOGLE_AUTH_FRAGMENT_PROFILE.code -> { //Al loguearse después de dar click en el perfil de usuario
                     val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
-                    if (result.isSuccess) {
+                    if (result!=null && result.isSuccess) {
                         val account = result.signInAccount
                         val authCode = account?.serverAuthCode
                         GoogleApiPeopleHelper.PeopleAsyncTask(viewModel, activity!!.resources)

@@ -165,5 +165,11 @@
 
     <!--ERRORS-->
     <string name="no_database_connection">No existe conexión con la base de datos</string>
+    <string name="no_network_connection">No hay conexión de internet</string>
     <string name="error_getting_user">Error al obtener el usuario</string>
+    <string name="error_getting_subcategory">Error al obtener la subcategoría</string>
+    <string name="error_creating_chat">Error al crear el chat</string>
+
+    <!--CHATS-->
+    <string name="content_description_chat_state">Icono de estado del chat</string>
 </resources>

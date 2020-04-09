@@ -12,7 +12,6 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 
 import com.teltronic.app112.R
-import com.teltronic.app112.database.room.DatabaseApp
 import com.teltronic.app112.databinding.FragmentMedicalInfoBinding
 
 /**

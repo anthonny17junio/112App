@@ -40,7 +40,7 @@ class ConfirmMessageFragment : Fragment() {
         val args = ConfirmMessageFragmentArgs.fromBundle(arguments!!)
         val subcategory = args.subcategory
         val act = requireNotNull(activity)
-        val viewModelFactory = ConfirmMessageViewModelFactory(subcategory, act)
+        val viewModelFactory = ConfirmMessageViewModelFactory(subcategory, act, binding)
         viewModel =
             ViewModelProvider(this, viewModelFactory).get(ConfirmMessageViewModel::class.java)
 
@@ -66,7 +66,6 @@ class ConfirmMessageFragment : Fragment() {
                     Snackbar.make(
                         activity!!.findViewById(android.R.id.content),
                         strError,
-//                        getString(R.string.message_medical_information_saved),
                         Snackbar.LENGTH_LONG
                     ).show()
                     viewModel.clearStrErrorCreateChat()
@@ -97,10 +96,10 @@ class ConfirmMessageFragment : Fragment() {
     }
 
     private fun configureConfirmButtonObserver() {
-        viewModel.boolNavigateToChat.observe(
+        viewModel.idChatToNavigate.observe(
             this as LifecycleOwner,
-            Observer { shouldNavigate ->
-                if (shouldNavigate) {
+            Observer { idChat ->
+                if (idChat != null) {
                     val actionNavigate =
                         ConfirmMessageFragmentDirections.actionConfirmMessageFragmentToChatFragment(
                             viewModel.subcategory.value!!,

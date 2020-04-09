@@ -19,8 +19,6 @@ class ChatViewModel(
         get() = _idColorResource
 
     private val _idChat = MutableLiveData<Int>()
-    val idChat: LiveData<Int>
-        get() = _idChat
 
     private val _subcategory = MutableLiveData<Subcategory>()
     val subcategory: LiveData<Subcategory>

@@ -98,7 +98,7 @@ class MainFragment : Fragment() {
                         ).show()
                     } else if (Phone.existPermission(
                             activity,
-                            PermissionsApp.FINE_LOCATION_FROM_MAIN_FRAGMENT
+                            PermissionsApp.FINE_LOCATION_FROM_MAIN_FRAGMENT_TO_LOCATION
                         )
                     ) {
                         //Si tienes permisos de localización navegas a location screen
@@ -109,7 +109,7 @@ class MainFragment : Fragment() {
                         //Si no tienes permisos de localización los pides
                         Phone.askPermission(
                             activity!!,
-                            PermissionsApp.FINE_LOCATION_FROM_MAIN_FRAGMENT
+                            PermissionsApp.FINE_LOCATION_FROM_MAIN_FRAGMENT_TO_LOCATION
                         )
                     }
                     viewModel.onNavigateToLocationComplete()
@@ -137,11 +137,32 @@ class MainFragment : Fragment() {
             this as LifecycleOwner,
             Observer { shouldNavigate ->
                 if (shouldNavigate) {
-                    val actionNavigate =
-                        MainFragmentDirections.actionMainFragmentToNewChatFragment()
-                    findNavController().navigate(actionNavigate)
+                    if (!Phone.isLocationEnabled(activity)) {
+                        Toast.makeText(
+                            activity,
+                            R.string.location_no_enabled,
+                            Toast.LENGTH_LONG
+                        ).show()
+                    } else if (Phone.existPermission(
+                            activity,
+                            PermissionsApp.FINE_LOCATION_FROM_MAIN_FRAGMENT_TO_NEW_CHAT
+                        )
+                    ) {
+                        //Si tienes permisos de localización navegas a new chat screen
+                        val actionNavigate =
+                            MainFragmentDirections.actionMainFragmentToNewChatFragment()
+                        findNavController().navigate(actionNavigate)
+                    } else {
+                        //Si no tienes permisos de localización los pides
+                        Phone.askPermission(
+                            activity!!,
+                            PermissionsApp.FINE_LOCATION_FROM_MAIN_FRAGMENT_TO_NEW_CHAT
+                        )
+                    }
                     viewModel.navigateToNewChatComplete()
                 }
+
+
             })
     }
 

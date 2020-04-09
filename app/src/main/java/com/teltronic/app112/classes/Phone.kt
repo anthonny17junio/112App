@@ -8,6 +8,7 @@ import android.app.KeyguardManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Geocoder
 import android.location.LocationManager
 import android.net.Uri
 import android.widget.Toast
@@ -21,6 +22,8 @@ import com.teltronic.app112.R
 import com.teltronic.app112.classes.enums.IntCodes
 import com.teltronic.app112.classes.enums.PermissionsApp
 import com.teltronic.app112.screens.mainScreen.MainFragmentDirections
+import java.lang.Exception
+import java.util.*
 import java.util.concurrent.Executors
 
 
@@ -46,7 +49,6 @@ object Phone {
         )
     }
 
-
     //Revisar onRequestPermissionsResult en MainActivity.kt
     fun makeActionRequestPermissionsResult(
         activity: Activity, requestCode: Int, grantResults: IntArray
@@ -60,7 +62,7 @@ object Phone {
                 }
             }
 
-            PermissionsApp.FINE_LOCATION_FROM_MAIN_FRAGMENT.code -> {
+            PermissionsApp.FINE_LOCATION_FROM_MAIN_FRAGMENT_TO_LOCATION.code -> {
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                     //Si acepto los permisos navego a "location screen"
                     val actionNavigate =
@@ -83,6 +85,19 @@ object Phone {
                             )
                             .show()
                     }
+                }
+            }
+
+            PermissionsApp.FINE_LOCATION_FROM_MAIN_FRAGMENT_TO_NEW_CHAT.code -> {
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    //Si acepto los permisos navego a "new chat"
+                    val actionNavigate =
+                        MainFragmentDirections.actionMainFragmentToNewChatFragment()
+                    //Ojo IMPORTANTE debo enviar myNavHostFragment debido a que en activity_main.xml es el navController
+                    activity.findNavController(R.id.myNavHostFragment).navigate(actionNavigate)
+                } else {
+                    Toast.makeText(activity, R.string.txt_permission_location, Toast.LENGTH_LONG)
+                        .show()
                 }
             }
         }
@@ -175,6 +190,16 @@ object Phone {
                 activity.resources.getString(R.string.device_no_secure),
                 Toast.LENGTH_LONG
             ).show()
+        }
+    }
+
+    fun getCityName(context: Context, lat: Double, longitude: Double): String {
+        val geocode = Geocoder(context, Locale.getDefault())
+        val addresses = geocode.getFromLocation(lat, longitude, 1)
+        return try {
+            addresses[0].locality
+        } catch (e: Exception) {
+            ""
         }
     }
 

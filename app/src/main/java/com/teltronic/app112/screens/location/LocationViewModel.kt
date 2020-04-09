@@ -41,7 +41,7 @@ class LocationViewModel(activity: FragmentActivity?) : ViewModel() {
         getLastLocation()
     }
 
-    private fun getLastLocation(): Location? {
+    private fun getLastLocation() {
         val mFusedLocationClient: FusedLocationProviderClient =
             LocationServices.getFusedLocationProviderClient(_activity as Activity)
         mFusedLocationClient.lastLocation.addOnCompleteListener(_activity as Activity) { task ->
@@ -50,7 +50,6 @@ class LocationViewModel(activity: FragmentActivity?) : ViewModel() {
                 _coordinates.value = LatLng(location.latitude, location.longitude)
             }
         }
-        return null
     }
 
     fun copyLatLang() {

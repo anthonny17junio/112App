@@ -194,9 +194,9 @@ object Phone {
     }
 
     fun getCityName(context: Context, lat: Double, longitude: Double): String {
-        val geocode = Geocoder(context, Locale.getDefault())
-        val addresses = geocode.getFromLocation(lat, longitude, 1)
         return try {
+            val geocode = Geocoder(context, Locale.getDefault())
+            val addresses = geocode.getFromLocation(lat, longitude, 1)
             addresses[0].locality
         } catch (e: Exception) {
             ""

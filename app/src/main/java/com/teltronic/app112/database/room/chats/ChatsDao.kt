@@ -6,10 +6,10 @@ import androidx.room.*
 @Dao
 interface ChatsDao {
     @Insert
-    fun insert(configurations: ChatEntity)
+    fun insert(chat: ChatEntity)
 
     @Update
-    fun update(configurations: ChatEntity)
+    fun update(chat: ChatEntity)
 
     @Query("SELECT * FROM tb_chats ORDER BY creation_epoch_time DESC")
     fun getAll(): LiveData<List<ChatEntity>>
@@ -19,4 +19,7 @@ interface ChatsDao {
 
     @Query("DELETE FROM tb_chats")
     fun deleteAll()
+
+    @Query("DELETE FROM tb_chats WHERE id= :idChat")
+    fun delete(idChat: String)
 }

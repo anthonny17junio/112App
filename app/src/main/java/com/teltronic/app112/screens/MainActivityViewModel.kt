@@ -7,15 +7,18 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.rethinkdb.RethinkDB
+import com.rethinkdb.model.OptArgs
 import com.rethinkdb.net.Cursor
 import com.teltronic.app112.classes.GoogleApiPeopleHelper
 import com.teltronic.app112.classes.enums.NamesRethinkdb
 import com.teltronic.app112.database.rethink.DatabaseRethink
 import com.teltronic.app112.database.room.DatabaseApp
 import com.teltronic.app112.database.room.DatabaseRoomHelper
+import com.teltronic.app112.database.room.chats.ChatEntityConverter
 import com.teltronic.app112.database.room.configurations.ConfigurationsEntity
 import kotlinx.coroutines.*
 
+@Suppress("UNCHECKED_CAST")
 class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
     private var _activity: MainActivity = activityParam
 
@@ -72,11 +75,12 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
     val shouldAskGoogleAuth: LiveData<Boolean>
         get() = _shouldAskGoogleAuth
 
-    var configurations: LiveData<ConfigurationsEntity>
+    private var configurations: LiveData<ConfigurationsEntity>
 
     private val job = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + job)
     private lateinit var cursorChangesTbChats: Cursor<*>
+    private val dataSourceChats = DatabaseApp.getInstance(activityParam.application).chatsDao
 
     init {
         //Esto se inicia cuando se presiona el botón para ir a user profile
@@ -122,11 +126,41 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
                 .getAll(idUser).optArg("index", "id_user")
 
             if (con != null) {
-                cursorChangesTbChats = table.changes().run(con) as Cursor<*>
+                //OptArgs.of("time_format", "raw")  me devuelve la fecha como jsonObject y no como offSetDatetime
+                //cursorChangesTbChats = table.changes().run(con) as Cursor<*> //ANTES devuelve la fecha como OffSetDatetime
+                cursorChangesTbChats =
+                    table.changes().run(con, OptArgs.of("time_format", "raw")) as Cursor<*>
                 for (change in cursorChangesTbChats) { //Esto se ejecutará cada vez que haya un cambio en la tabla "tb_chats"
                     if (job.isActive) {
-                        //gestionar cambios
-                        //getPalabrasIO()
+                        val cambio = change as HashMap<String, HashMap<String, *>>
+
+                        val newChat = ChatEntityConverter.fromHashMap(
+                            cambio["new_val"],
+                            _activity.baseContext
+                        )
+                        val oldChat = ChatEntityConverter.fromHashMap(
+                            cambio["old_val"],
+                            _activity.baseContext
+                        )
+
+                        if (oldChat == null && newChat != null) {
+                            //INSERT
+                            val chatRoom = dataSourceChats.get(newChat.id)
+                            if (chatRoom == null) {
+                                dataSourceChats.insert(newChat)
+                            }
+                        } else if (oldChat != null && newChat == null) {
+                            //DELETE
+                            dataSourceChats.delete(oldChat.id)
+                        } else if (oldChat != null && newChat != null) {
+                            //UPDATE
+                            val chatRoom = dataSourceChats.get(newChat.id)
+                            if (chatRoom == null) {
+                                dataSourceChats.insert(newChat)
+                            } else {
+                                dataSourceChats.update(newChat)
+                            }
+                        }
                     } else {
                         cursorChangesTbChats.close()
                     }
@@ -134,27 +168,6 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
             }
         }
     }
-
-//    private suspend fun getPalabrasIO() {
-//        withContext(Dispatchers.IO) {
-//            val con = DatabaseRethink.getConnection()
-//            val rethinkDB = RethinkDB.r
-//
-//            val cursor =
-//                rethinkDB.table("tb_palabras").orderBy().optArg("index", "time")
-//                    .run(con) as Cursor<HashMap<*, *>>
-//            val list = cursor.bufferedItems()
-//
-//            var palabras = ""
-//            for (item in list) {
-//                val jsonObject = item as org.json.simple.JSONObject
-//                val palabra = jsonObject["palabra"] as String
-//                palabras += palabra + "\n"
-//            }
-//            _palabras.postValue(palabras)
-//        }
-//    }
-
 
     fun googleAuthAsked() {
         _shouldAskGoogleAuth.value = false

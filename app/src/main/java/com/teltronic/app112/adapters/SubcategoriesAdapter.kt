@@ -13,38 +13,50 @@ import com.teltronic.app112.R
 import com.teltronic.app112.classes.enums.Subcategory
 
 class SubcategoriesListAdapter(
-    private var activity: Application,
+    private var application: Application,
     private var subcategories: List<Subcategory>
 ) : BaseAdapter() {
 
-    private class ViewHolder(row: View) {
-        var lblTxtSubcategory: TextView = row.findViewById(R.id.lbl_name)
-        var iconSubcategory: ImageView = row.findViewById(R.id.icon_subcategory)
+    @SuppressLint("InflateParams")
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+        return ViewHolder.from(convertView, position, application, subcategories)
     }
 
 
-    @SuppressLint("InflateParams")
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val view: View
-        val viewHolder: ViewHolder
+    private class ViewHolder private constructor(row: View) {
+        var lblTxtSubcategory: TextView = row.findViewById(R.id.lbl_name)
+        var iconSubcategory: ImageView = row.findViewById(R.id.icon_subcategory)
 
-        if (convertView == null) {
-            val inflater =
-                activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            view = inflater.inflate(R.layout.item_subcategory, null)
-            viewHolder = ViewHolder(view)
+        companion object {
+            fun from(
+                convertView: View?,
+                position: Int,
+                application: Application,
+                subcategories: List<Subcategory>
+            ): View {
+                val viewHolder: ViewHolder
+                val view: View
 
-            view.tag = viewHolder
-        } else {
-            view = convertView
-            viewHolder = view.tag as ViewHolder
+                if (convertView == null) {
+                    val inflater =
+                        application.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                    view = inflater.inflate(R.layout.item_subcategory, null)
+                    viewHolder = ViewHolder(view)
+
+                    view.tag = viewHolder
+                } else {
+                    view = convertView
+                    viewHolder = view.tag as ViewHolder
+                }
+
+                val subcat = subcategories[position]
+                viewHolder.lblTxtSubcategory.text = application.resources.getString(subcat.idTitle)
+                viewHolder.iconSubcategory.setImageResource(subcat.idIcon)
+
+                return view
+            }
         }
 
-        val subcat = subcategories[position]
-        viewHolder.lblTxtSubcategory.text = activity.resources.getString(subcat.idTitle)
-        viewHolder.iconSubcategory.setImageResource(subcat.idIcon)
-
-        return view
     }
 
     override fun getItem(position: Int): Subcategory {

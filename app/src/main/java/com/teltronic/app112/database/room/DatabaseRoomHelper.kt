@@ -1,3 +1,5 @@
+@file:Suppress("SENSELESS_COMPARISON")
+
 package com.teltronic.app112.database.room
 
 import android.app.Activity
@@ -16,6 +18,7 @@ object DatabaseRoomHelper {
         val idSynchronizedUser: String?
 
         var googleIDLocal: String? = null
+        var idUserRoom: String? = null
 
         //Inicializo googleIDLocal (puede ser null si nunca se ha iniciado sesión con google en la aplicación)
         val account = GoogleSignIn.getLastSignedInAccount(activity)
@@ -26,11 +29,13 @@ object DatabaseRoomHelper {
         //Inicializo el id de user en Room (puede ser null si nunca se ha iniciado sesión con google en la aplicación)
         val dataSource = DatabaseApp.getInstance(activity.application).configurationsDao
         val configurations = dataSource.get()
-        //Verifico que este idUserRoom exista en RETHINKDB
-        val idUserRoom = UsersRethink.getIdUserById(con, configurations.id_rethink)
-        //Si no existe ningún usuario en rethinkDB que corresponda con el id que está en room elimino el usuario de ROOM
-        if (idUserRoom == null) {
-            dataSource.deleteAll()
+        if (configurations != null) {
+            //Verifico que este idUserRoom exista en RETHINKDB
+            idUserRoom = UsersRethink.getIdUserById(con, configurations.id_rethink)
+            //Si no existe ningún usuario en rethinkDB que corresponda con el id que está en room elimino el usuario de ROOM
+            if (idUserRoom == null) {
+                dataSource.deleteAll()
+            }
         }
 
         /* EN ESTE PUNTO HAY 4 POSIBLES CASOS:

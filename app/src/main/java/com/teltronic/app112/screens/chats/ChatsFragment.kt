@@ -53,6 +53,7 @@ class ChatsFragment : Fragment() {
 
         configureErrorObserver()
         configChatsObserver()
+        configOnItemClickListener()
 
         return binding.root
     }
@@ -62,12 +63,16 @@ class ChatsFragment : Fragment() {
         super.onDestroy()
     }
 
+    private fun configOnItemClickListener(){
+//            binding.rvChats.clic
+    }
+
     private fun configChatsObserver() {
         viewModel.chats.observe(
             this as LifecycleOwner,
             Observer { chats ->
                 chats?.let {
-                    adapter.data = chats
+                    adapter.submitList(chats)
                 }
             }
         )

@@ -9,17 +9,17 @@ import androidx.lifecycle.ViewModel
 import com.rethinkdb.net.Connection
 import com.teltronic.app112.R
 import com.teltronic.app112.classes.ConnectionLiveData
-import com.teltronic.app112.classes.Phone
 import com.teltronic.app112.database.rethink.DatabaseRethink
 import com.teltronic.app112.database.rethink.tb_chats.ChatsRethink
 import com.teltronic.app112.database.room.DatabaseApp
 import com.teltronic.app112.database.room.DatabaseRoomHelper
 import com.teltronic.app112.database.room.chats.ChatEntity
+import com.teltronic.app112.database.room.chats.ChatEntityConverter
 import kotlinx.coroutines.*
-import org.json.simple.JSONObject
 import kotlin.collections.HashMap
 
 
+@Suppress("UNCHECKED_CAST")
 class ChatsViewModel(fragment: ChatsFragment) :
     ViewModel() {
 
@@ -75,6 +75,7 @@ class ChatsViewModel(fragment: ChatsFragment) :
         }
     }
 
+    //Inserta algún chat en el caso de no existir en Room
     private fun syncRoomRethinkChats() {
         val con = DatabaseRethink.getConnection()
         requireNotNull(con)
@@ -92,33 +93,13 @@ class ChatsViewModel(fragment: ChatsFragment) :
     }
 
     private fun insertChatInRoom(chat: HashMap<*, *>) {
-        val id = chat["id"] as String
-        val creationTime = chat["creation_time"] as JSONObject
-        val creationTimezone = creationTime["timezone"] as String
-        val creationEpochTime = creationTime["epoch_time"] as Double
+        val context = _fragment.context
+        if (context != null) {
+            val hshChat = chat as HashMap<String, *>
+            val chatInsert = ChatEntityConverter.fromHashMap(hshChat, context)
 
-        val idSubcategory = (chat["id_subcategory"] as Long).toInt()
-        val idChatState = (chat["id_chat_state"] as Long).toInt()
-        val lat = chat["lat"] as Double
-        val long = chat["long"] as Double
-        val lastLanObj = chat["last_lat"]
-        val lastLongObj = chat["last_long"]
-        val realTime = !(lastLanObj == null || lastLongObj == null)
-
-        if (_fragment.context != null) {
-            val cityName = Phone.getCityName(_fragment.context!!, lat, long)
-
-            val chatInsert = ChatEntity(
-                id,
-                idSubcategory,
-                idChatState,
-                creationEpochTime,
-                creationTimezone,
-                cityName,
-                realTime
-            )
-
-            dataSource.insert(chatInsert)
+            if (chatInsert != null)
+                dataSource.insert(chatInsert)
         }
     }
 }

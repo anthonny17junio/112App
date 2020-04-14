@@ -275,10 +275,7 @@
             app:popUpTo="@+id/mainFragment"
             app:popUpToInclusive="true" />
         <argument
-            android:name="subcategory"
-            app:argType="com.teltronic.app112.classes.enums.Subcategory" />
-        <argument
-            android:name="chatState"
-            app:argType="com.teltronic.app112.classes.enums.ChatState" />
+            android:name="idChat"
+            app:argType="string" />
     </fragment>
 </navigation>

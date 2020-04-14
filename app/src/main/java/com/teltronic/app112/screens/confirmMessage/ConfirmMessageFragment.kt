@@ -13,7 +13,6 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 
 import com.teltronic.app112.R
-import com.teltronic.app112.classes.enums.ChatState
 import com.teltronic.app112.databinding.FragmentConfirmMessageBinding
 
 /**
@@ -102,8 +101,7 @@ class ConfirmMessageFragment : Fragment() {
                 if (idChat != null) {
                     val actionNavigate =
                         ConfirmMessageFragmentDirections.actionConfirmMessageFragmentToChatFragment(
-                            viewModel.subcategory.value!!,
-                            ChatState.IN_PROGRESS
+                            idChat
                         )
                     findNavController().navigate(actionNavigate)
                     viewModel.navigateToChatComplete()

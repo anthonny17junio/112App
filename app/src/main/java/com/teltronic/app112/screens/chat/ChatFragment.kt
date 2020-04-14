@@ -32,10 +32,9 @@ class ChatFragment : Fragment() {
         )
         //Inicializo el viewModel
         val args = ChatFragmentArgs.fromBundle(arguments!!)
-        val subcategory = args.subcategory
-        val chatState = args.chatState
+        val idChat = args.idChat
         val application = requireNotNull(this.activity).application
-        val viewModelFactory = ChatViewModelFactory(application, subcategory, chatState)
+        val viewModelFactory = ChatViewModelFactory(application, idChat)
         viewModel = ViewModelProvider(this, viewModelFactory).get(ChatViewModel::class.java)
 
         //"Uno" el layout con esta clase por medio del binding

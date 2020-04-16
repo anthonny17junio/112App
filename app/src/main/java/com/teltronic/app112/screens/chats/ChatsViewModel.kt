@@ -38,6 +38,10 @@ class ChatsViewModel(fragment: ChatsFragment) :
     private val _fragment = fragment
     private val dataSource = DatabaseApp.getInstance(_fragment.activity!!.application).chatsDao
 
+    private val _navigateToChat = MutableLiveData<String>()
+    val navigateToChat
+        get() = _navigateToChat
+
     init {
         getChatsRoom()
         _networkConnection.observe(fragment as LifecycleOwner,
@@ -62,6 +66,14 @@ class ChatsViewModel(fragment: ChatsFragment) :
 
     private fun clearStrErrorCreateChat() {
         _strError.postValue("")
+    }
+
+    fun onChatClicked(id: String) {
+        _navigateToChat.value = id
+    }
+
+    fun onChatNavigated(){
+        _navigateToChat.value = null
     }
 
     private suspend fun getRethinkdbConnectionIO() {

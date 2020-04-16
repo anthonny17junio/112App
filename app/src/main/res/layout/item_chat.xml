@@ -3,10 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="chat"
             type="com.teltronic.app112.database.room.chats.ChatEntity" />
+        <variable
+            name="clickListener"
+            type="com.teltronic.app112.adapters.ChatListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,7 +16,9 @@
         android:layout_height="70dp"
         android:layout_marginBottom="@dimen/default_half_margin_size"
         android:background="#FFFFFF"
-        tools:ignore="Overdraw">
+        tools:ignore="Overdraw"
+        android:onClick="@{() -> clickListener.onClick(chat)}"
+        >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/stateChat"

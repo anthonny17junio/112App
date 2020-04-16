@@ -98,7 +98,7 @@
         android:id="@+id/userProfileFragment"
         android:name="com.teltronic.app112.screens.userProfile.UserProfileFragment"
         android:label="@string/user_profile_title"
-        tools:layout="@layout/fragment_user_profile" >
+        tools:layout="@layout/fragment_user_profile">
         <action
             android:id="@+id/action_userProfileFragment_to_mainFragment"
             app:destination="@id/mainFragment"
@@ -111,7 +111,7 @@
         android:id="@+id/medicalInfoFragment"
         android:name="com.teltronic.app112.screens.medicalInfo.MedicalInfoFragment"
         android:label="@string/medical_information_title"
-        tools:layout="@layout/fragment_medical_info" >
+        tools:layout="@layout/fragment_medical_info">
         <action
             android:id="@+id/action_medicalInfoFragment_to_mainFragment"
             app:destination="@id/mainFragment"
@@ -124,7 +124,7 @@
         android:id="@+id/configurationFragment"
         android:name="com.teltronic.app112.screens.configuration.ConfigurationFragment"
         android:label="@string/configuration_title"
-        tools:layout="@layout/fragment_configuration" >
+        tools:layout="@layout/fragment_configuration">
         <action
             android:id="@+id/action_configurationFragment_to_mainFragment"
             app:destination="@id/mainFragment"
@@ -137,7 +137,7 @@
         android:id="@+id/legalNoticeFragment"
         android:name="com.teltronic.app112.screens.legalNotice.LegalNoticeFragment"
         android:label="@string/legal_notice_title"
-        tools:layout="@layout/fragment_legal_notice" >
+        tools:layout="@layout/fragment_legal_notice">
         <action
             android:id="@+id/action_legalNoticeFragment_to_mainFragment"
             app:destination="@id/mainFragment"
@@ -150,7 +150,7 @@
         android:id="@+id/aboutFragment"
         android:name="com.teltronic.app112.screens.about.AboutFragment"
         android:label="@string/about_title"
-        tools:layout="@layout/fragment_about" >
+        tools:layout="@layout/fragment_about">
         <action
             android:id="@+id/action_aboutFragment_to_mainFragment"
             app:destination="@id/mainFragment"
@@ -163,7 +163,7 @@
         android:id="@+id/noticesFragment"
         android:name="com.teltronic.app112.screens.notices.NoticesFragment"
         android:label="@string/notices_title"
-        tools:layout="@layout/fragment_notices" >
+        tools:layout="@layout/fragment_notices">
         <action
             android:id="@+id/action_noticesFragment_to_mainFragment"
             app:destination="@id/mainFragment"
@@ -176,7 +176,7 @@
         android:id="@+id/chatsFragment"
         android:name="com.teltronic.app112.screens.chats.ChatsFragment"
         android:label="@string/chats_title"
-        tools:layout="@layout/fragment_chats" >
+        tools:layout="@layout/fragment_chats">
         <action
             android:id="@+id/action_chatsFragment_to_mainFragment"
             app:destination="@id/mainFragment"
@@ -184,12 +184,19 @@
             app:exitAnim="@anim/slide_out_right"
             app:popUpTo="@+id/mainFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_chatsFragment_to_chatFragment"
+            app:destination="@id/chatFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/newChatFragment"
         android:name="com.teltronic.app112.screens.newChat.NewChatFragment"
         android:label="@string/new_chat_title"
-        tools:layout="@layout/fragment_new_chat" >
+        tools:layout="@layout/fragment_new_chat">
         <action
             android:id="@+id/action_newChatFragment_to_confirmMessageFragment"
             app:destination="@id/confirmMessageFragment"
@@ -216,7 +223,7 @@
         android:id="@+id/confirmMessageFragment"
         android:name="com.teltronic.app112.screens.confirmMessage.ConfirmMessageFragment"
         android:label="@string/confirm_chat_title"
-        tools:layout="@layout/fragment_confirm_message" >
+        tools:layout="@layout/fragment_confirm_message">
         <argument
             android:name="subcategory"
             app:argType="com.teltronic.app112.classes.enums.Subcategory" />
@@ -266,7 +273,7 @@
         android:id="@+id/chatFragment"
         android:name="com.teltronic.app112.screens.chat.ChatFragment"
         android:label="@string/chat_title"
-        tools:layout="@layout/fragment_chat" >
+        tools:layout="@layout/fragment_chat">
         <action
             android:id="@+id/action_chatFragment_to_mainFragment"
             app:destination="@id/mainFragment"

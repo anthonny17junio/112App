@@ -12,6 +12,7 @@ import com.google.android.material.snackbar.Snackbar
 
 import com.teltronic.app112.databinding.FragmentChatsBinding
 import com.teltronic.app112.R
+import com.teltronic.app112.adapters.ChatListener
 import com.teltronic.app112.adapters.ChatsAdapter
 
 
@@ -48,12 +49,14 @@ class ChatsFragment : Fragment() {
         setHasOptionsMenu(true) //Habilita el icono de la derecha
         //Retorno el binding root (no el inflater)
 
-        adapter = ChatsAdapter()
+        adapter = ChatsAdapter(ChatListener { chatId ->
+            viewModel.onChatClicked(chatId)
+        })
         binding.rvChats.adapter = adapter
 
         configureErrorObserver()
         configChatsObserver()
-        configOnItemClickListener()
+        configOnclickChatObserver()
 
         return binding.root
     }
@@ -63,8 +66,15 @@ class ChatsFragment : Fragment() {
         super.onDestroy()
     }
 
-    private fun configOnItemClickListener(){
-//            binding.rvChats.clic
+    private fun configOnclickChatObserver() {
+        viewModel.navigateToChat.observe(this as LifecycleOwner, Observer { idChat ->
+            idChat?.let {
+                this.findNavController().navigate(
+                    ChatsFragmentDirections.actionChatsFragmentToChatFragment(idChat)
+                )
+                viewModel.onChatNavigated()
+            }
+        })
     }
 
     private fun configChatsObserver() {

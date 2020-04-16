@@ -9,12 +9,11 @@ import com.teltronic.app112.database.room.chats.ChatEntity
 import com.teltronic.app112.databinding.ItemChatBinding
 
 //  class ChatsAdapter(private val context: Context) : RecyclerView.Adapter<ChatsAdapter.ViewHolder>() {
-class ChatsAdapter :
+class ChatsAdapter(private val clickListener: ChatListener) :
     ListAdapter<ChatEntity, ChatsAdapter.ViewHolder>(ChatsDiffCallback()) {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val chat = getItem(position)
-        holder.bind(chat)
+        holder.bind(getItem(position)!!, clickListener)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -34,9 +33,11 @@ class ChatsAdapter :
         }
 
         fun bind(
-            chat: ChatEntity
+            chat: ChatEntity,
+            clickListener: ChatListener
         ) {
             binding.chat = chat
+            binding.clickListener = clickListener
             binding.executePendingBindings()
         }
     }

@@ -94,3 +94,7 @@ fun ImageView.setChatState(chat: ChatEntity) {
         }
     }
 }
+
+class ChatListener(val clickListener: (chatId: String) -> Unit) {
+    fun onClick(chat: ChatEntity) = clickListener(chat.id)
+}

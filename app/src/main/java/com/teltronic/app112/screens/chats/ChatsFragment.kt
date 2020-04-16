@@ -48,7 +48,7 @@ class ChatsFragment : Fragment() {
         setHasOptionsMenu(true) //Habilita el icono de la derecha
         //Retorno el binding root (no el inflater)
 
-        adapter = ChatsAdapter(this.context!!)
+        adapter = ChatsAdapter()
         binding.rvChats.adapter = adapter
 
         configureErrorObserver()

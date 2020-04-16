@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="chat"
             type="com.teltronic.app112.database.room.chats.ChatEntity" />
@@ -31,6 +32,7 @@
                 android:layout_height="0dp"
                 android:layout_marginBottom="@dimen/default_half_margin_size"
                 android:contentDescription="@string/content_description_chat_state_icon"
+                app:chatStateImage="@{chat}"
                 app:layout_constraintBottom_toTopOf="@+id/tvChatState"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -42,6 +44,7 @@
                 android:id="@+id/tvChatState"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                app:chatStateText="@{chat}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -65,6 +68,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:textStyle="bold"
+                app:category="@{chat}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="@string/txt_accident" />
@@ -80,6 +84,7 @@
                 app:layout_constraintBaseline_toBaselineOf="@+id/tvCategory"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tvCategory"
+                app:subcategory="@{chat}"
                 tools:text="@string/subcategory_accident_car_without_injured" />
 
             <ImageView
@@ -104,6 +109,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/tvDate"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/tvDate"
+                app:location="@{chat}"
                 tools:text="Zaragoza, 50014" />
 
             <ImageView
@@ -125,6 +131,7 @@
                 android:layout_marginStart="@dimen/default_half_margin_size"
                 android:textColor="@color/black_overlay"
                 android:textSize="12sp"
+                app:date="@{chat}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/ivDateHour"
                 tools:text="16/03/2020" />
@@ -138,6 +145,7 @@
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tvDate"
+                app:time="@{chat}"
                 tools:text="15:55" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -61,9 +61,10 @@ class ChatViewModel(
     @SuppressLint("SimpleDateFormat")
     private suspend fun initIO(idChat: String) {
         withContext(Dispatchers.IO) {
-            val chat = dataSourceChats.get(idChat)
+            val chatWithMessages = dataSourceChats.getChatWithMessages(idChat).value
+            val chat = chatWithMessages?.chat
+            val messages = chatWithMessages?.messages
             requireNotNull(chat)
-
             val sdfDate = SimpleDateFormat("dd-MM-yyyy")
             val sdfHour = SimpleDateFormat("HH:mm")
             val creationDate = Date(chat.creation_epoch_time.toLong() * 1000)

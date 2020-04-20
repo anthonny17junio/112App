@@ -17,7 +17,6 @@ import com.teltronic.app112.databinding.FragmentAboutBinding
 class AboutFragment : Fragment() {
 
     private lateinit var binding: FragmentAboutBinding
-    private lateinit var viewModel: AboutViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,11 +29,6 @@ class AboutFragment : Fragment() {
             container,
             false
         )
-        //Inicializo el viewModel
-        viewModel = ViewModelProvider(this).get(AboutViewModel::class.java)
-
-        //"Uno" el layout con esta clase por medio del binding
-        binding.aboutViewModel = viewModel
         //Para que el ciclo de vida del binding sea consistente y funcione bien con LiveData
         binding.lifecycleOwner = this
 

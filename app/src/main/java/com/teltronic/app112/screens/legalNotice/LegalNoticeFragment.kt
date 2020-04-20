@@ -17,7 +17,6 @@ import com.teltronic.app112.databinding.FragmentLegalNoticeBinding
 class LegalNoticeFragment : Fragment() {
 
     private lateinit var binding: FragmentLegalNoticeBinding
-    private lateinit var viewModel: LegalNoticeViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,11 +30,6 @@ class LegalNoticeFragment : Fragment() {
             false
         )
 
-        //Inicializo el viewModel
-        viewModel = ViewModelProvider(this).get(LegalNoticeViewModel::class.java)
-
-        //"Uno" el layout con esta clase por medio del binding
-        binding.legalNoticeViewModel = viewModel
         //Para que el ciclo de vida del binding sea consistente y funcione bien con LiveData
         binding.lifecycleOwner = this
         //Retorno el binding root (no el inflater)

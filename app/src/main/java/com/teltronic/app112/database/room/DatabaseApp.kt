@@ -10,14 +10,15 @@ import com.teltronic.app112.database.room.configurations.ConfigurationsDao
 import com.teltronic.app112.database.room.configurations.ConfigurationsEntity
 import com.teltronic.app112.database.room.medicalInfo.MedicalInfoDao
 import com.teltronic.app112.database.room.medicalInfo.MedicalInfoEntity
+import com.teltronic.app112.database.room.messages.MessageEntity
 
 /*
 En entities van todas las tablas (entities)  de la base de datos
 exportSchema es true por defecto
  */
 @Database(
-    entities = [MedicalInfoEntity::class, ConfigurationsEntity::class, ChatEntity::class],
-    version = 6,
+    entities = [MedicalInfoEntity::class, ConfigurationsEntity::class, ChatEntity::class, MessageEntity::class],
+    version = 7,
     exportSchema = false
 )
 abstract class DatabaseApp : RoomDatabase() {

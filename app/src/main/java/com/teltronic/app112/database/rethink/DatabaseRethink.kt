@@ -45,6 +45,7 @@ abstract class DatabaseRethink {
             verifyDatabase(r, con)
             verifyTbUsers(r, con)
             verifyTbChats(r, con)
+            verifyTbMessages(r,con)
         }
 
         private fun verifyDatabase(r: RethinkDB, con: Connection) {
@@ -62,6 +63,23 @@ abstract class DatabaseRethink {
                 r.dbCreate(NamesRethinkdb.DATABASE.text).run<Any>(con)
             }
         }
+        private fun verifyTbMessages(r: RethinkDB, con: Connection) {
+            val tables =
+                r.db(NamesRethinkdb.DATABASE.text).tableList().run(con) as ArrayList<String>
+
+            var existe = false
+            for (table in tables) {
+                if (table == NamesRethinkdb.TB_MESSAGES.text) {
+                    existe = true
+                    break
+                }
+            }
+
+            if (!existe) {
+                r.db(NamesRethinkdb.DATABASE.text).tableCreate(NamesRethinkdb.TB_MESSAGES.text)
+                    .run(con) as Any
+            }
+        }
 
         private fun verifyTbUsers(r: RethinkDB, con: Connection) {
             val tables =
@@ -76,8 +94,26 @@ abstract class DatabaseRethink {
             }
 
             if (!existe) {
-                r.db(NamesRethinkdb.DATABASE.text).tableCreate(NamesRethinkdb.TB_USERS.text)
+                r.db(NamesRethinkdb.DATABASE.text).tableCreate(NamesRethinkdb.TB_MESSAGES.text)
                     .run(con) as Any
+                //Crea el índice
+                r.db(NamesRethinkdb.DATABASE.text).table(NamesRethinkdb.TB_MESSAGES.text)
+                    .indexCreate("creation_time").run(con) as Any
+                //Espera a que el índice esté creado para ser usado
+                r.db(NamesRethinkdb.DATABASE.text).table(NamesRethinkdb.TB_MESSAGES.text)
+                    .indexWait("creation_time").run(con) as Any
+                //Crea el índice
+                r.db(NamesRethinkdb.DATABASE.text).table(NamesRethinkdb.TB_MESSAGES.text)
+                    .indexCreate("id_user").run(con) as Any
+                //Espera a que el índice esté creado para ser usado
+                r.db(NamesRethinkdb.DATABASE.text).table(NamesRethinkdb.TB_MESSAGES.text)
+                    .indexWait("id_user").run(con) as Any
+                //Crea el índice
+                r.db(NamesRethinkdb.DATABASE.text).table(NamesRethinkdb.TB_MESSAGES.text)
+                    .indexCreate("id_chat").run(con) as Any
+                //Espera a que el índice esté creado para ser usado
+                r.db(NamesRethinkdb.DATABASE.text).table(NamesRethinkdb.TB_MESSAGES.text)
+                    .indexWait("id_chat").run(con) as Any
             }
         }
 

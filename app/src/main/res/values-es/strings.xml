@@ -169,7 +169,12 @@
     <string name="error_getting_user">Error al obtener el usuario</string>
     <string name="error_getting_subcategory">Error al obtener la subcategoría</string>
     <string name="error_creating_chat">Error al crear el chat</string>
+    <string name="error_sending_message">Error al enviar el mensaje</string>
 
     <!--CHATS-->
     <string name="content_description_chat_state">Icono de estado del chat</string>
+
+    <!--CHAT-->
+    <string name="send_message">Enviar</string>
+    <string name="hint_message">Escribe un mensaje</string>
 </resources>

@@ -2,7 +2,6 @@ package com.teltronic.app112.database.room.chats
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.teltronic.app112.database.room.chatWithMessages.ChatWithMessages
 
 @Dao
 interface ChatsDao {
@@ -18,6 +17,9 @@ interface ChatsDao {
     @Query("SELECT * FROM tb_chats WHERE id= :idChat")
     fun get(idChat: String): ChatEntity?
 
+//    @Query("SELECT * FROM tb_chats WHERE id= :idChat")
+//    fun getLiveData(idChat: String): LiveData<ChatEntity?>
+
     @Query("DELETE FROM tb_chats") //todo comprobar que al eliminar el chat se eliminan los mensajes
     fun deleteAll()
 
@@ -27,4 +29,7 @@ interface ChatsDao {
     @Transaction
     @Query("SELECT * FROM tb_chats WHERE id= :idChat")
     fun getChatWithMessages(idChat: String): LiveData<ChatWithMessages>
+
+    @Query("UPDATE tb_chats SET id_chat_state = :idNewState WHERE id= :idChat")
+    fun changeState(idChat: String, idNewState: Int)
 }

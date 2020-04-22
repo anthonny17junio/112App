@@ -86,7 +86,7 @@ class MedicalInfoFragment : Fragment() {
             this as LifecycleOwner, Observer { shouldShow ->
                 if (shouldShow) {
                     Snackbar.make(
-                        activity!!.findViewById(android.R.id.content),
+                        requireActivity().findViewById(android.R.id.content),
                         getString(R.string.message_medical_information_saved),
                         Snackbar.LENGTH_SHORT
                     ).show()

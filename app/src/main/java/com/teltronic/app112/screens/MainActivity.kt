@@ -24,6 +24,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.material.snackbar.Snackbar
 import com.teltronic.app112.R
 import com.teltronic.app112.classes.DownloadImageTask
 import com.teltronic.app112.classes.GoogleApiPeopleHelper
@@ -40,6 +41,7 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedList
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var viewModel: MainActivityViewModel
     private lateinit var binding: ActivityMainBinding
+    private lateinit var snackbar: Snackbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +63,20 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedList
         configureNavigationObservers()
     }
 
+    fun hideSnackbar() {
+        if (::snackbar.isInitialized)
+            snackbar.dismiss()
+    }
+
+     fun showSnackbar(message:String){
+         snackbar =
+             Snackbar.make(
+                 this.findViewById(android.R.id.content),
+                 message,
+                 Snackbar.LENGTH_INDEFINITE
+             )
+         snackbar.show()
+    }
 
     //Menú lateral
     private fun configureLateralMenu() {

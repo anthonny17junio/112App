@@ -180,8 +180,10 @@
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@+id/footerChat"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/headerChat">
+            app:layout_constraintTop_toBottomOf="@+id/headerChat"
+            app:layout_constraintVertical_bias="0.0">
 
             <TextView
                 android:id="@+id/tvChats"
@@ -190,17 +192,59 @@
                 android:text="1, 2, 3"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/btnChange"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{()->chatViewModel.changeChatState()}"
+                android:text="Cambiar estado"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvChats" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/footerChat"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:visibility="visible"
+            android:layout_height="wrap_content"
+            android:visibility="@{chatViewModel.footerVisibility}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
+            <EditText
+                android:id="@+id/etMessage"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_half_margin_size"
+                android:layout_marginEnd="@dimen/default_half_margin_size"
+                android:ems="10"
+                android:hint="@string/hint_message"
+                android:importantForAutofill="no"
+                android:inputType="textPersonName"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btnSendMessage"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/btnSendMessage"
+                style="@style/btnPrimaryRed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/default_half_margin_size"
+                android:enabled="@{chatViewModel.boolEnableInterface}"
+                android:onClick="@{()->chatViewModel.trySendMessage()}"
+                android:paddingEnd="20dp"
+                android:text="@string/send_message"
+                android:textColor="@color/colorWhite"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="RtlSymmetry" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

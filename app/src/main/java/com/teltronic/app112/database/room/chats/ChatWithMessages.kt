@@ -1,9 +1,7 @@
-package com.teltronic.app112.database.room.chatWithMessages
+package com.teltronic.app112.database.room.chats
 
-import androidx.lifecycle.LiveData
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.teltronic.app112.database.room.chats.ChatEntity
 import com.teltronic.app112.database.room.messages.MessageEntity
 
 data class ChatWithMessages(

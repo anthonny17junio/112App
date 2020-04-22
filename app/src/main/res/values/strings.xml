@@ -213,7 +213,12 @@
     <string name="error_getting_user">Error getting user</string>
     <string name="error_getting_subcategory">Error getting subcategory</string>
     <string name="error_creating_chat">Error creating chat</string>
+    <string name="error_sending_message">Error sending message</string>
 
     <!--CHATS-->
     <string name="content_description_chat_state">Chat state icon</string>
+
+    <!--CHAT-->
+    <string name="send_message">Send</string>
+    <string name="hint_message">Write a message</string>
 </resources>

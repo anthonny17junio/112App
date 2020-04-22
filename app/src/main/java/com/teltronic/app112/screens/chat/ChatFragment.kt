@@ -5,8 +5,11 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 
 import com.teltronic.app112.R
 import com.teltronic.app112.databinding.FragmentChatBinding
@@ -16,7 +19,7 @@ import com.teltronic.app112.databinding.FragmentChatBinding
  */
 class ChatFragment : Fragment() {
 
-    private lateinit var binding: FragmentChatBinding
+    lateinit var binding: FragmentChatBinding
     private lateinit var viewModel: ChatViewModel
 
     override fun onCreateView(
@@ -31,10 +34,10 @@ class ChatFragment : Fragment() {
             false
         )
         //Inicializo el viewModel
-        val args = ChatFragmentArgs.fromBundle(arguments!!)
+        val args = ChatFragmentArgs.fromBundle(requireArguments())
         val idChat = args.idChat
         val application = requireNotNull(this.activity).application
-        val viewModelFactory = ChatViewModelFactory(application, idChat)
+        val viewModelFactory = ChatViewModelFactory(application, idChat, this)
         viewModel = ViewModelProvider(this, viewModelFactory).get(ChatViewModel::class.java)
 
         //"Uno" el layout con esta clase por medio del binding
@@ -43,9 +46,26 @@ class ChatFragment : Fragment() {
         binding.lifecycleOwner = this
 
         setHasOptionsMenu(true) //Habilita el icono de la derecha
-        //Retorno el binding root (no el inflater)
 
+        configureErrorSendMessageObserver()
+        //Retorno el binding root (no el inflater)
         return binding.root
+    }
+
+    private fun configureErrorSendMessageObserver() {
+        viewModel.strErrorSendMessage.observe(
+            this as LifecycleOwner,
+            Observer { strError ->
+                if (strError != "") {
+                    Snackbar.make(
+                        requireActivity().findViewById(android.R.id.content),
+                        strError,
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                    viewModel.clearStrErrorSendMessage()
+                }
+            }
+        )
     }
 
 

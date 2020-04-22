@@ -62,7 +62,7 @@ class UserProfileFragment : Fragment() {
                     if (result!=null && result.isSuccess) {
                         val account = result.signInAccount
                         val authCode = account?.serverAuthCode
-                        GoogleApiPeopleHelper.PeopleAsyncTask(viewModel, activity!!.resources)
+                        GoogleApiPeopleHelper.PeopleAsyncTask(viewModel, requireActivity().resources)
                             .execute(authCode)
                     }
                 }

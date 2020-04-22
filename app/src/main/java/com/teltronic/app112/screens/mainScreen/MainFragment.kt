@@ -57,7 +57,7 @@ class MainFragment : Fragment() {
             Observer { shouldCall ->
                 if (shouldCall) {
                     viewModel.makeBoolCallComplete()
-                    Phone.makeCall(activity!!)
+                    Phone.makeCall(requireActivity())
                 }
             }
         )
@@ -108,7 +108,7 @@ class MainFragment : Fragment() {
                     } else {
                         //Si no tienes permisos de localización los pides
                         Phone.askPermission(
-                            activity!!,
+                            requireActivity(),
                             PermissionsApp.FINE_LOCATION_FROM_MAIN_FRAGMENT_TO_LOCATION
                         )
                     }
@@ -155,7 +155,7 @@ class MainFragment : Fragment() {
                     } else {
                         //Si no tienes permisos de localización los pides
                         Phone.askPermission(
-                            activity!!,
+                            requireActivity(),
                             PermissionsApp.FINE_LOCATION_FROM_MAIN_FRAGMENT_TO_NEW_CHAT
                         )
                     }

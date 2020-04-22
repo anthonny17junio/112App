@@ -36,7 +36,7 @@ class ConfirmMessageFragment : Fragment() {
         )
 
         //Inicializo el viewModel
-        val args = ConfirmMessageFragmentArgs.fromBundle(arguments!!)
+        val args = ConfirmMessageFragmentArgs.fromBundle(requireArguments())
         val subcategory = args.subcategory
         val act = requireNotNull(activity)
         val viewModelFactory = ConfirmMessageViewModelFactory(subcategory, act, binding)
@@ -63,7 +63,7 @@ class ConfirmMessageFragment : Fragment() {
             Observer { strError ->
                 if (strError != "") {
                     Snackbar.make(
-                        activity!!.findViewById(android.R.id.content),
+                        requireActivity().findViewById(android.R.id.content),
                         strError,
                         Snackbar.LENGTH_LONG
                     ).show()

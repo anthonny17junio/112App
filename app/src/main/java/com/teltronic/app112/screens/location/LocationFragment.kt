@@ -116,7 +116,7 @@ class LocationFragment : Fragment(), OnMapReadyCallback {
             Observer { shouldCall ->
                 if (shouldCall) {
                     viewModel.makeBoolCallComplete()
-                    Phone.makeCall(activity!!)
+                    Phone.makeCall(requireActivity())
                 }
             }
         )

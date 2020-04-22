@@ -36,7 +36,7 @@ class ChatsViewModel(fragment: ChatsFragment) :
     private val uiScope = CoroutineScope(Dispatchers.Main + job)
 
     private val _fragment = fragment
-    private val dataSource = DatabaseApp.getInstance(_fragment.activity!!.application).chatsDao
+    private val dataSource = DatabaseApp.getInstance(_fragment.requireActivity().application).chatsDao
 
     private val _navigateToChat = MutableLiveData<String>()
     val navigateToChat

@@ -8,12 +8,12 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.snackbar.Snackbar
 
 import com.teltronic.app112.databinding.FragmentChatsBinding
 import com.teltronic.app112.R
 import com.teltronic.app112.adapters.ChatListener
 import com.teltronic.app112.adapters.ChatsAdapter
+import com.teltronic.app112.screens.MainActivity
 
 
 /**
@@ -23,7 +23,6 @@ class ChatsFragment : Fragment() {
 
     private lateinit var binding: FragmentChatsBinding
     private lateinit var viewModel: ChatsViewModel
-    private lateinit var snackbar: Snackbar
     private lateinit var adapter: ChatsAdapter
 
     override fun onCreateView(
@@ -62,8 +61,13 @@ class ChatsFragment : Fragment() {
     }
 
     override fun onDestroy() {
-        hideSnackbar()
+        (activity as MainActivity).hideSnackbar()
         super.onDestroy()
+    }
+
+    override fun onDestroyView() {
+        (activity as MainActivity).hideSnackbar()
+        super.onDestroyView()
     }
 
     private fun configOnclickChatObserver() {
@@ -93,24 +97,14 @@ class ChatsFragment : Fragment() {
             this as LifecycleOwner,
             Observer { strError ->
                 if (strError != "") {
-                    snackbar =
-                        Snackbar.make(
-                            activity!!.findViewById(android.R.id.content),
-                            strError,
-                            Snackbar.LENGTH_INDEFINITE
-                        )
-                    snackbar.show()
+                    (activity as MainActivity).showSnackbar(strError)
                 } else {
-                    hideSnackbar()
+                    (activity as MainActivity).hideSnackbar()
                 }
             }
         )
     }
 
-    private fun hideSnackbar() {
-        if (::snackbar.isInitialized)
-            snackbar.dismiss()
-    }
 
     //Inicia el menú de la derecha (en este caso solo es un icono)
     override fun onCreateOptionsMenu(

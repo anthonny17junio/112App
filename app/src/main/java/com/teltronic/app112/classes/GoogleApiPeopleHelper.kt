@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.teltronic.app112.classes
 
 import android.app.Activity

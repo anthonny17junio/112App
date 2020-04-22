@@ -8,9 +8,8 @@ enum class ChatState(var idTitle: Int, var idIcon: Int, var idColor: Int, var id
         R.drawable.ic_calendar_time,
         R.color.colorGreen,
         1
-    )
-    ;
-//    , PROCESSED(R.string.chat_state_in_processed, R.drawable.ic_done_white, R.color.black_overlay, 2);
+    ),
+    PROCESSED(R.string.chat_state_in_processed, R.drawable.ic_done_white, R.color.black_overlay, 2);
 
     companion object {
         fun getById(id: Int): ChatState? {

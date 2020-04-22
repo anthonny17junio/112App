@@ -34,7 +34,7 @@ class ConfigurationFragment : Fragment() {
         )
         //Inicializo el viewModel
         viewModel = ViewModelProvider(this).get(ConfigurationViewModel::class.java)
-        viewModel.loadConfigurations(this.activity!!)
+        viewModel.loadConfigurations(this.requireActivity())
 
         //"Uno" el layout con esta clase por medio del binding
         binding.configurationViewModel = viewModel

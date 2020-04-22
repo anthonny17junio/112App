@@ -35,7 +35,7 @@ class SubcategoriesNewChatFragment : Fragment() {
             false
         )
         //Inicializo el viewModel
-        val args = SubcategoriesNewChatFragmentArgs.fromBundle(arguments!!)
+        val args = SubcategoriesNewChatFragmentArgs.fromBundle(requireArguments())
         val category = args.category
 
         val application = requireNotNull(this.activity).application

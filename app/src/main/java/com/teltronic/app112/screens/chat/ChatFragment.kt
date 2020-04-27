@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 
 import com.teltronic.app112.R
+import com.teltronic.app112.adapters.MessagesAdapter
 import com.teltronic.app112.databinding.FragmentChatBinding
 
 /**
@@ -21,6 +22,7 @@ class ChatFragment : Fragment() {
 
     lateinit var binding: FragmentChatBinding
     private lateinit var viewModel: ChatViewModel
+    val adapter = MessagesAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,6 +44,8 @@ class ChatFragment : Fragment() {
 
         //"Uno" el layout con esta clase por medio del binding
         binding.chatViewModel = viewModel
+
+        binding.rvMessages.adapter = adapter
         //Para que el ciclo de vida del binding sea consistente y funcione bien con LiveData
         binding.lifecycleOwner = this
 

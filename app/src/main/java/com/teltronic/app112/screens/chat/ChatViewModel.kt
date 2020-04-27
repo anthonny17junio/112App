@@ -147,11 +147,12 @@ class ChatViewModel(
     }
 
     private fun updateMessages(messages: List<MessageEntity>) {
-        var strMessages = ""
-        for (message in messages) {
-            strMessages += "\n" + message.content
-        }
-        binding.tvChats.text = strMessages
+//        var strMessages = ""
+//        for (message in messages) {
+//            strMessages += "\n" + message.content
+//        }
+//        binding.tvChats.text = strMessages
+        _fragment.adapter.data = messages
     }
 
     @SuppressLint("SimpleDateFormat")

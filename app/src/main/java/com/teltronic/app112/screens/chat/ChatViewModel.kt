@@ -12,6 +12,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.teltronic.app112.R
 import com.teltronic.app112.classes.enums.ChatState
+import com.teltronic.app112.classes.enums.MessageType
 import com.teltronic.app112.classes.enums.Subcategory
 import com.teltronic.app112.database.rethink.DatabaseRethink
 import com.teltronic.app112.database.rethink.tb_messages.MessagesRethink
@@ -19,11 +20,15 @@ import com.teltronic.app112.database.room.DatabaseApp
 import com.teltronic.app112.database.room.DatabaseRoomHelper
 import com.teltronic.app112.database.room.chats.ChatEntity
 import com.teltronic.app112.database.room.chats.ChatWithMessages
+import com.teltronic.app112.database.room.messages.MessageEntity
+import com.teltronic.app112.database.room.messages.MessageEntityConverter
 import com.teltronic.app112.databinding.FragmentChatBinding
 import kotlinx.coroutines.*
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.HashMap
 
+@Suppress("UNCHECKED_CAST")
 class ChatViewModel(
     application: Application,
     idChat: String,
@@ -66,6 +71,7 @@ class ChatViewModel(
     private val job = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + job)
     private val dataSourceChats = DatabaseApp.getInstance(application).chatsDao
+    private val dataSourceMessages = DatabaseApp.getInstance(application).messagesDao
 
     private var _boolEnableInterface = MutableLiveData<Boolean>()
     val boolEnableInterface: LiveData<Boolean>
@@ -76,6 +82,7 @@ class ChatViewModel(
         get() = _strErrorSendMessage
 
     private var _idUser: String? = null
+
 
     init {
         enableInterface()
@@ -95,21 +102,60 @@ class ChatViewModel(
     private suspend fun initIO(idChat: String) {
         withContext(Dispatchers.IO) {
             chat = dataSourceChats.getChatWithMessages(idChat)
-//            chat = dataSourceChats.getLiveData(idChat)
 
             _fragment.activity?.runOnUiThread {
                 chat.observe(_fragment as LifecycleOwner,
                     Observer { chatWithMessages ->
                         if (chatWithMessages != null) {
-                            updateUI(chatWithMessages.chat)
+                            updateUI(chatWithMessages.chat, chatWithMessages.messages)
                         }
                     })
+            }
+
+            syncRoomRethinkMessages(idChat)
+        }
+    }
+
+    private fun syncRoomRethinkMessages(idChat: String) {
+        val con = DatabaseRethink.getConnection()
+        if (con != null) {
+            val rethinkMessages = MessagesRethink.getMessages(con, idChat)
+            for (message in rethinkMessages) {
+                val idMessage = message["id"] as String
+                val messageRoom = dataSourceMessages.get(idMessage)
+                if (messageRoom == null) {
+                    insertMessageInRoom(message)
+                }
             }
         }
     }
 
+    private fun insertMessageInRoom(message: HashMap<*, *>) {
+        val context = _fragment.context
+        if (context != null) {
+            val hshMessage = message as HashMap<String, *>
+            val messageRoom = MessageEntityConverter.fromHashMap(hshMessage, context)
+            if (messageRoom != null) {
+                dataSourceMessages.insert(messageRoom)
+            }
+        }
+    }
+
+    private fun updateUI(chat: ChatEntity, messages: List<MessageEntity>) {
+        updateHeader(chat)
+        updateMessages(messages)
+    }
+
+    private fun updateMessages(messages: List<MessageEntity>) {
+        var strMessages = ""
+        for (message in messages) {
+            strMessages += "\n" + message.content
+        }
+        binding.tvChats.text = strMessages
+    }
+
     @SuppressLint("SimpleDateFormat")
-    private fun updateUI(chat: ChatEntity) {
+    private fun updateHeader(chat: ChatEntity) {
         val chatState = ChatState.getById(chat.id_chat_state)!!
         val sdfDate = SimpleDateFormat("dd-MM-yyyy")
         val sdfHour = SimpleDateFormat("HH:mm")
@@ -136,28 +182,28 @@ class ChatViewModel(
         }
     }
 
-    fun changeChatState() {
-        val idChat = _idChat.value
-        val chatState = _chatState.value
-        if (idChat != null && chatState != null) {
-            val idChatState = chatState.id
-            if (idChatState == ChatState.IN_PROGRESS.id) {
-                uiScope.launch {
-                    changeStateIO(idChat, ChatState.PROCESSED.id)
-                }
-            } else if (idChatState == ChatState.PROCESSED.id) {
-                uiScope.launch {
-                    changeStateIO(idChat, ChatState.IN_PROGRESS.id)
-                }
-            }
-        }
-    }
+//    fun changeChatState() {
+//        val idChat = _idChat.value
+//        val chatState = _chatState.value
+//        if (idChat != null && chatState != null) {
+//            val idChatState = chatState.id
+//            if (idChatState == ChatState.IN_PROGRESS.id) {
+//                uiScope.launch {
+//                    changeStateIO(idChat, ChatState.PROCESSED.id)
+//                }
+//            } else if (idChatState == ChatState.PROCESSED.id) {
+//                uiScope.launch {
+//                    changeStateIO(idChat, ChatState.IN_PROGRESS.id)
+//                }
+//            }
+//        }
+//    }
 
-    private suspend fun changeStateIO(idChat: String, idNewChatState: Int) {
-        withContext(Dispatchers.IO) {
-            dataSourceChats.changeState(idChat, idNewChatState)
-        }
-    }
+//    private suspend fun changeStateIO(idChat: String, idNewChatState: Int) {
+//        withContext(Dispatchers.IO) {
+//            dataSourceChats.changeState(idChat, idNewChatState)
+//        }
+//    }
 
     fun trySendMessage() {
         val message = binding.etMessage.text.toString()
@@ -212,7 +258,8 @@ class ChatViewModel(
 
         val con = DatabaseRethink.getConnection()
         return if (con != null) {
-            MessagesRethink.sendTextMessage(con, message, idUser, idChat)
+            val idMessageType = MessageType.TEXT.id
+            MessagesRethink.sendTextMessage(con, message, idUser, idChat, idMessageType)
         } else {
             null
         }

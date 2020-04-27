@@ -44,8 +44,7 @@ object ChatsRethink {
 
         val itemInserted = table.insert(
             itemToInsert
-        )
-            .run<HashMap<*, *>>(con)
+        ).run<HashMap<*, *>>(con)
 
         return try {
             (itemInserted["generated_keys"] as ArrayList<String>)[0] //Id inserted

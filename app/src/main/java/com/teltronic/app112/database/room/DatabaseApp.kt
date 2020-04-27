@@ -11,6 +11,7 @@ import com.teltronic.app112.database.room.configurations.ConfigurationsEntity
 import com.teltronic.app112.database.room.medicalInfo.MedicalInfoDao
 import com.teltronic.app112.database.room.medicalInfo.MedicalInfoEntity
 import com.teltronic.app112.database.room.messages.MessageEntity
+import com.teltronic.app112.database.room.messages.MessagesDao
 
 /*
 En entities van todas las tablas (entities)  de la base de datos
@@ -25,6 +26,7 @@ abstract class DatabaseApp : RoomDatabase() {
     abstract val medicalInfoDao: MedicalInfoDao
     abstract val configurationsDao: ConfigurationsDao
     abstract val chatsDao: ChatsDao
+    abstract val messagesDao: MessagesDao
 
     //Permite acceder a los métodos para crear u obtener la base de datos sin instanciar la clase
     companion object {

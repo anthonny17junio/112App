@@ -7,6 +7,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.rethinkdb.RethinkDB
+import com.rethinkdb.gen.ast.ReqlExpr
 import com.rethinkdb.model.OptArgs
 import com.rethinkdb.net.Cursor
 import com.teltronic.app112.classes.GoogleApiPeopleHelper
@@ -16,6 +17,7 @@ import com.teltronic.app112.database.room.DatabaseApp
 import com.teltronic.app112.database.room.DatabaseRoomHelper
 import com.teltronic.app112.database.room.chats.ChatEntityConverter
 import com.teltronic.app112.database.room.configurations.ConfigurationsEntity
+import com.teltronic.app112.database.room.messages.MessageEntityConverter
 import kotlinx.coroutines.*
 
 @Suppress("UNCHECKED_CAST")
@@ -80,7 +82,9 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
     private val job = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + job)
     private lateinit var cursorChangesTbChats: Cursor<*>
+    private lateinit var cursorChangesTbMessages: Cursor<*>
     private val dataSourceChats = DatabaseApp.getInstance(activityParam.application).chatsDao
+    private val dataSourceMessages = DatabaseApp.getInstance(activityParam.application).messagesDao
 
     init {
         //Esto se inicia cuando se presiona el botón para ir a user profile
@@ -113,6 +117,9 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
                 uiScope.launch {
                     //Aquí se debe configurar un listener para escuchar los cambios de los chats
                     subscribeToChangesTbChatsIO(idUser)
+                }
+                uiScope.launch {
+                    subscribeToChangesTbMessagesIO(idUser)
                 }
             }
         })
@@ -149,9 +156,19 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
                             if (chatRoom == null) {
                                 dataSourceChats.insert(newChat)
                             }
+                            //Reload listener de cambios en tbMessages
+                            if (::cursorChangesTbMessages.isInitialized) {
+                                cursorChangesTbMessages.close()
+                                subscribeToChangesTbMessagesIO(idUser)
+                            }
                         } else if (oldChat != null && newChat == null) {
                             //DELETE
                             dataSourceChats.delete(oldChat.id)
+                            //Reload listener de cambios en tbMessages
+                            if (::cursorChangesTbMessages.isInitialized) {
+                                cursorChangesTbMessages.close()
+                                subscribeToChangesTbMessagesIO(idUser)
+                            }
                         } else if (oldChat != null && newChat != null) {
                             //UPDATE
                             val chatRoom = dataSourceChats.get(newChat.id)
@@ -163,6 +180,62 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
                         }
                     } else {
                         cursorChangesTbChats.close()
+                    }
+                }
+            }
+        }
+    }
+
+    private suspend fun subscribeToChangesTbMessagesIO(idUser: String) {
+        withContext(Dispatchers.IO) {
+            val con = DatabaseRethink.getConnection()
+            val r = RethinkDB.r
+            val tableChats = r.db(NamesRethinkdb.DATABASE.text).table(NamesRethinkdb.TB_CHATS.text)
+                .getAll(idUser).optArg("index", "id_user")
+            val tableMessages =
+                r.db(NamesRethinkdb.DATABASE.text).table(NamesRethinkdb.TB_MESSAGES.text)
+
+            val tableJoin = r.do_(
+                tableChats.g("id").coerceTo("array")
+            ) { idChats: ReqlExpr? ->
+                tableMessages.getAll(r.args(idChats)).optArg("index", "id_chat")
+            }
+            if (con != null) {
+                cursorChangesTbMessages = tableJoin.changes()
+                    .run(con, OptArgs.of("time_format", "raw")) as Cursor<*>
+                for (change in cursorChangesTbMessages) { //Esto se ejecutará cada vez que haya un cambio en la tabla "tb_chats"
+                    if (job.isActive) {
+                        val cambio = change as HashMap<String, HashMap<String, *>>
+
+                        val newMessage = MessageEntityConverter.fromHashMap(
+                            cambio["new_val"],
+                            _activity.baseContext
+                        )
+                        val oldMessage = MessageEntityConverter.fromHashMap(
+                            cambio["old_val"],
+                            _activity.baseContext
+                        )
+
+                        if (oldMessage == null && newMessage != null) {
+                            //INSERT
+                            val messageRoom = dataSourceMessages.get(newMessage.id)
+                            if (messageRoom == null) {
+                                dataSourceMessages.insert(newMessage)
+                            }
+                        } else if (oldMessage != null && newMessage == null) {
+                            //DELETE
+                            dataSourceMessages.delete(oldMessage.id)
+                        } else if (oldMessage != null && newMessage != null) {
+                            //UPDATE
+                            val messageRoom = dataSourceMessages.get(newMessage.id)
+                            if (messageRoom == null) {
+                                dataSourceMessages.insert(newMessage)
+                            } else {
+                                dataSourceMessages.update(newMessage)
+                            }
+                        }
+                    } else {
+                        cursorChangesTbMessages.close()
                     }
                 }
             }

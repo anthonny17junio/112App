@@ -30,6 +30,6 @@ interface ChatsDao {
     @Query("SELECT * FROM tb_chats WHERE id= :idChat")
     fun getChatWithMessages(idChat: String): LiveData<ChatWithMessages>
 
-    @Query("UPDATE tb_chats SET id_chat_state = :idNewState WHERE id= :idChat")
-    fun changeState(idChat: String, idNewState: Int)
+//    @Query("UPDATE tb_chats SET id_chat_state = :idNewState WHERE id= :idChat")
+//    fun changeState(idChat: String, idNewState: Int)
 }

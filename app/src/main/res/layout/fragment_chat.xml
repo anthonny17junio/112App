@@ -28,7 +28,7 @@
                 android:id="@+id/infoChat"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:background="@color/black_overlay"
+                android:background="@color/colorTitleChat"
                 android:padding="@dimen/default_half_margin_size"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/stateChat"
@@ -178,6 +178,7 @@
             android:id="@+id/bodyChat"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:background="@color/colorBackgroundChat"
             app:layout_constraintBottom_toTopOf="@+id/footerChat"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -189,7 +190,11 @@
                 android:id="@+id/rv_messages"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
             <!--            <TextView-->
             <!--                android:id="@+id/tvChats"-->
             <!--                android:layout_width="wrap_content"-->
@@ -214,6 +219,7 @@
             android:id="@+id/footerChat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorBackgroundChat"
             android:visibility="@{chatViewModel.footerVisibility}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -228,7 +234,7 @@
                 android:ems="10"
                 android:hint="@string/hint_message"
                 android:importantForAutofill="no"
-                android:inputType="textPersonName"
+                android:inputType="text"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/btnSendMessage"
                 app:layout_constraintHorizontal_bias="1.0"

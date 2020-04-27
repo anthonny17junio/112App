@@ -5,6 +5,10 @@
     <color name="colorAccent">#f9b9bc</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorGreen">#03780F</color>
+    <color name="colorTitleChat">#858585</color>
+    <color name="colorBackgroundChat">#eff1f8</color>
+    <color name="colorMessageChat">#e6e6e6</color>
+
 <!--    <color name="fontColorBlack">#00FF00</color>-->
 <!--    <color name="fontColorBlack">#444444</color>-->
     <color name="black_overlay">#C0C0C0</color>

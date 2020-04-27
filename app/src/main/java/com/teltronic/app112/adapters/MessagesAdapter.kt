@@ -2,57 +2,52 @@ package com.teltronic.app112.adapters
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.teltronic.app112.R
 import com.teltronic.app112.database.room.messages.MessageEntity
-import java.text.SimpleDateFormat
-import java.util.*
+import com.teltronic.app112.databinding.ItemMessageTextMeBinding
 
-class MessagesAdapter : RecyclerView.Adapter<MessagesAdapter.ViewHolder>() {
-    var data = listOf<MessageEntity>()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
+class MessagesAdapter :
+    ListAdapter<MessageEntity, MessagesAdapter.ViewHolder>(MessagesDiffCallback()) {
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
     }
 
-    override fun getItemCount() = data.size
-
-    @SuppressLint("SimpleDateFormat")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = data[position]
-
+        val item = getItem(position)
         holder.bind(item)
     }
 
 
-    class ViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val tvMessage: TextView = itemView.findViewById(R.id.tvMessage)
-        val tvHour: TextView = itemView.findViewById(R.id.tvHour)
-
+    class ViewHolder private constructor(val binding: ItemMessageTextMeBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(item: MessageEntity) {
-            val sdfHour = SimpleDateFormat("HH:mm")
-            val creationDate = Date(item.creation_epoch_time.toLong() * 1000)
-
-            tvMessage.text = item.content
-            tvHour.text = sdfHour.format(creationDate)
+            binding.message = item
+            binding.executePendingBindings()
         }
 
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
-                val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_message_text_other, parent, false)
-                return ViewHolder(view)
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = ItemMessageTextMeBinding.inflate(layoutInflater, parent, false)
+                return ViewHolder(binding)
             }
         }
     }
+}
 
+class MessagesDiffCallback : DiffUtil.ItemCallback<MessageEntity>() {
+    override fun areItemsTheSame(oldItem: MessageEntity, newItem: MessageEntity): Boolean {
+        return oldItem.id == newItem.id
+    }
+
+    override fun areContentsTheSame(oldItem: MessageEntity, newItem: MessageEntity): Boolean {
+        return oldItem == newItem
+    }
 
 }
 

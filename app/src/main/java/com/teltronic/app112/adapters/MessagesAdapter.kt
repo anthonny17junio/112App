@@ -19,9 +19,7 @@ class MessagesAdapter : RecyclerView.Adapter<MessagesAdapter.ViewHolder>() {
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        val view = layoutInflater.inflate(R.layout.item_message_text_other, parent, false)
-        return ViewHolder(view)
+        return ViewHolder.from(parent)
     }
 
     override fun getItemCount() = data.size
@@ -30,16 +28,31 @@ class MessagesAdapter : RecyclerView.Adapter<MessagesAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = data[position]
 
-        val sdfHour = SimpleDateFormat("HH:mm")
-        val creationDate = Date(item.creation_epoch_time.toLong() * 1000)
-
-        holder.tvMessage.text = item.content
-        holder.tvHour.text = sdfHour.format(creationDate)
+        holder.bind(item)
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+    class ViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvMessage: TextView = itemView.findViewById(R.id.tvMessage)
         val tvHour: TextView = itemView.findViewById(R.id.tvHour)
+
+        fun bind(item: MessageEntity) {
+            val sdfHour = SimpleDateFormat("HH:mm")
+            val creationDate = Date(item.creation_epoch_time.toLong() * 1000)
+
+            tvMessage.text = item.content
+            tvHour.text = sdfHour.format(creationDate)
+        }
+
+        companion object {
+            fun from(parent: ViewGroup): ViewHolder {
+                val view = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_message_text_other, parent, false)
+                return ViewHolder(view)
+            }
+        }
     }
+
+
 }
 

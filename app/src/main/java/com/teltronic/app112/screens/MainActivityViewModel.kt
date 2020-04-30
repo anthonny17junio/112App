@@ -20,7 +20,7 @@ import com.teltronic.app112.database.room.configurations.ConfigurationsEntity
 import com.teltronic.app112.database.room.messages.MessageEntityConverter
 import kotlinx.coroutines.*
 
-@Suppress("UNCHECKED_CAST")
+@Suppress("UNCHECKED_CAST", "SENSELESS_COMPARISON")
 class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
     private var _activity: MainActivity = activityParam
 
@@ -125,6 +125,11 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
         })
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        job.cancel()
+    }
+
     private suspend fun subscribeToChangesTbChatsIO(idUser: String) {
         withContext(Dispatchers.IO) {
             val con = DatabaseRethink.getConnection()
@@ -208,12 +213,10 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
                         val cambio = change as HashMap<String, HashMap<String, *>>
 
                         val newMessage = MessageEntityConverter.fromHashMap(
-                            cambio["new_val"],
-                            _activity.baseContext
+                            cambio["new_val"]
                         )
                         val oldMessage = MessageEntityConverter.fromHashMap(
-                            cambio["old_val"],
-                            _activity.baseContext
+                            cambio["old_val"]
                         )
 
                         if (oldMessage == null && newMessage != null) {
@@ -362,18 +365,18 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
                 val dataSourceConfigurations =
                     DatabaseApp.getInstance(_activity.application).configurationsDao
                 val configurations = dataSourceConfigurations.get()
-                val idRoom = configurations.id_rethink
 
-                //Se asegura que estén sincronizados los id de usuario de google con room y con rethinkdb
                 val idSync = DatabaseRoomHelper.getOrInsertSynchronizedRethinkId(con, _activity)
 
-                if (idRoom != idSync) {
-                    //Si el id que estaba en room no es igual con el id sincronizado, eliminar lo que había antes en tb_chats
-                    val dataSourceChats =
-                        DatabaseApp.getInstance(_activity.application).chatsDao
+                if (configurations != null) {
+                    val idRoom = configurations.id_rethink
+                    //Se asegura que estén sincronizados los id de usuario de google con room y con rethinkdb
 
-                    dataSourceChats.deleteAll()
-
+                    if (idRoom != idSync) {
+                        //Si el id que estaba en room no es igual con el id sincronizado, eliminar lo que había antes en tb_chats
+                        val dataSourceChats = DatabaseApp.getInstance(_activity.application).chatsDao
+                        dataSourceChats.deleteAll()
+                    }
                 }
             }
         }

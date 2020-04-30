@@ -19,7 +19,7 @@ exportSchema es true por defecto
  */
 @Database(
     entities = [MedicalInfoEntity::class, ConfigurationsEntity::class, ChatEntity::class, MessageEntity::class],
-    version = 7,
+    version = 9,
     exportSchema = false
 )
 abstract class DatabaseApp : RoomDatabase() {

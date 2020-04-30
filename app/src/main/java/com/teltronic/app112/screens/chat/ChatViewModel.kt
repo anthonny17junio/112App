@@ -6,10 +6,8 @@ import android.app.Application
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import com.teltronic.app112.R
 import com.teltronic.app112.classes.enums.ChatState
 import com.teltronic.app112.classes.enums.MessageType
@@ -20,9 +18,7 @@ import com.teltronic.app112.database.room.DatabaseApp
 import com.teltronic.app112.database.room.DatabaseRoomHelper
 import com.teltronic.app112.database.room.chats.ChatEntity
 import com.teltronic.app112.database.room.chats.ChatWithMessages
-import com.teltronic.app112.database.room.messages.MessageEntity
 import com.teltronic.app112.database.room.messages.MessageEntityConverter
-import com.teltronic.app112.databinding.FragmentChatBinding
 import kotlinx.coroutines.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -34,7 +30,6 @@ class ChatViewModel(
     idChat: String,
     fragment: ChatFragment
 ) : AndroidViewModel(application) {
-    var binding: FragmentChatBinding
     lateinit var chat: LiveData<ChatWithMessages>
 
     private val _idColorResource = MutableLiveData<Int>()
@@ -67,9 +62,19 @@ class ChatViewModel(
     val footerVisibility: LiveData<Int>
         get() = _footerVisibility
 
+    private val _clearMessage = MutableLiveData<Boolean>()
+    val clearMessage: LiveData<Boolean>
+        get() = _clearMessage
+
+    private val _startChatObserver = MutableLiveData<Boolean>()
+    val startChatObserver: LiveData<Boolean>
+        get() = _startChatObserver
+
+    private val _startSendMessage = MutableLiveData<Boolean>()
+    val startSendMessage: LiveData<Boolean>
+        get() = _startSendMessage
+
     private val _fragment = fragment
-    private val job = Job()
-    private val uiScope = CoroutineScope(Dispatchers.Main + job)
     private val dataSourceChats = DatabaseApp.getInstance(application).chatsDao
     private val dataSourceMessages = DatabaseApp.getInstance(application).messagesDao
 
@@ -91,9 +96,16 @@ class ChatViewModel(
         _idChat.value = idChat
         _idColorResource.value = ChatState.IN_PROGRESS.idColor
         _footerVisibility.value = View.GONE
-        binding = fragment.binding
         _strErrorSendMessage.value = ""
-        uiScope.launch {
+        initUI(idChat)
+        _clearMessage.value = false
+        _startChatObserver.value = false
+        _startSendMessage.value = false
+    }
+
+
+    private fun initUI(idChat: String) {
+        _fragment.uiScope.launch {
             initIO(idChat)
         }
     }
@@ -102,15 +114,7 @@ class ChatViewModel(
     private suspend fun initIO(idChat: String) {
         withContext(Dispatchers.IO) {
             chat = dataSourceChats.getChatWithMessages(idChat)
-
-            _fragment.activity?.runOnUiThread {
-                chat.observe(_fragment as LifecycleOwner,
-                    Observer { chatWithMessages ->
-                        if (chatWithMessages != null) {
-                            updateUI(chatWithMessages.chat, chatWithMessages.messages)
-                        }
-                    })
-            }
+            _startChatObserver.postValue(true)
 
             syncRoomRethinkMessages(idChat)
         }
@@ -134,24 +138,20 @@ class ChatViewModel(
         val context = _fragment.context
         if (context != null) {
             val hshMessage = message as HashMap<String, *>
-            val messageRoom = MessageEntityConverter.fromHashMap(hshMessage, context)
+            val messageRoom = MessageEntityConverter.fromHashMap(hshMessage)
             if (messageRoom != null) {
                 dataSourceMessages.insert(messageRoom)
             }
         }
     }
 
-    private fun updateUI(chat: ChatEntity, messages: List<MessageEntity>) {
-        updateHeader(chat)
-        updateMessages(messages)
-    }
 
-    private fun updateMessages(messages: List<MessageEntity>) {
-        _fragment.adapter.submitList(messages)
-    }
+//    private fun updateMessages(messages: List<MessageEntity>) {
+//        _fragment.adapter.submitMessagesList(messages)
+//    }
 
     @SuppressLint("SimpleDateFormat")
-    private fun updateHeader(chat: ChatEntity) {
+    fun updateHeader(chat: ChatEntity) {
         val chatState = ChatState.getById(chat.id_chat_state)!!
         val sdfDate = SimpleDateFormat("dd-MM-yyyy")
         val sdfHour = SimpleDateFormat("HH:mm")
@@ -202,48 +202,49 @@ class ChatViewModel(
 //    }
 
     fun trySendMessage() {
-        val message = binding.etMessage.text.toString()
-        if (message != "") {
-            uiScope.launch {
-                trySendMessageIO(message)
-            }
-        }
+        _startSendMessage.value = true
     }
 
-    private suspend fun trySendMessageIO(message: String) {
-        withContext(Dispatchers.IO) {
-            disableInterface()
-            //Tener conexión con rethinkDB
-            val con = DatabaseRethink.getConnection()
-            if (con != null) {
-                //Tener un id de usuario válido
-                if (_idUser == null) {
-                    _idUser = DatabaseRoomHelper.getOrInsertSynchronizedRethinkId(
-                        con,
-                        _fragment.activity as Activity
-                    )
-                }
-                if (_idUser != null) {
-                    val idSentMessage = sendMessage(message)
-                    if (idSentMessage == null) {
-                        _strErrorSendMessage.postValue(
-                            (getApplication() as Application).getString(R.string.error_sending_message)
-                        )
-                    } else {
-                        binding.etMessage.setText("")
-                    }
-                } else {
+    fun messageSent() {
+        _startSendMessage.value = false
+    }
+
+    fun trySendMessageIO(message: String) {
+        disableInterface()
+        //Tener conexión con rethinkDB
+        val con = DatabaseRethink.getConnection()
+        if (con != null) {
+            //Tener un id de usuario válido
+            if (_idUser == null) {
+                _idUser = DatabaseRoomHelper.getOrInsertSynchronizedRethinkId(
+                    con,
+                    _fragment.activity as Activity
+                )
+            }
+            if (_idUser != null) {
+                val idSentMessage = sendMessage(message)
+                if (idSentMessage == null) {
                     _strErrorSendMessage.postValue(
-                        (getApplication() as Application).getString(R.string.error_getting_user)
+                        (getApplication() as Application).getString(R.string.error_sending_message)
                     )
+                } else {
+                    _clearMessage.postValue(true)
                 }
             } else {
                 _strErrorSendMessage.postValue(
-                    (getApplication() as Application).getString(R.string.no_database_connection)
+                    (getApplication() as Application).getString(R.string.error_getting_user)
                 )
             }
-            enableInterface()
+        } else {
+            _strErrorSendMessage.postValue(
+                (getApplication() as Application).getString(R.string.no_database_connection)
+            )
         }
+        enableInterface()
+    }
+
+    fun messageCleared() {
+        _clearMessage.value = false
     }
 
     private fun sendMessage(message: String): String? {

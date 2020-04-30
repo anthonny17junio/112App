@@ -284,5 +284,8 @@
         <argument
             android:name="idChat"
             app:argType="string" />
+        <argument
+            android:name="idUserRoom"
+            app:argType="string" />
     </fragment>
 </navigation>

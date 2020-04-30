@@ -13,7 +13,11 @@ import com.google.android.material.snackbar.Snackbar
 
 import com.teltronic.app112.R
 import com.teltronic.app112.adapters.MessagesAdapter
+import com.teltronic.app112.database.room.chats.ChatWithMessages
 import com.teltronic.app112.databinding.FragmentChatBinding
+import kotlinx.coroutines.*
+import timber.log.Timber
+import java.lang.Exception
 
 /**
  * A simple [Fragment] subclass.
@@ -22,7 +26,9 @@ class ChatFragment : Fragment() {
 
     lateinit var binding: FragmentChatBinding
     private lateinit var viewModel: ChatViewModel
-    val adapter = MessagesAdapter()
+    private lateinit var adapter: MessagesAdapter
+    private val job = Job()
+    val uiScope = CoroutineScope(Dispatchers.Main + job)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,13 +44,14 @@ class ChatFragment : Fragment() {
         //Inicializo el viewModel
         val args = ChatFragmentArgs.fromBundle(requireArguments())
         val idChat = args.idChat
+        val idUserRoom = args.idUserRoom
         val application = requireNotNull(this.activity).application
         val viewModelFactory = ChatViewModelFactory(application, idChat, this)
         viewModel = ViewModelProvider(this, viewModelFactory).get(ChatViewModel::class.java)
 
         //"Uno" el layout con esta clase por medio del binding
         binding.chatViewModel = viewModel
-
+        adapter = MessagesAdapter(idUserRoom)
         binding.rvMessages.adapter = adapter
         //Para que el ciclo de vida del binding sea consistente y funcione bien con LiveData
         binding.lifecycleOwner = this
@@ -52,9 +59,79 @@ class ChatFragment : Fragment() {
         setHasOptionsMenu(true) //Habilita el icono de la derecha
 
         configureErrorSendMessageObserver()
+        configureClearMessageObserver()
+
+        configureChatObserver()
+        configureStartSendMessageObserver()
         //Retorno el binding root (no el inflater)
         return binding.root
     }
+
+    private fun configureChatObserver() {
+        viewModel.startChatObserver.observe(
+            this as LifecycleOwner,
+            Observer { startObserver ->
+                if (startObserver) {
+                    startChatObserver()
+                }
+            }
+        )
+    }
+
+    private fun configureStartSendMessageObserver() {
+        viewModel.startSendMessage.observe(
+            this as LifecycleOwner,
+            Observer { shouldSendMessage ->
+                if (shouldSendMessage) {
+                    val message = binding.etMessage.text.toString()
+                    if (message != "") {
+                        uiScope.launch {
+                            trySendMessageIO(message)
+                        }
+                    }
+                    viewModel.messageSent()
+                }
+            }
+        )
+    }
+
+    private suspend fun trySendMessageIO(message: String) {
+        withContext(Dispatchers.IO) {
+            viewModel.trySendMessageIO(message)
+        }
+    }
+
+    private fun startChatObserver() {
+        viewModel.chat.observe(
+            this as LifecycleOwner,
+            Observer { chatWithMessages ->
+                uiScope.launch {
+                    if (chatWithMessages != null) {
+                        updateScreenIO(chatWithMessages)
+                    }
+                }
+            }
+        )
+    }
+
+    override fun onPause() {
+        super.onPause()
+        job.cancel()
+    }
+
+    private suspend fun updateScreenIO(chatWithMessages: ChatWithMessages) {
+        withContext(Dispatchers.IO) {
+            val messages = chatWithMessages.messages
+            viewModel.updateHeader(chatWithMessages.chat)
+            adapter.submitMessagesList(messages)
+            try {
+                binding.rvMessages.smoothScrollToPosition(messages.count() - 1)
+            } catch (e: Exception) {
+                Timber.i("Exception ${e.message}}")
+            }
+        }
+    }
+
 
     private fun configureErrorSendMessageObserver() {
         viewModel.strErrorSendMessage.observe(
@@ -67,6 +144,18 @@ class ChatFragment : Fragment() {
                         Snackbar.LENGTH_LONG
                     ).show()
                     viewModel.clearStrErrorSendMessage()
+                }
+            }
+        )
+    }
+
+    private fun configureClearMessageObserver() {
+        viewModel.clearMessage.observe(
+            this as LifecycleOwner,
+            Observer { shouldClear ->
+                if (shouldClear) {
+                    binding.etMessage.setText("")
+                    viewModel.messageCleared()
                 }
             }
         )

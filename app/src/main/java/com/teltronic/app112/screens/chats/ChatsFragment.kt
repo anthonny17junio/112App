@@ -74,7 +74,7 @@ class ChatsFragment : Fragment() {
         viewModel.navigateToChat.observe(this as LifecycleOwner, Observer { idChat ->
             idChat?.let {
                 this.findNavController().navigate(
-                    ChatsFragmentDirections.actionChatsFragmentToChatFragment(idChat)
+                    ChatsFragmentDirections.actionChatsFragmentToChatFragment(idChat, viewModel.idUser)
                 )
                 viewModel.onChatNavigated()
             }

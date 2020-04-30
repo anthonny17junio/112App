@@ -27,6 +27,8 @@ class ChatsViewModel(fragment: ChatsFragment) :
     val strError: LiveData<String>
         get() = _strError
 
+    lateinit var idUser: String
+
     lateinit var chats: LiveData<List<ChatEntity>>
 
     private val _networkConnection = ConnectionLiveData(fragment.context)
@@ -36,7 +38,8 @@ class ChatsViewModel(fragment: ChatsFragment) :
     private val uiScope = CoroutineScope(Dispatchers.Main + job)
 
     private val _fragment = fragment
-    private val dataSource = DatabaseApp.getInstance(_fragment.requireActivity().application).chatsDao
+    private val dataSource =
+        DatabaseApp.getInstance(_fragment.requireActivity().application).chatsDao
 
     private val _navigateToChat = MutableLiveData<String>()
     val navigateToChat
@@ -58,6 +61,12 @@ class ChatsViewModel(fragment: ChatsFragment) :
                 }
             }
         )
+
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        job.cancel()
     }
 
     private fun getChatsRoom() {
@@ -72,7 +81,7 @@ class ChatsViewModel(fragment: ChatsFragment) :
         _navigateToChat.value = id
     }
 
-    fun onChatNavigated(){
+    fun onChatNavigated() {
         _navigateToChat.value = null
     }
 
@@ -94,6 +103,7 @@ class ChatsViewModel(fragment: ChatsFragment) :
         val userId =
             DatabaseRoomHelper.getOrInsertSynchronizedRethinkId(con, _fragment.activity as Activity)
         requireNotNull(userId)
+        idUser = userId
         val chats = ChatsRethink.getChatsByUser(con, userId)
         for (chat in chats) {
             val idChat = chat["id"] as String

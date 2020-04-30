@@ -101,7 +101,7 @@ class ConfirmMessageFragment : Fragment() {
                 if (idChat != null) {
                     val actionNavigate =
                         ConfirmMessageFragmentDirections.actionConfirmMessageFragmentToChatFragment(
-                            idChat
+                            idChat, viewModel.idUser
                         )
                     findNavController().navigate(actionNavigate)
                     viewModel.navigateToChatComplete()

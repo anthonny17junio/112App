@@ -5,7 +5,6 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "tb_messages", indices = [Index(value = ["id_chat"])])
-//@Entity(tableName = "tb_messages", indices = arrayOf(Index(value = ["id_chat"])))
 data class MessageEntity(
     @PrimaryKey
     var id: String,

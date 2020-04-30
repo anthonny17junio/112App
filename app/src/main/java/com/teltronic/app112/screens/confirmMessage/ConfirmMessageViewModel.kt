@@ -33,6 +33,7 @@ class ConfirmMessageViewModel(
     private val job = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + job)
 
+    lateinit var idUser: String
 
     private var _progressbarStyle = MutableLiveData<Int>()
     val progressbarStyle: LiveData<Int>
@@ -108,8 +109,10 @@ class ConfirmMessageViewModel(
                 val locationEnabled = activateLocation()
                 if (locationEnabled) {
                     //Tener un id de usuario válido
-                    val idUser = DatabaseRoomHelper.getOrInsertSynchronizedRethinkId(con, _activity)
-                    if (idUser != null) {
+                    val idUserTmp =
+                        DatabaseRoomHelper.getOrInsertSynchronizedRethinkId(con, _activity)
+                    if (idUserTmp != null) {
+                        idUser = idUserTmp
                         //Tener un id de subcategoría
                         val subcategory = _subcategory.value
                         if (subcategory != null) {

@@ -1,7 +1,11 @@
 package com.teltronic.app112.screens.chat
 
 
+import android.app.Activity
+import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
@@ -13,10 +17,14 @@ import com.google.android.material.snackbar.Snackbar
 
 import com.teltronic.app112.R
 import com.teltronic.app112.adapters.MessagesAdapter
+import com.teltronic.app112.classes.Phone
+import com.teltronic.app112.classes.enums.IntCodes
+import com.teltronic.app112.classes.enums.PermissionsApp
 import com.teltronic.app112.database.room.chats.ChatWithMessages
 import com.teltronic.app112.databinding.FragmentChatBinding
 import kotlinx.coroutines.*
 import timber.log.Timber
+import java.io.ByteArrayOutputStream
 import java.lang.Exception
 
 /**
@@ -27,8 +35,8 @@ class ChatFragment : Fragment() {
     lateinit var binding: FragmentChatBinding
     private lateinit var viewModel: ChatViewModel
     private lateinit var adapter: MessagesAdapter
-    private val job = Job()
-    val uiScope = CoroutineScope(Dispatchers.Main + job)
+    private var job = Job()
+    private var uiScope = CoroutineScope(Dispatchers.Main + job)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,7 +54,7 @@ class ChatFragment : Fragment() {
         val idChat = args.idChat
         val idUserRoom = args.idUserRoom
         val application = requireNotNull(this.activity).application
-        val viewModelFactory = ChatViewModelFactory(application, idChat, this)
+        val viewModelFactory = ChatViewModelFactory(application, idChat, idUserRoom)
         viewModel = ViewModelProvider(this, viewModelFactory).get(ChatViewModel::class.java)
 
         //"Uno" el layout con esta clase por medio del binding
@@ -63,6 +71,9 @@ class ChatFragment : Fragment() {
 
         configureChatObserver()
         configureStartSendMessageObserver()
+        configureAskCameraPermissionObserver()
+        configureStartCameraObserver()
+        configureInitUIObserver()
         //Retorno el binding root (no el inflater)
         return binding.root
     }
@@ -78,6 +89,51 @@ class ChatFragment : Fragment() {
         )
     }
 
+    private fun configureAskCameraPermissionObserver() {
+        viewModel.boolAskCameraPermission.observe(
+            this as LifecycleOwner,
+            Observer { askPermission ->
+                if (askPermission) {
+                    Phone.askPermission(
+                        requireActivity(),
+                        PermissionsApp.CAMERA
+                    )
+                    viewModel.cameraPermissionAsked()
+                }
+            }
+        )
+    }
+
+    private fun configureStartCameraObserver() {
+        viewModel.boolStartCamera.observe(
+            this as LifecycleOwner,
+            Observer { startCamera ->
+                if (startCamera) {
+                    Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+                        takePictureIntent.resolveActivity(requireContext().packageManager)?.also {
+                            startActivityForResult(takePictureIntent, IntCodes.CODE_PHOTO.code)
+                        }
+                    }
+                    viewModel.cameraStarted()
+                }
+            }
+        )
+    }
+
+    private fun configureInitUIObserver() {
+        viewModel.boolInitUI.observe(
+            this as LifecycleOwner,
+            Observer { shouldInit ->
+                if (shouldInit) {
+                    uiScope.launch {
+                        viewModel.initIO()
+                    }
+                }
+            }
+        )
+    }
+
+    //TEXT MESSAGE
     private fun configureStartSendMessageObserver() {
         viewModel.startSendMessage.observe(
             this as LifecycleOwner,
@@ -86,18 +142,41 @@ class ChatFragment : Fragment() {
                     val message = binding.etMessage.text.toString()
                     if (message != "") {
                         uiScope.launch {
-                            trySendMessageIO(message)
+                            trySendTextMessageIO(message)
                         }
                     }
-                    viewModel.messageSent()
+                    viewModel.textMessageSent()
                 }
             }
         )
     }
 
-    private suspend fun trySendMessageIO(message: String) {
+    private suspend fun trySendTextMessageIO(message: String) {
         withContext(Dispatchers.IO) {
-            viewModel.trySendMessageIO(message)
+            viewModel.trySendTextMessageIO(message)
+        }
+    }
+
+    //IMAGE MESSAGE
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == IntCodes.CODE_PHOTO.code && resultCode == Activity.RESULT_OK) {
+            //"reinicio" el uiScope"
+            job = Job()
+            uiScope = CoroutineScope(Dispatchers.Main + job)
+            uiScope.launch {
+                val imageBitmap = data?.extras?.get("data") as Bitmap
+                trySendImageMessageIO(imageBitmap)
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private suspend fun trySendImageMessageIO(imageBitmap: Bitmap) {
+        withContext(Dispatchers.IO) {
+            val stream = ByteArrayOutputStream()
+            imageBitmap.compress(Bitmap.CompressFormat.PNG, 10, stream)
+            val imageByteArray = stream.toByteArray()
+            viewModel.trySendImageMessageIO(imageByteArray)
         }
     }
 

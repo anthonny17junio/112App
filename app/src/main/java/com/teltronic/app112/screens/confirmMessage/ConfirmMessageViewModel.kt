@@ -18,13 +18,11 @@ import com.teltronic.app112.classes.enums.Subcategory
 import com.teltronic.app112.database.rethink.DatabaseRethink
 import com.teltronic.app112.database.rethink.tb_chats.ChatsRethink
 import com.teltronic.app112.database.room.DatabaseRoomHelper
-import com.teltronic.app112.databinding.FragmentConfirmMessageBinding
 import kotlinx.coroutines.*
 
 class ConfirmMessageViewModel(
     subcat: Subcategory,
-    activity: FragmentActivity,
-    private val binding: FragmentConfirmMessageBinding
+    activity: FragmentActivity
 ) :
     ViewModel() {
 
@@ -59,6 +57,10 @@ class ConfirmMessageViewModel(
     val idChatToNavigate: LiveData<String>
         get() = _idChatToNavigate
 
+    private var _createChat = MutableLiveData<Boolean>()
+    val createChat: LiveData<Boolean>
+        get() = _createChat
+
     override fun onCleared() {
         super.onCleared()
         job.cancel()
@@ -76,9 +78,18 @@ class ConfirmMessageViewModel(
         }
 
         _idChatToNavigate.value = null
+        _createChat.value = false
     }
 
     fun tryCreateNewChat() {
+        _createChat.value = true
+    }
+
+    fun newChatCreated(){
+        _createChat.value=false
+    }
+
+    fun startCreatingNewChat(realTimeSelected: Boolean) {
         val mFusedLocationClient: FusedLocationProviderClient =
             LocationServices.getFusedLocationProviderClient(_activity as Activity)
 
@@ -94,12 +105,12 @@ class ConfirmMessageViewModel(
             }
 
             uiScope.launch {
-                tryCreateNewChatIO(lat, long)
+                tryCreateNewChatIO(lat, long, realTimeSelected)
             }
         }
     }
 
-    private suspend fun tryCreateNewChatIO(lat: Double, long: Double) {
+    private suspend fun tryCreateNewChatIO(lat: Double, long: Double, realTimeSelected: Boolean) {
         withContext(Dispatchers.IO) {
             disableInterface()
             //Tener conexión con rethinkDB
@@ -116,7 +127,8 @@ class ConfirmMessageViewModel(
                         //Tener un id de subcategoría
                         val subcategory = _subcategory.value
                         if (subcategory != null) {
-                            val idNewChat = createNewChat(subcategory, con, lat, long, idUser)
+                            val idNewChat =
+                                createNewChat(subcategory, con, lat, long, idUser, realTimeSelected)
 
                             if (idNewChat != null) {
                                 navigateToChat(idNewChat)
@@ -151,10 +163,11 @@ class ConfirmMessageViewModel(
         con: Connection,
         lat: Double,
         long: Double,
-        idUser: String
+        idUser: String,
+        realTimeSelected: Boolean
     ): String? {
+//        _createChat.postValue(true)
         val idSubcategory = subcategory.id
-        val realTimeSelected = binding.chkRealTimeLocation.isChecked
 
         //Insert en rethink
         return ChatsRethink.insertNewChat(

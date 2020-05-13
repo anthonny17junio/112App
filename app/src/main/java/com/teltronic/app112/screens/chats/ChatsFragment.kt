@@ -2,6 +2,7 @@ package com.teltronic.app112.screens.chats
 
 import android.os.Bundle
 import android.view.*
+import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
@@ -13,6 +14,8 @@ import com.teltronic.app112.databinding.FragmentChatsBinding
 import com.teltronic.app112.R
 import com.teltronic.app112.adapters.ChatListener
 import com.teltronic.app112.adapters.ChatsAdapter
+import com.teltronic.app112.classes.Phone
+import com.teltronic.app112.classes.enums.PermissionsApp
 import com.teltronic.app112.screens.MainActivity
 
 
@@ -73,9 +76,27 @@ class ChatsFragment : Fragment() {
     private fun configOnclickChatObserver() {
         viewModel.navigateToChat.observe(this as LifecycleOwner, Observer { idChat ->
             idChat?.let {
-                this.findNavController().navigate(
-                    ChatsFragmentDirections.actionChatsFragmentToChatFragment(idChat, viewModel.idUser)
-                )
+                if ((!Phone.existPermission(
+                        requireActivity().application,
+                        PermissionsApp.WRITE_EXTERNAL_STORAGE
+                    ) || !Phone.existPermission(
+                        requireActivity().application,
+                        PermissionsApp.READ_EXTERNAL_STORAGE
+                    ))
+                ) {
+                    ActivityCompat.requestPermissions(
+                        requireActivity(),
+                        arrayOf(PermissionsApp.WRITE_EXTERNAL_STORAGE.manifestName,PermissionsApp.READ_EXTERNAL_STORAGE.manifestName),
+                        PermissionsApp.WRITE_EXTERNAL_STORAGE.code
+                    )
+                } else {
+                    this.findNavController().navigate(
+                        ChatsFragmentDirections.actionChatsFragmentToChatFragment(
+                            idChat,
+                            viewModel.idUser
+                        )
+                    )
+                }
                 viewModel.onChatNavigated()
             }
         })

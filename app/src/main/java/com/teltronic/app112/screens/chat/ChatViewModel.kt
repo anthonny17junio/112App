@@ -1,7 +1,6 @@
 package com.teltronic.app112.screens.chat
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.Application
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -9,13 +8,14 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.teltronic.app112.R
+import com.teltronic.app112.classes.Phone
 import com.teltronic.app112.classes.enums.ChatState
 import com.teltronic.app112.classes.enums.MessageType
+import com.teltronic.app112.classes.enums.PermissionsApp
 import com.teltronic.app112.classes.enums.Subcategory
 import com.teltronic.app112.database.rethink.DatabaseRethink
 import com.teltronic.app112.database.rethink.tb_messages.MessagesRethink
 import com.teltronic.app112.database.room.DatabaseApp
-import com.teltronic.app112.database.room.DatabaseRoomHelper
 import com.teltronic.app112.database.room.chats.ChatEntity
 import com.teltronic.app112.database.room.chats.ChatWithMessages
 import com.teltronic.app112.database.room.messages.MessageEntityConverter
@@ -28,7 +28,7 @@ import kotlin.collections.HashMap
 class ChatViewModel(
     application: Application,
     idChat: String,
-    fragment: ChatFragment
+    idUser: String
 ) : AndroidViewModel(application) {
     lateinit var chat: LiveData<ChatWithMessages>
 
@@ -70,11 +70,10 @@ class ChatViewModel(
     val startChatObserver: LiveData<Boolean>
         get() = _startChatObserver
 
-    private val _startSendMessage = MutableLiveData<Boolean>()
+    private val _startSendTextMessage = MutableLiveData<Boolean>()
     val startSendMessage: LiveData<Boolean>
-        get() = _startSendMessage
+        get() = _startSendTextMessage
 
-    private val _fragment = fragment
     private val dataSourceChats = DatabaseApp.getInstance(application).chatsDao
     private val dataSourceMessages = DatabaseApp.getInstance(application).messagesDao
 
@@ -86,8 +85,19 @@ class ChatViewModel(
     val strErrorSendMessage: LiveData<String>
         get() = _strErrorSendMessage
 
-    private var _idUser: String? = null
+    private val _idUser: String = idUser
 
+    private var _boolAskCameraPermission = MutableLiveData<Boolean>()
+    val boolAskCameraPermission: LiveData<Boolean>
+        get() = _boolAskCameraPermission
+
+    private var _boolStartCamera = MutableLiveData<Boolean>()
+    val boolStartCamera: LiveData<Boolean>
+        get() = _boolStartCamera
+
+    private var _boolInitUI = MutableLiveData<Boolean>()
+    val boolInitUI: LiveData<Boolean>
+        get() = _boolInitUI
 
     init {
         enableInterface()
@@ -97,26 +107,26 @@ class ChatViewModel(
         _idColorResource.value = ChatState.IN_PROGRESS.idColor
         _footerVisibility.value = View.GONE
         _strErrorSendMessage.value = ""
-        initUI(idChat)
         _clearMessage.value = false
         _startChatObserver.value = false
-        _startSendMessage.value = false
+        _startSendTextMessage.value = false
+        _boolAskCameraPermission.value = false
+        _boolStartCamera.value = false
+        _boolInitUI.value = true
     }
 
 
-    private fun initUI(idChat: String) {
-        _fragment.uiScope.launch {
-            initIO(idChat)
-        }
+    fun cameraPermissionAsked() {
+        _boolAskCameraPermission.value = false
     }
 
     @SuppressLint("SimpleDateFormat")
-    private suspend fun initIO(idChat: String) {
+    suspend fun initIO() {
         withContext(Dispatchers.IO) {
-            chat = dataSourceChats.getChatWithMessages(idChat)
+            chat = dataSourceChats.getChatWithMessages(_idChat.value!!)
             _startChatObserver.postValue(true)
 
-            syncRoomRethinkMessages(idChat)
+            syncRoomRethinkMessages(_idChat.value!!)
         }
     }
 
@@ -135,20 +145,12 @@ class ChatViewModel(
     }
 
     private fun insertMessageInRoom(message: HashMap<*, *>) {
-        val context = _fragment.context
-        if (context != null) {
-            val hshMessage = message as HashMap<String, *>
-            val messageRoom = MessageEntityConverter.fromHashMap(hshMessage)
-            if (messageRoom != null) {
-                dataSourceMessages.insert(messageRoom)
-            }
+        val hshMessage = message as HashMap<String, *>
+        val messageRoom = MessageEntityConverter.fromHashMap(hshMessage)
+        if (messageRoom != null) {
+            dataSourceMessages.insert(messageRoom)
         }
     }
-
-
-//    private fun updateMessages(messages: List<MessageEntity>) {
-//        _fragment.adapter.submitMessagesList(messages)
-//    }
 
     @SuppressLint("SimpleDateFormat")
     fun updateHeader(chat: ChatEntity) {
@@ -178,62 +180,30 @@ class ChatViewModel(
         }
     }
 
-//    fun changeChatState() {
-//        val idChat = _idChat.value
-//        val chatState = _chatState.value
-//        if (idChat != null && chatState != null) {
-//            val idChatState = chatState.id
-//            if (idChatState == ChatState.IN_PROGRESS.id) {
-//                uiScope.launch {
-//                    changeStateIO(idChat, ChatState.PROCESSED.id)
-//                }
-//            } else if (idChatState == ChatState.PROCESSED.id) {
-//                uiScope.launch {
-//                    changeStateIO(idChat, ChatState.IN_PROGRESS.id)
-//                }
-//            }
-//        }
-//    }
-
-//    private suspend fun changeStateIO(idChat: String, idNewChatState: Int) {
-//        withContext(Dispatchers.IO) {
-//            dataSourceChats.changeState(idChat, idNewChatState)
-//        }
-//    }
-
-    fun trySendMessage() {
-        _startSendMessage.value = true
+    fun trySendTextMessage() {
+        _startSendTextMessage.value = true
     }
 
-    fun messageSent() {
-        _startSendMessage.value = false
+    fun textMessageSent() {
+        _startSendTextMessage.value = false
     }
 
-    fun trySendMessageIO(message: String) {
+    fun trySendTextMessageIO(message: String) {
         disableInterface()
         //Tener conexión con rethinkDB
         val con = DatabaseRethink.getConnection()
         if (con != null) {
-            //Tener un id de usuario válido
-            if (_idUser == null) {
-                _idUser = DatabaseRoomHelper.getOrInsertSynchronizedRethinkId(
-                    con,
-                    _fragment.activity as Activity
-                )
-            }
-            if (_idUser != null) {
-                val idSentMessage = sendMessage(message)
-                if (idSentMessage == null) {
-                    _strErrorSendMessage.postValue(
-                        (getApplication() as Application).getString(R.string.error_sending_message)
-                    )
-                } else {
-                    _clearMessage.postValue(true)
-                }
-            } else {
+            val idSentMessage = sendTextMessage(message)
+            if (idSentMessage == null) {
                 _strErrorSendMessage.postValue(
-                    (getApplication() as Application).getString(R.string.error_getting_user)
+                    (getApplication() as Application).getString(R.string.error_sending_message)
                 )
+            } else {
+                _clearMessage.postValue(true)
+                //Guardar mensaje en room
+                val messageToSave = MessagesRethink.getMessage(con, idSentMessage)
+                if (messageToSave != null)
+                    insertMessageInRoom(messageToSave)
             }
         } else {
             _strErrorSendMessage.postValue(
@@ -247,16 +217,29 @@ class ChatViewModel(
         _clearMessage.value = false
     }
 
-    private fun sendMessage(message: String): String? {
+    private fun sendTextMessage(message: String): String? {
         val idUser = _idUser
         val idChat = _idChat.value
-        requireNotNull(idUser)
         requireNotNull(idChat)
 
         val con = DatabaseRethink.getConnection()
         return if (con != null) {
             val idMessageType = MessageType.TEXT.id
             MessagesRethink.sendTextMessage(con, message, idUser, idChat, idMessageType)
+        } else {
+            null
+        }
+    }
+
+    private fun sendImageMessage(imageByteArray: ByteArray): String? {
+        val idUser = _idUser
+        val idChat = _idChat.value
+        requireNotNull(idChat)
+
+        val con = DatabaseRethink.getConnection()
+        return if (con != null) {
+            val idMessageType = MessageType.IMAGE.id
+            MessagesRethink.sendImageMessage(con, imageByteArray, idUser, idChat, idMessageType)
         } else {
             null
         }
@@ -274,4 +257,45 @@ class ChatViewModel(
         _strErrorSendMessage.value = ""
     }
 
+    fun tryStartCamera() {
+        if (!Phone.existPermission(
+                getApplication(),
+                PermissionsApp.CAMERA
+            )
+        ) {
+            _boolAskCameraPermission.value = true
+        } else {
+            _boolStartCamera.value = true
+        }
+    }
+
+    fun cameraStarted() {
+        _boolStartCamera.value = false
+    }
+
+
+    fun trySendImageMessageIO(imageByteArray: ByteArray) {
+        disableInterface()
+        //Tener conexión con rethinkDB
+        val con = DatabaseRethink.getConnection()
+        if (con != null) {
+            val idSentMessage = sendImageMessage(imageByteArray)
+            if (idSentMessage == null) {
+                _strErrorSendMessage.postValue(
+                    (getApplication() as Application).getString(R.string.error_sending_message)
+                )
+            } else {
+                _clearMessage.postValue(true)
+                //Guardar mensaje en room
+                val message = MessagesRethink.getMessage(con, idSentMessage)
+                if (message != null)
+                    insertMessageInRoom(message)
+            }
+        } else {
+            _strErrorSendMessage.postValue(
+                (getApplication() as Application).getString(R.string.no_database_connection)
+            )
+        }
+        enableInterface()
+    }
 }

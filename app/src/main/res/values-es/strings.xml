@@ -38,9 +38,11 @@
     <string name="txt_btn_main_chats">Chats</string>
 
     <!--MENSAJES DE PERMISOS-->
+    <string name="txt_permission">Por favor, acepta los permisos</string>
     <string name="txt_permission_call">Por favor, acepta los permisos para realizar la llamada</string>
-    <string name="txt_permission_location">Por favor, accepta los permisos para utilizar tu ubicación</string>
+    <string name="txt_permission_location">Por favor, acepta los permisos para utilizar tu ubicación</string>
     <string name="location_no_enabled">Por favor, habilita la localización GPS de tu móvil</string>
+    <string name="txt_permission_camera">Por favor, acepta los permisos para utilizar la cámara</string>
 
     <!--LATERAL MENU-->
     <string name="content_description_logo112">Imagen logo 112</string>
@@ -177,4 +179,6 @@
     <!--CHAT-->
     <string name="send_message">Enviar</string>
     <string name="hint_message">Escribe un mensaje</string>
+    <string name="content_description_camera">Ícono de cámara</string>
+    <string name="content_description_chat_image">Imagen de chat</string>
 </resources>

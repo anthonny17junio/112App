@@ -9,7 +9,6 @@ import com.teltronic.app112.database.room.DatabaseApp
 import com.teltronic.app112.database.room.medicalInfo.MedicalInfoEntity
 import com.teltronic.app112.databinding.FragmentMedicalInfoBinding
 import kotlinx.coroutines.*
-import java.util.concurrent.TimeUnit
 
 class MedicalInfoViewModel(
     application: Application,
@@ -80,7 +79,7 @@ class MedicalInfoViewModel(
         withContext(Dispatchers.IO) {
             disableInterface() //Deshabilito la interfaz
 
-            TimeUnit.MILLISECONDS.sleep(3000L) //Si se pone código aquí NO se bloquea UI (porque estamos en Dispatchers.IO)
+//            TimeUnit.MILLISECONDS.sleep(3000L) //Si se pone código aquí NO se bloquea UI (porque estamos en Dispatchers.IO)
             if (medicalInfo.value == null) {
                 //Si no existe medicalInfo se inserta
                 dataSource.insert(medicalInfoInsert)

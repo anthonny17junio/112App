@@ -196,6 +196,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:stackFromEnd="true" />
+
             <!--            <TextView-->
             <!--                android:id="@+id/tvChats"-->
             <!--                android:layout_width="wrap_content"-->
@@ -238,8 +239,7 @@
                 android:inputType="text"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/btnSendMessage"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ivCamera"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
@@ -249,7 +249,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/default_half_margin_size"
                 android:enabled="@{chatViewModel.boolEnableInterface}"
-                android:onClick="@{()->chatViewModel.trySendMessage()}"
+                android:onClick="@{()->chatViewModel.trySendTextMessage()}"
                 android:paddingEnd="20dp"
                 android:text="@string/send_message"
                 android:textColor="@color/colorWhite"
@@ -257,6 +257,18 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="RtlSymmetry" />
+
+            <ImageView
+                android:id="@+id/ivCamera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_half_margin_size"
+                android:contentDescription="@string/content_description_camera"
+                android:onClick="@{()->chatViewModel.tryStartCamera()}"
+                android:src="@android:drawable/ic_menu_camera"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

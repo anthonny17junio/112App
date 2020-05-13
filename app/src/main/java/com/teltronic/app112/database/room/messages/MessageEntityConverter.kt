@@ -1,5 +1,7 @@
 package com.teltronic.app112.database.room.messages
 
+import android.util.Base64
+import com.teltronic.app112.classes.enums.MessageType
 import org.json.simple.JSONObject
 import java.lang.ClassCastException
 
@@ -19,16 +21,41 @@ object MessageEntityConverter {
             }
 
             val idMessageType = hshMap["id_type"] as Long
-            val content = hshMap["content"] as String
-            return MessageEntity(
-                id,
-                idUser,
-                idChat,
-                creationEpochTime,
-                creationTimezone,
-                idMessageType.toInt(),
-                content
-            )
+
+            return when (idMessageType.toInt()) {
+                MessageType.TEXT.id -> {
+                    val content = hshMap["content"] as String
+                    MessageEntity(
+                        id,
+                        idUser,
+                        idChat,
+                        creationEpochTime,
+                        creationTimezone,
+                        idMessageType.toInt(),
+                        content
+                    )
+                }
+
+                MessageType.IMAGE.id -> {
+                    val strImage = try {
+                        Base64.encodeToString((hshMap["content"] as ByteArray), Base64.DEFAULT)
+                    } catch (e: ClassCastException) {
+                        (hshMap["content"] as JSONObject)["data"] as String //Cuando se restauran los mensajes
+                    }
+                    MessageEntity(
+                        id,
+                        idUser,
+                        idChat,
+                        creationEpochTime,
+                        creationTimezone,
+                        idMessageType.toInt(),
+                        strImage
+                    )
+                }
+
+                else -> null
+            }
+
         } else {
             return null
         }

@@ -7,13 +7,13 @@ import androidx.lifecycle.ViewModelProvider
 class ChatViewModelFactory(
     private var application: Application,
     private val idChat: String,
-    private val fragment: ChatFragment
+    private val idUser: String
 ) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ChatViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return ChatViewModel(application, idChat, fragment) as T
+            return ChatViewModel(application, idChat, idUser) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

@@ -21,7 +21,7 @@
         android:padding="@dimen/default_half_margin_size">
 
         <TextView
-            android:id="@+id/tvMessage"
+            android:id="@+id/ivMessage"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toStartOf="@+id/tvHour"

@@ -4,6 +4,7 @@ package com.teltronic.app112.screens.confirmMessage
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
+import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
@@ -13,6 +14,8 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 
 import com.teltronic.app112.R
+import com.teltronic.app112.classes.Phone
+import com.teltronic.app112.classes.enums.PermissionsApp
 import com.teltronic.app112.databinding.FragmentConfirmMessageBinding
 
 /**
@@ -39,7 +42,7 @@ class ConfirmMessageFragment : Fragment() {
         val args = ConfirmMessageFragmentArgs.fromBundle(requireArguments())
         val subcategory = args.subcategory
         val act = requireNotNull(activity)
-        val viewModelFactory = ConfirmMessageViewModelFactory(subcategory, act, binding)
+        val viewModelFactory = ConfirmMessageViewModelFactory(subcategory, act)
         viewModel =
             ViewModelProvider(this, viewModelFactory).get(ConfirmMessageViewModel::class.java)
 
@@ -53,8 +56,39 @@ class ConfirmMessageFragment : Fragment() {
         configureBackButton()
         configureConfirmButtonObserver()
         configureErrorCreateChatObserver()
+        configureStartCreateChatObserver()
         //Retorno el binding root (no el inflater)
         return binding.root
+    }
+
+    private fun configureStartCreateChatObserver() {
+        viewModel.createChat.observe(
+            this as LifecycleOwner,
+            Observer { shouldCreateChat ->
+                if (shouldCreateChat) {
+                    if ((!Phone.existPermission(
+                            requireActivity().application,
+                            PermissionsApp.WRITE_EXTERNAL_STORAGE
+                        ) || !Phone.existPermission(
+                            requireActivity().application,
+                            PermissionsApp.READ_EXTERNAL_STORAGE
+                        ))
+                    ) {
+                        ActivityCompat.requestPermissions(
+                            requireActivity(),
+                            arrayOf(
+                                PermissionsApp.WRITE_EXTERNAL_STORAGE.manifestName,
+                                PermissionsApp.READ_EXTERNAL_STORAGE.manifestName
+                            ),
+                            PermissionsApp.WRITE_EXTERNAL_STORAGE.code
+                        )
+                    } else {
+                        viewModel.startCreatingNewChat(binding.chkRealTimeLocation.isChecked)
+                    }
+                    viewModel.newChatCreated()
+                }
+            }
+        )
     }
 
     private fun configureErrorCreateChatObserver() {

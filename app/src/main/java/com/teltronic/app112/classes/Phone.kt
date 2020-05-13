@@ -30,7 +30,7 @@ import java.util.concurrent.Executors
 object Phone {
 
     //Verifica si existe un determinado permiso
-    fun existPermission(context: FragmentActivity?, perm: PermissionsApp): Boolean {
+    fun existPermission(context: Context?, perm: PermissionsApp): Boolean {
         val permission =
             ContextCompat.checkSelfPermission(
                 context!!,
@@ -79,10 +79,10 @@ object Phone {
                 activity.runOnUiThread {
                     if ((grantResults.isEmpty() || grantResults[0] == PackageManager.PERMISSION_DENIED)) {
                         Toast.makeText(
-                                activity,
-                                R.string.txt_permission_location,
-                                Toast.LENGTH_LONG
-                            )
+                            activity,
+                            R.string.txt_permission_location,
+                            Toast.LENGTH_LONG
+                        )
                             .show()
                     }
                 }
@@ -97,6 +97,19 @@ object Phone {
                     activity.findNavController(R.id.myNavHostFragment).navigate(actionNavigate)
                 } else {
                     Toast.makeText(activity, R.string.txt_permission_location, Toast.LENGTH_LONG)
+                        .show()
+                }
+            }
+
+            PermissionsApp.CAMERA.code -> {
+                if ((grantResults.isEmpty() || grantResults[0] == PackageManager.PERMISSION_DENIED)) {
+                    Toast.makeText(activity, R.string.txt_permission_camera, Toast.LENGTH_LONG)
+                        .show()
+                }
+            }
+            PermissionsApp.WRITE_EXTERNAL_STORAGE.code -> {
+                if ((grantResults.isEmpty() || grantResults[0] == PackageManager.PERMISSION_DENIED || grantResults[1] == PackageManager.PERMISSION_DENIED)) {
+                    Toast.makeText(activity, R.string.txt_permission, Toast.LENGTH_LONG)
                         .show()
                 }
             }

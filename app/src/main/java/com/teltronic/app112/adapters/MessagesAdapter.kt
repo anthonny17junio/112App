@@ -5,7 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.teltronic.app112.classes.enums.MessageType
 import com.teltronic.app112.database.room.messages.MessageEntity
+import com.teltronic.app112.databinding.ItemMessageImageMeBinding
+import com.teltronic.app112.databinding.ItemMessageImageOtherBinding
 import com.teltronic.app112.databinding.ItemMessageTextMeBinding
 import com.teltronic.app112.databinding.ItemMessageTextOtherBinding
 import kotlinx.coroutines.CoroutineScope
@@ -16,6 +19,8 @@ import java.lang.ClassCastException
 
 private const val ITEM_VIEW_TYPE_TEXT_ME = 0
 private const val ITEM_VIEW_TYPE_TEXT_OTHER = 1
+private const val ITEM_VIEW_TYPE_IMAGE_ME = 2
+private const val ITEM_VIEW_TYPE_IMAGE_OTHER = 3
 
 @Suppress("UNREACHABLE_CODE")
 class MessagesAdapter(private val idUserRoom: String) :
@@ -29,6 +34,10 @@ class MessagesAdapter(private val idUserRoom: String) :
                 ViewHolderTextMe.from(parent)
             ITEM_VIEW_TYPE_TEXT_OTHER ->
                 ViewHolderTextOther.from(parent)
+            ITEM_VIEW_TYPE_IMAGE_ME ->
+                ViewHolderImageMe.from(parent)
+            ITEM_VIEW_TYPE_IMAGE_OTHER ->
+                ViewHolderImageOther.from(parent)
             else -> throw ClassCastException("Unknown viewType $viewType")
         }
     }
@@ -39,7 +48,15 @@ class MessagesAdapter(private val idUserRoom: String) :
                 val messageItem = getItem(position) as DataItem.TextMessage
                 holder.bind(messageItem.messageEntity)
             }
-            is ViewHolderTextOther ->{
+            is ViewHolderTextOther -> {
+                val messageItem = getItem(position) as DataItem.TextMessage
+                holder.bind(messageItem.messageEntity)
+            }
+            is ViewHolderImageOther -> {
+                val messageItem = getItem(position) as DataItem.TextMessage
+                holder.bind(messageItem.messageEntity)
+            }
+            is ViewHolderImageMe -> {
                 val messageItem = getItem(position) as DataItem.TextMessage
                 holder.bind(messageItem.messageEntity)
             }
@@ -49,12 +66,19 @@ class MessagesAdapter(private val idUserRoom: String) :
     override fun getItemViewType(position: Int): Int {
         val message = getItem(position)
         val idUserMessage = message.idUser
+        val idType = message.idMessageType
         return when (message) {
             is DataItem.TextMessage ->
                 if (idUserRoom == idUserMessage) {
-                    ITEM_VIEW_TYPE_TEXT_ME
+                    if (idType == MessageType.IMAGE.id)
+                        ITEM_VIEW_TYPE_IMAGE_ME
+                    else
+                        ITEM_VIEW_TYPE_TEXT_ME
                 } else {
-                    ITEM_VIEW_TYPE_TEXT_OTHER
+                    if (idType == MessageType.IMAGE.id)
+                        ITEM_VIEW_TYPE_IMAGE_OTHER
+                    else
+                        ITEM_VIEW_TYPE_TEXT_OTHER
                 }
         }
     }
@@ -99,6 +123,38 @@ class MessagesAdapter(private val idUserRoom: String) :
             }
         }
     }
+
+    class ViewHolderImageOther private constructor(val binding: ItemMessageImageOtherBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: MessageEntity) {
+            binding.message = item
+            binding.executePendingBindings()
+        }
+
+        companion object {
+            fun from(parent: ViewGroup): ViewHolderImageOther {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = ItemMessageImageOtherBinding.inflate(layoutInflater, parent, false)
+                return ViewHolderImageOther(binding)
+            }
+        }
+    }
+
+    class ViewHolderImageMe private constructor(val binding: ItemMessageImageMeBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: MessageEntity) {
+            binding.message = item
+            binding.executePendingBindings()
+        }
+
+        companion object {
+            fun from(parent: ViewGroup): ViewHolderImageMe {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = ItemMessageImageMeBinding.inflate(layoutInflater, parent, false)
+                return ViewHolderImageMe(binding)
+            }
+        }
+    }
 }
 
 class MessagesDiffCallback : DiffUtil.ItemCallback<DataItem>() {
@@ -119,8 +175,12 @@ sealed class DataItem {
 
         override val idUser: String
             get() = messageEntity.id_user
+
+        override val idMessageType: Int
+            get() = messageEntity.id_message_type
     }
 
     abstract val id: String
     abstract val idUser: String
+    abstract val idMessageType: Int
 }

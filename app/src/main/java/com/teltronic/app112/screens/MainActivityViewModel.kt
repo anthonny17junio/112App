@@ -161,19 +161,19 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
                             if (chatRoom == null) {
                                 dataSourceChats.insert(newChat)
                             }
-                            //Reload listener de cambios en tbMessages
-                            if (::cursorChangesTbMessages.isInitialized) {
-                                cursorChangesTbMessages.close()
-                                subscribeToChangesTbMessagesIO(idUser)
-                            }
+//                            //Reload listener de cambios en tbMessages
+//                            if (::cursorChangesTbMessages.isInitialized) {
+//                                cursorChangesTbMessages.close()
+//                                subscribeToChangesTbMessagesIO(idUser)
+//                            }
                         } else if (oldChat != null && newChat == null) {
                             //DELETE
                             dataSourceChats.delete(oldChat.id)
-                            //Reload listener de cambios en tbMessages
-                            if (::cursorChangesTbMessages.isInitialized) {
-                                cursorChangesTbMessages.close()
-                                subscribeToChangesTbMessagesIO(idUser)
-                            }
+//                            //Reload listener de cambios en tbMessages
+//                            if (::cursorChangesTbMessages.isInitialized) {
+//                                cursorChangesTbMessages.close()
+//                                subscribeToChangesTbMessagesIO(idUser)
+//                            }
                         } else if (oldChat != null && newChat != null) {
                             //UPDATE
                             val chatRoom = dataSourceChats.get(newChat.id)
@@ -200,13 +200,11 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
             val tableMessages =
                 r.db(NamesRethinkdb.DATABASE.text).table(NamesRethinkdb.TB_MESSAGES.text)
 
-            val tableJoin = r.do_(
-                tableChats.g("id").coerceTo("array")
-            ) { idChats: ReqlExpr? ->
-                tableMessages.getAll(r.args(idChats)).optArg("index", "id_chat")
-            }
             if (con != null) {
-                cursorChangesTbMessages = tableJoin.changes()
+                cursorChangesTbMessages = tableMessages.changes().filter { change: ReqlExpr ->
+                    (r.expr(tableChats.g("id").coerceTo("array")))
+                        .contains(change.g("new_val").g("id_chat"))
+                }.filter { change: ReqlExpr -> (change.g("new_val").g("id_user").ne(idUser)) }
                     .run(con, OptArgs.of("time_format", "raw")) as Cursor<*>
                 for (change in cursorChangesTbMessages) { //Esto se ejecutará cada vez que haya un cambio en la tabla "tb_chats"
                     if (job.isActive) {
@@ -244,6 +242,7 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
             }
         }
     }
+
 
     fun googleAuthAsked() {
         _shouldAskGoogleAuth.value = false
@@ -374,7 +373,8 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
 
                     if (idRoom != idSync) {
                         //Si el id que estaba en room no es igual con el id sincronizado, eliminar lo que había antes en tb_chats
-                        val dataSourceChats = DatabaseApp.getInstance(_activity.application).chatsDao
+                        val dataSourceChats =
+                            DatabaseApp.getInstance(_activity.application).chatsDao
                         dataSourceChats.deleteAll()
                     }
                 }

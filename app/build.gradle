@@ -78,4 +78,5 @@ dependencies {
 
     //Rethink DB
     implementation group: 'com.rethinkdb', name: 'rethinkdb-driver', version: '2.3.3'
+
 }

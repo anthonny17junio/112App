@@ -1,12 +1,15 @@
 package com.teltronic.app112.screens.chat
 
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.view.*
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
@@ -14,7 +17,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
-
 import com.teltronic.app112.R
 import com.teltronic.app112.adapters.MessagesAdapter
 import com.teltronic.app112.classes.Phone
@@ -24,8 +26,11 @@ import com.teltronic.app112.database.room.chats.ChatWithMessages
 import com.teltronic.app112.databinding.FragmentChatBinding
 import kotlinx.coroutines.*
 import timber.log.Timber
-import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.IOException
 import java.lang.Exception
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * A simple [Fragment] subclass.
@@ -111,7 +116,22 @@ class ChatFragment : Fragment() {
                 if (startCamera) {
                     Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
                         takePictureIntent.resolveActivity(requireContext().packageManager)?.also {
-                            startActivityForResult(takePictureIntent, IntCodes.CODE_PHOTO.code)
+                            val photoFile: File? = try {
+                                createImageFile()
+                            } catch (ex: IOException) {
+                                // Error occurred while creating the File
+                                null
+                            }
+                            // Continue only if the File was successfully created
+                            photoFile?.also {
+                                val photoURI: Uri = FileProvider.getUriForFile(
+                                    requireContext(),
+                                    "com.example.android.fileprovider",
+                                    it
+                                )
+                                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                                startActivityForResult(takePictureIntent, IntCodes.CODE_PHOTO.code)
+                            }
                         }
                     }
                     viewModel.cameraStarted()
@@ -120,13 +140,32 @@ class ChatFragment : Fragment() {
         )
     }
 
+    @SuppressLint("SimpleDateFormat")
+    @Throws(IOException::class)
+    private fun createImageFile(): File {
+        // Create an image file name
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+
+        val storageDir: File? =
+            requireActivity().getExternalFilesDir((Environment.DIRECTORY_PICTURES))
+
+        return File.createTempFile(
+            "JPEG_${timeStamp}_", /* prefix */
+            ".jpg", /* suffix */
+            storageDir /* directory */
+        ).apply {
+            // Save a file: path for use with ACTION_VIEW intents
+            viewModel.currentPhotoPath = absolutePath
+        }
+    }
+
     private fun configureInitUIObserver() {
         viewModel.boolInitUI.observe(
             this as LifecycleOwner,
             Observer { shouldInit ->
                 if (shouldInit) {
                     uiScope.launch {
-                        viewModel.initIO()
+                        viewModel.initIO(requireActivity())
                     }
                 }
             }
@@ -164,19 +203,15 @@ class ChatFragment : Fragment() {
             job = Job()
             uiScope = CoroutineScope(Dispatchers.Main + job)
             uiScope.launch {
-                val imageBitmap = data?.extras?.get("data") as Bitmap
-                trySendImageMessageIO(imageBitmap)
+                trySendImageMessageIO()
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    private suspend fun trySendImageMessageIO(imageBitmap: Bitmap) {
+    private suspend fun trySendImageMessageIO() {
         withContext(Dispatchers.IO) {
-            val stream = ByteArrayOutputStream()
-            imageBitmap.compress(Bitmap.CompressFormat.PNG, 10, stream)
-            val imageByteArray = stream.toByteArray()
-            viewModel.trySendImageMessageIO(imageByteArray)
+            viewModel.trySendImageMessageIO()
         }
     }
 

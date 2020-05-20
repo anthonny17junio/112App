@@ -2,6 +2,9 @@ package com.teltronic.app112.screens.chat
 
 import android.annotation.SuppressLint
 import android.app.Application
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.Environment
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
@@ -20,9 +23,15 @@ import com.teltronic.app112.database.room.chats.ChatEntity
 import com.teltronic.app112.database.room.chats.ChatWithMessages
 import com.teltronic.app112.database.room.messages.MessageEntityConverter
 import kotlinx.coroutines.*
+import org.json.simple.JSONObject
+import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
+import android.util.Base64
+import androidx.fragment.app.FragmentActivity
+import java.io.File
+import java.io.FileOutputStream
 
 @Suppress("UNCHECKED_CAST")
 class ChatViewModel(
@@ -99,6 +108,8 @@ class ChatViewModel(
     val boolInitUI: LiveData<Boolean>
         get() = _boolInitUI
 
+    lateinit var currentPhotoPath: String
+
     init {
         enableInterface()
         _subcategory.value = Subcategory.OTHER
@@ -121,16 +132,17 @@ class ChatViewModel(
     }
 
     @SuppressLint("SimpleDateFormat")
-    suspend fun initIO() {
+    suspend fun initIO(activity: FragmentActivity) {
         withContext(Dispatchers.IO) {
             chat = dataSourceChats.getChatWithMessages(_idChat.value!!)
             _startChatObserver.postValue(true)
 
-            syncRoomRethinkMessages(_idChat.value!!)
+            syncRoomRethinkMessages(_idChat.value!!, activity)
         }
     }
 
-    private fun syncRoomRethinkMessages(idChat: String) {
+    @SuppressLint("SimpleDateFormat")
+    private fun syncRoomRethinkMessages(idChat: String, activity: FragmentActivity) {
         val con = DatabaseRethink.getConnection()
         if (con != null) {
             val rethinkMessages = MessagesRethink.getMessages(con, idChat)
@@ -138,14 +150,46 @@ class ChatViewModel(
                 val idMessage = message["id"] as String
                 val messageRoom = dataSourceMessages.get(idMessage)
                 if (messageRoom == null) {
-                    insertMessageInRoom(message)
+                    val hshMessage = message as HashMap<String, Any>
+                    if ((hshMessage["id_type"] as Long).toInt() == MessageType.IMAGE.id) { //Si es de tipo imagen
+                        //Guardo la imagen en room
+                        val image64 = (hshMessage["content"] as JSONObject)["data"] as String
+                        val imageBytes = Base64.decode(image64, Base64.DEFAULT)
+                        val decodedImage =
+                            BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                        // Get the context wrapper
+                        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+                        val storageDir: File? =
+                            activity.getExternalFilesDir((Environment.DIRECTORY_PICTURES))
+                        val fileCreated = File(storageDir, "JPEG_${timeStamp}_.jpg")
+
+                        val fOut = FileOutputStream(fileCreated)
+                        decodedImage.compress(Bitmap.CompressFormat.PNG, 90, fOut)
+                        fOut.flush()
+                        fOut.close()
+
+                        val path = fileCreated.absolutePath
+
+                        hshMessage["content"] = path
+                    }
+                    insertMessageInRoom(hshMessage)
                 }
             }
         }
     }
 
-    private fun insertMessageInRoom(message: HashMap<*, *>) {
+    private fun insertTextMessageInRoom(message: HashMap<*, *>) {
         val hshMessage = message as HashMap<String, *>
+        insertMessageInRoom(hshMessage)
+    }
+
+    private fun insertImageMessageInRoom(message: HashMap<*, *>) {
+        val hshMessage = message as HashMap<String, Any>
+        hshMessage["content"] = currentPhotoPath
+        insertMessageInRoom(hshMessage)
+    }
+
+    private fun insertMessageInRoom(hshMessage: HashMap<String, *>) {
         val messageRoom = MessageEntityConverter.fromHashMap(hshMessage)
         if (messageRoom != null) {
             dataSourceMessages.insert(messageRoom)
@@ -203,7 +247,7 @@ class ChatViewModel(
                 //Guardar mensaje en room
                 val messageToSave = MessagesRethink.getMessage(con, idSentMessage)
                 if (messageToSave != null)
-                    insertMessageInRoom(messageToSave)
+                    insertTextMessageInRoom(messageToSave)
             }
         } else {
             _strErrorSendMessage.postValue(
@@ -231,7 +275,7 @@ class ChatViewModel(
         }
     }
 
-    private fun sendImageMessage(imageByteArray: ByteArray): String? {
+    private fun sendImageMessage(currentPhotoPath: String): String? {
         val idUser = _idUser
         val idChat = _idChat.value
         requireNotNull(idChat)
@@ -239,6 +283,11 @@ class ChatViewModel(
         val con = DatabaseRethink.getConnection()
         return if (con != null) {
             val idMessageType = MessageType.IMAGE.id
+            val imageBitmap = BitmapFactory.decodeFile(currentPhotoPath)
+            val stream = ByteArrayOutputStream()
+            imageBitmap.compress(Bitmap.CompressFormat.PNG, 90, stream)
+            val imageByteArray = stream.toByteArray()
+
             MessagesRethink.sendImageMessage(con, imageByteArray, idUser, idChat, idMessageType)
         } else {
             null
@@ -274,12 +323,12 @@ class ChatViewModel(
     }
 
 
-    fun trySendImageMessageIO(imageByteArray: ByteArray) {
+    fun trySendImageMessageIO() {
         disableInterface()
         //Tener conexión con rethinkDB
         val con = DatabaseRethink.getConnection()
         if (con != null) {
-            val idSentMessage = sendImageMessage(imageByteArray)
+            val idSentMessage = sendImageMessage(currentPhotoPath)
             if (idSentMessage == null) {
                 _strErrorSendMessage.postValue(
                     (getApplication() as Application).getString(R.string.error_sending_message)
@@ -287,9 +336,9 @@ class ChatViewModel(
             } else {
                 _clearMessage.postValue(true)
                 //Guardar mensaje en room
-                val message = MessagesRethink.getMessage(con, idSentMessage)
+                val message = MessagesRethink.getMessageWithoutFile(con, idSentMessage)
                 if (message != null)
-                    insertMessageInRoom(message)
+                    insertImageMessageInRoom(message)
             }
         } else {
             _strErrorSendMessage.postValue(

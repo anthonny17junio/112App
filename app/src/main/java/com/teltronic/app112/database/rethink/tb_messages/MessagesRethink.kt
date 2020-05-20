@@ -86,4 +86,8 @@ object MessagesRethink {
     fun getMessage(con: Connection, idChat: String): HashMap<*, *>? {
         return table.get(idChat).run(con, OptArgs.of("time_format", "raw")) as HashMap<*, *>?
     }
+
+    fun getMessageWithoutFile(con: Connection, idChat: String): HashMap<*, *>? {
+        return table.get(idChat).without("content").run(con, OptArgs.of("time_format", "raw")) as HashMap<*, *>?
+    }
 }

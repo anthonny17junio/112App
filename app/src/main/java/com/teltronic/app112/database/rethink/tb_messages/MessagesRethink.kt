@@ -5,7 +5,6 @@ package com.teltronic.app112.database.rethink.tb_messages
 import com.rethinkdb.RethinkDB
 import com.rethinkdb.model.OptArgs
 import com.rethinkdb.net.Connection
-import com.rethinkdb.net.Cursor
 import com.teltronic.app112.classes.enums.NamesRethinkdb
 import com.teltronic.app112.database.rethink.tb_chats.ChatsRethink
 import java.lang.Exception
@@ -75,12 +74,10 @@ object MessagesRethink {
     }
 
 
-    fun getMessages(con: Connection, idChat: String): ArrayList<java.util.HashMap<*, *>> {
-        val cursor =
-            table.orderBy().optArg("index", r.asc("creation_time"))
-                .filter(r.hashMap("id_chat", idChat))
-                .run(con) as Cursor<java.util.HashMap<*, *>>
-        return cursor.bufferedItems()
+    fun getMessagesIds(con: Connection, idChat: String): ArrayList<String> {
+        return r.db("db112").table("tb_messages").getAll(idChat).optArg("index", "id_chat")
+            .orderBy("creation_time").getField("id")
+            .run(con) as ArrayList<String>
     }
 
     fun getMessage(con: Connection, idChat: String): HashMap<*, *>? {
@@ -88,6 +85,7 @@ object MessagesRethink {
     }
 
     fun getMessageWithoutFile(con: Connection, idChat: String): HashMap<*, *>? {
-        return table.get(idChat).without("content").run(con, OptArgs.of("time_format", "raw")) as HashMap<*, *>?
+        return table.get(idChat).without("content")
+            .run(con, OptArgs.of("time_format", "raw")) as HashMap<*, *>?
     }
 }

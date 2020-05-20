@@ -154,7 +154,6 @@ class ChatFragment : Fragment() {
             ".jpg", /* suffix */
             storageDir /* directory */
         ).apply {
-            // Save a file: path for use with ACTION_VIEW intents
             viewModel.currentPhotoPath = absolutePath
         }
     }

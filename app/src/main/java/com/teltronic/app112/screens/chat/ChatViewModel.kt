@@ -23,15 +23,13 @@ import com.teltronic.app112.database.room.chats.ChatEntity
 import com.teltronic.app112.database.room.chats.ChatWithMessages
 import com.teltronic.app112.database.room.messages.MessageEntityConverter
 import kotlinx.coroutines.*
-import org.json.simple.JSONObject
 import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.collections.HashMap
-import android.util.Base64
 import androidx.fragment.app.FragmentActivity
 import java.io.File
 import java.io.FileOutputStream
+import java.util.*
 
 @Suppress("UNCHECKED_CAST")
 class ChatViewModel(
@@ -110,6 +108,10 @@ class ChatViewModel(
 
     lateinit var currentPhotoPath: String
 
+    private var _progressbarStyle = MutableLiveData<Int>()
+    val progressbarStyle: LiveData<Int>
+        get() = _progressbarStyle
+
     init {
         enableInterface()
         _subcategory.value = Subcategory.OTHER
@@ -145,18 +147,18 @@ class ChatViewModel(
     private fun syncRoomRethinkMessages(idChat: String, activity: FragmentActivity) {
         val con = DatabaseRethink.getConnection()
         if (con != null) {
-            val rethinkMessages = MessagesRethink.getMessages(con, idChat)
-            for (message in rethinkMessages) {
-                val idMessage = message["id"] as String
+            val rethinkMessagesIds = MessagesRethink.getMessagesIds(con, idChat)
+            for (idMessage in rethinkMessagesIds) {
                 val messageRoom = dataSourceMessages.get(idMessage)
                 if (messageRoom == null) {
-                    val hshMessage = message as HashMap<String, Any>
+                    val messageRethink = MessagesRethink.getMessage(con,idMessage)
+                    val hshMessage = messageRethink as HashMap<String, Any>
                     if ((hshMessage["id_type"] as Long).toInt() == MessageType.IMAGE.id) { //Si es de tipo imagen
                         //Guardo la imagen en room
-                        val image64 = (hshMessage["content"] as JSONObject)["data"] as String
-                        val imageBytes = Base64.decode(image64, Base64.DEFAULT)
+                        val image64 = (hshMessage["content"] as ByteArray)
+//                        val imageBytes = Base64.decode(image64, Base64.DEFAULT)
                         val decodedImage =
-                            BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                            BitmapFactory.decodeByteArray(image64, 0, image64.size)
                         // Get the context wrapper
                         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
                         val storageDir: File? =
@@ -285,7 +287,30 @@ class ChatViewModel(
             val idMessageType = MessageType.IMAGE.id
             val imageBitmap = BitmapFactory.decodeFile(currentPhotoPath)
             val stream = ByteArrayOutputStream()
-            imageBitmap.compress(Bitmap.CompressFormat.PNG, 90, stream)
+
+            //Se comprime la imagen a un máximo de 500px
+            val maxSize = 500
+
+            var width = imageBitmap.width
+            var height = imageBitmap.height
+
+            if(width>maxSize || height>maxSize) {
+                val bitmapRatio = width.toFloat() / height.toFloat()
+                if (bitmapRatio > 1) {
+                    width = maxSize
+                    height = (width / bitmapRatio).toInt()
+                } else {
+                    height = maxSize
+                    width = (height * bitmapRatio).toInt()
+                }
+
+                //Comprimo la imagen con las nuevas dimensiones
+                val bitmapReduced = Bitmap.createScaledBitmap(imageBitmap, width, height, true)
+                bitmapReduced.compress(Bitmap.CompressFormat.PNG, 90, stream)
+            }else{
+                //No comprimo la imagen si esta es menor a 500 por ancho y alto
+                imageBitmap.compress(Bitmap.CompressFormat.PNG, 90, stream)
+            }
             val imageByteArray = stream.toByteArray()
 
             MessagesRethink.sendImageMessage(con, imageByteArray, idUser, idChat, idMessageType)
@@ -296,10 +321,12 @@ class ChatViewModel(
 
     private fun disableInterface() {
         _boolEnableInterface.postValue(false)
+        _progressbarStyle.postValue(View.VISIBLE)
     }
 
     private fun enableInterface() {
         _boolEnableInterface.postValue(true)
+        _progressbarStyle.postValue(View.GONE)
     }
 
     fun clearStrErrorSendMessage() {

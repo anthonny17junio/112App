@@ -28,17 +28,5 @@
 
         </androidx.recyclerview.widget.RecyclerView>
 
-        <!--        <TextView-->
-        <!--            android:id="@+id/tvChats"-->
-        <!--            android:layout_width="0dp"-->
-        <!--            android:layout_height="0dp"-->
-        <!--            android:layout_marginStart="32dp"-->
-        <!--            android:layout_marginTop="32dp"-->
-        <!--            android:layout_marginEnd="32dp"-->
-        <!--            android:text="@{chatsViewModel.strChats}"-->
-        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toTopOf="parent" />-->
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

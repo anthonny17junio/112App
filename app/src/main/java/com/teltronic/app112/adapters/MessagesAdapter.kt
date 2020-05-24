@@ -23,7 +23,7 @@ private const val ITEM_VIEW_TYPE_IMAGE_ME = 2
 private const val ITEM_VIEW_TYPE_IMAGE_OTHER = 3
 
 @Suppress("UNREACHABLE_CODE")
-class MessagesAdapter(private val idUserRoom: String) :
+class MessagesAdapter(private val idUserRoom: String, val clickListener: MessageListener) :
     ListAdapter<DataItem, RecyclerView.ViewHolder>(MessagesDiffCallback()) {
 
     private val adapterScope = CoroutineScope(Dispatchers.Default)
@@ -54,11 +54,11 @@ class MessagesAdapter(private val idUserRoom: String) :
             }
             is ViewHolderImageOther -> {
                 val messageItem = getItem(position) as DataItem.TextMessage
-                holder.bind(messageItem.messageEntity)
+                holder.bind(messageItem.messageEntity, clickListener)
             }
             is ViewHolderImageMe -> {
                 val messageItem = getItem(position) as DataItem.TextMessage
-                holder.bind(messageItem.messageEntity)
+                holder.bind(messageItem.messageEntity, clickListener)
             }
         }
     }
@@ -94,7 +94,9 @@ class MessagesAdapter(private val idUserRoom: String) :
 
     class ViewHolderTextMe private constructor(val binding: ItemMessageTextMeBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: MessageEntity) {
+        fun bind(
+            item: MessageEntity
+        ) {
             binding.message = item
             binding.executePendingBindings()
         }
@@ -126,8 +128,12 @@ class MessagesAdapter(private val idUserRoom: String) :
 
     class ViewHolderImageOther private constructor(val binding: ItemMessageImageOtherBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: MessageEntity) {
+        fun bind(
+            item: MessageEntity,
+            clickListener: MessageListener
+        ) {
             binding.message = item
+            binding.clickListener = clickListener
             binding.executePendingBindings()
         }
 
@@ -142,8 +148,12 @@ class MessagesAdapter(private val idUserRoom: String) :
 
     class ViewHolderImageMe private constructor(val binding: ItemMessageImageMeBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: MessageEntity) {
+        fun bind(
+            item: MessageEntity,
+            clickListener: MessageListener
+        ) {
             binding.message = item
+            binding.clickListener = clickListener
             binding.executePendingBindings()
         }
 
@@ -183,4 +193,8 @@ sealed class DataItem {
     abstract val id: String
     abstract val idUser: String
     abstract val idMessageType: Int
+}
+
+class MessageListener(val clickListener: (idMessage: String) -> Unit) {
+    fun onClick(message: MessageEntity) = clickListener(message.id)
 }

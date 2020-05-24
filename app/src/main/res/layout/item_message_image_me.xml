@@ -8,6 +8,10 @@
         <variable
             name="message"
             type="com.teltronic.app112.database.room.messages.MessageEntity" />
+
+        <variable
+            name="clickListener"
+            type="com.teltronic.app112.adapters.MessageListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,7 +20,8 @@
         android:layout_marginStart="50dp"
         android:layout_marginTop="@dimen/default_half_margin_size"
         android:layout_marginEnd="@dimen/default_half_margin_size"
-        android:layout_marginBottom="@dimen/default_half_margin_size">
+        android:layout_marginBottom="@dimen/default_half_margin_size"
+        android:onClick="@{()->clickListener.onClick(message)}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"

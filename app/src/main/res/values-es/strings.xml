@@ -181,4 +181,5 @@
     <string name="hint_message">Escribe un mensaje</string>
     <string name="content_description_camera">Ícono de cámara</string>
     <string name="content_description_chat_image">Imagen de chat</string>
+    <string name="image_not_found">Imagen no encontrada</string>
 </resources>

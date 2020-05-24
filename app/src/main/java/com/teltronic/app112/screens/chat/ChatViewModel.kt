@@ -29,6 +29,7 @@ import kotlin.collections.HashMap
 import androidx.fragment.app.FragmentActivity
 import java.io.File
 import java.io.FileOutputStream
+import java.lang.Exception
 import java.util.*
 
 @Suppress("UNCHECKED_CAST")
@@ -151,7 +152,7 @@ class ChatViewModel(
             for (idMessage in rethinkMessagesIds) {
                 val messageRoom = dataSourceMessages.get(idMessage)
                 if (messageRoom == null) {
-                    val messageRethink = MessagesRethink.getMessage(con,idMessage)
+                    val messageRethink = MessagesRethink.getMessage(con, idMessage)
                     val hshMessage = messageRethink as HashMap<String, Any>
                     if ((hshMessage["id_type"] as Long).toInt() == MessageType.IMAGE.id) { //Si es de tipo imagen
                         //Guardo la imagen en room
@@ -294,7 +295,7 @@ class ChatViewModel(
             var width = imageBitmap.width
             var height = imageBitmap.height
 
-            if(width>maxSize || height>maxSize) {
+            if (width > maxSize || height > maxSize) {
                 val bitmapRatio = width.toFloat() / height.toFloat()
                 if (bitmapRatio > 1) {
                     width = maxSize
@@ -307,7 +308,7 @@ class ChatViewModel(
                 //Comprimo la imagen con las nuevas dimensiones
                 val bitmapReduced = Bitmap.createScaledBitmap(imageBitmap, width, height, true)
                 bitmapReduced.compress(Bitmap.CompressFormat.PNG, 90, stream)
-            }else{
+            } else {
                 //No comprimo la imagen si esta es menor a 500 por ancho y alto
                 imageBitmap.compress(Bitmap.CompressFormat.PNG, 90, stream)
             }
@@ -373,5 +374,16 @@ class ChatViewModel(
             )
         }
         enableInterface()
+    }
+
+    fun getBitmapImage(idMessage: String): Bitmap? {
+        val message = dataSourceMessages.get(idMessage)
+        return try {
+            val url = message?.content
+            val imageBitmap = BitmapFactory.decodeFile(url)
+            imageBitmap
+        } catch (e: Exception) {
+            null
+        }
     }
 }

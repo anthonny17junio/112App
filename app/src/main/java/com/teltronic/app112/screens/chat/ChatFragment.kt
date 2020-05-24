@@ -3,12 +3,15 @@ package com.teltronic.app112.screens.chat
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.view.*
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
@@ -18,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.teltronic.app112.R
+import com.teltronic.app112.adapters.MessageListener
 import com.teltronic.app112.adapters.MessagesAdapter
 import com.teltronic.app112.classes.Phone
 import com.teltronic.app112.classes.enums.IntCodes
@@ -64,7 +68,9 @@ class ChatFragment : Fragment() {
 
         //"Uno" el layout con esta clase por medio del binding
         binding.chatViewModel = viewModel
-        adapter = MessagesAdapter(idUserRoom)
+        adapter = MessagesAdapter(idUserRoom, MessageListener { idMessage ->
+            showModalImage(idMessage)
+        })
         binding.rvMessages.adapter = adapter
         //Para que el ciclo de vida del binding sea consistente y funcione bien con LiveData
         binding.lifecycleOwner = this
@@ -294,6 +300,34 @@ class ChatFragment : Fragment() {
             }
             else ->
                 false
+        }
+    }
+
+    private fun showModalImage(idMessage: String) {
+        uiScope.launch {
+            showModalImageIO(idMessage)
+        }
+    }
+
+    private suspend fun showModalImageIO(idMessage: String) {
+        withContext(Dispatchers.IO) {
+            val dialog = AlertDialog.Builder(activity)
+            val dialogView = View.inflate(activity, R.layout.dialog_image, null)
+            val ivDialog = dialogView.findViewById<ImageView>(R.id.ivDialogPicture)
+
+            val bitmapImage = viewModel.getBitmapImage(idMessage)
+            if (bitmapImage != null) {
+                ivDialog.setImageBitmap(bitmapImage)
+                dialog.setView(dialogView)
+                dialog.setCancelable(true)
+                activity?.runOnUiThread {
+                    dialog.show()
+                }
+            } else {
+                activity?.runOnUiThread {
+                    Toast.makeText(activity, R.string.image_not_found, Toast.LENGTH_LONG).show()
+                }
+            }
         }
     }
 

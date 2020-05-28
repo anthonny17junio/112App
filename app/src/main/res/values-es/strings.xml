@@ -10,6 +10,7 @@
     <string name="changes_saved">Cambios guardados</string>
     <string name="title_biometric">Escanea tu huella</string>
     <string name="device_no_secure">Configure una contraseña en el dispositivo para poder utilizar esta funcionalidad</string>
+    <string name="loading">Cargando…</string>
 
     <!--TÍTULOS DE LAS PANTALLAS-->
     <string name="notices_title">AVISOS</string>
@@ -182,4 +183,7 @@
     <string name="content_description_camera">Ícono de cámara</string>
     <string name="content_description_chat_image">Imagen de chat</string>
     <string name="image_not_found">Imagen no encontrada</string>
+
+    <!--NOTIFICATIONS-->
+    <string name="notification_new_message">Tienes un nuevo mensaje</string>
 </resources>

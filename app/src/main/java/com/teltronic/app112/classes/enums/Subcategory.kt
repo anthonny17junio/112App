@@ -2,7 +2,7 @@ package com.teltronic.app112.classes.enums
 
 import com.teltronic.app112.R
 
-enum class Subcategory(var idTitle: Int, var idIcon: Int, var category: Category?, val id: Int) {
+enum class Subcategory(var idTitle: Int, var idIcon: Int?, var category: Category?, val id: Int) {
     //*************************************************************
     //CRIME
     //*************************************************************
@@ -285,6 +285,13 @@ enum class Subcategory(var idTitle: Int, var idIcon: Int, var category: Category
         R.drawable.ic_subcategory_accident_other,
         Category.OTHER,
         34
+    ),
+
+    EMPTY(
+        R.string.empty,
+        null,
+        Category.EMPTY,
+        35
     );
 
     companion object {

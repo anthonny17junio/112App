@@ -84,7 +84,7 @@ fun ImageView.setChatState(chat: ChatEntity) {
     chat.let {
         val chatState = ChatState.getById(chat.id_chat_state)
         chatState?.let {
-            setImageResource(chatState.idIcon)
+            setImageResource(chatState.idIcon!!)
             setColorFilter(
                 ContextCompat.getColor(
                     context,

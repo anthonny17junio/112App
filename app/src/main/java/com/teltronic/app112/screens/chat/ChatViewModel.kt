@@ -115,8 +115,11 @@ class ChatViewModel(
 
     init {
         enableInterface()
-        _subcategory.value = Subcategory.OTHER
-        _chatState.value = ChatState.IN_PROGRESS
+        _strLocation.value = ""
+        _strDate.value = ""
+        _strTime.value = ""
+        _subcategory.value = Subcategory.EMPTY
+        _chatState.value = ChatState.EMPTY
         _idChat.value = idChat
         _idColorResource.value = ChatState.IN_PROGRESS.idColor
         _footerVisibility.value = View.GONE

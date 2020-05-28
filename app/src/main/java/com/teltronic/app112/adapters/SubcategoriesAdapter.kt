@@ -51,7 +51,7 @@ class SubcategoriesListAdapter(
 
                 val subcat = subcategories[position]
                 viewHolder.lblTxtSubcategory.text = application.resources.getString(subcat.idTitle)
-                viewHolder.iconSubcategory.setImageResource(subcat.idIcon)
+                viewHolder.iconSubcategory.setImageResource(subcat.idIcon!!)
 
                 return view
             }

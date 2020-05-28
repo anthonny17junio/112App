@@ -3,7 +3,12 @@
 package com.teltronic.app112.screens
 
 import android.app.Activity
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -20,6 +25,10 @@ import androidx.navigation.ui.NavigationUI
 import com.teltronic.app112.databinding.ActivityMainBinding
 import com.teltronic.app112.screens.mainScreen.MainFragmentDirections
 import android.widget.TextView
+import android.widget.Toast
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.navigation.NavDeepLinkBuilder
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
@@ -31,10 +40,13 @@ import com.teltronic.app112.classes.GoogleApiPeopleHelper
 import com.teltronic.app112.classes.Phone
 import com.teltronic.app112.classes.Preferences
 import com.teltronic.app112.classes.enums.IntCodes
+import com.teltronic.app112.database.room.DatabaseApp
+import kotlinx.coroutines.*
 import timber.log.Timber
 import java.lang.Exception
 import java.lang.ref.WeakReference
 
+@Suppress("SENSELESS_COMPARISON")
 class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedListener {
 
 
@@ -45,6 +57,9 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedList
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
+        createNotificationChannel()
 
         Preferences.loadLocate(this)
 
@@ -61,21 +76,81 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedList
 
         configureLateralMenu()
         configureNavigationObservers()
+
+        trySendNotification()
     }
+
+    private fun trySendNotification() {
+        val viewModelJob = Job()
+        val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+
+        uiScope.launch {
+            trySendNotificationIO()
+        }
+    }
+
+    private suspend fun trySendNotificationIO() {
+        withContext(Dispatchers.IO) {
+            val configurations = DatabaseApp.getInstance(this@MainActivity).configurationsDao
+            if (configurations != null) {
+                val arguments = Bundle()
+                val idChat = "52748f41-fc1a-437f-8ad9-ceb99c5c178d"
+                arguments.putString("idChat", idChat)
+                arguments.putString("idUserRoom", configurations.get().id_rethink)
+
+                val pendingIntent: PendingIntent = NavDeepLinkBuilder(this@MainActivity)
+                    .setComponentName(MainActivity::class.java)
+                    .setGraph(R.navigation.navigation)
+                    .setDestination(R.id.chatFragment)
+                    .setArguments(arguments)
+                    .createPendingIntent()
+
+                val builder = NotificationCompat.Builder(this@MainActivity, "icChannel")
+                    .setSmallIcon(R.drawable.ic_notification_logo)
+                    .setContentTitle(getString(R.string.notification_new_message))
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setContentIntent(pendingIntent)
+                    .setAutoCancel(true)
+//
+                with(NotificationManagerCompat.from(this@MainActivity)) {
+                    // notificationId is a unique int for each notification that you must define
+                    notify(0, builder.build())
+                }
+            }
+        }
+    }
+
+    private fun createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "Canal xyz"
+            val descriptionText = "Descripción del canal"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel("icChannel", name, importance).apply {
+                description = descriptionText
+            }
+            // Register the channel with the system
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
 
     fun hideSnackbar() {
         if (::snackbar.isInitialized)
             snackbar.dismiss()
     }
 
-     fun showSnackbar(message:String){
-         snackbar =
-             Snackbar.make(
-                 this.findViewById(android.R.id.content),
-                 message,
-                 Snackbar.LENGTH_INDEFINITE
-             )
-         snackbar.show()
+    fun showSnackbar(message: String) {
+        snackbar =
+            Snackbar.make(
+                this.findViewById(android.R.id.content),
+                message,
+                Snackbar.LENGTH_INDEFINITE
+            )
+        snackbar.show()
     }
 
     //Menú lateral

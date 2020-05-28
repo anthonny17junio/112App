@@ -18,6 +18,8 @@
     <string name="changes_saved">Changes saved</string>
     <string name="title_biometric">Touch the fingerprint sensor</string>
     <string name="device_no_secure">Configure a password or on the device to use this functionality</string>
+    <string name="empty" translatable="false" />
+    <string name="loading">Loading…</string>
 
     <!--TÍTULOS DE LAS PANTALLAS-->
     <string name="notices_title">NOTICES</string>
@@ -226,4 +228,7 @@
     <string name="content_description_camera">Camera icon</string>
     <string name="content_description_chat_image">Chat image</string>
     <string name="image_not_found">Image not found</string>
+
+    <!--NOTIFICATIONS-->
+    <string name="notification_new_message">You have a new message</string>
 </resources>

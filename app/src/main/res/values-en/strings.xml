@@ -10,6 +10,8 @@
     <string name="title_biometric">Touch the fingerprint sensor</string>
     <string name="device_no_secure">Configure a password or on the device to use this functionality</string>
     <string name="loading">Loading…</string>
+    <string name="service_listen_messages_description">Service that notifies new messages from chats</string>
+    <string name="picture">[Picture]</string>
 
     <!--TÍTULOS DE LAS PANTALLAS-->
     <string name="notices_title">NOTICES</string>

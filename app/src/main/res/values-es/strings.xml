@@ -11,6 +11,8 @@
     <string name="title_biometric">Escanea tu huella</string>
     <string name="device_no_secure">Configure una contraseña en el dispositivo para poder utilizar esta funcionalidad</string>
     <string name="loading">Cargando…</string>
+    <string name="service_listen_messages_description">Servicio que notifica nuevos mensajes de los chats</string>
+    <string name="picture">[Foto]</string>
 
     <!--TÍTULOS DE LAS PANTALLAS-->
     <string name="notices_title">AVISOS</string>

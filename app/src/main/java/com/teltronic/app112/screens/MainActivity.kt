@@ -5,7 +5,6 @@ package com.teltronic.app112.screens
 import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -25,23 +24,14 @@ import androidx.navigation.ui.NavigationUI
 import com.teltronic.app112.databinding.ActivityMainBinding
 import com.teltronic.app112.screens.mainScreen.MainFragmentDirections
 import android.widget.TextView
-import android.widget.Toast
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import androidx.navigation.NavDeepLinkBuilder
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.material.snackbar.Snackbar
 import com.teltronic.app112.R
-import com.teltronic.app112.classes.DownloadImageTask
-import com.teltronic.app112.classes.GoogleApiPeopleHelper
-import com.teltronic.app112.classes.Phone
-import com.teltronic.app112.classes.Preferences
+import com.teltronic.app112.classes.*
 import com.teltronic.app112.classes.enums.IntCodes
-import com.teltronic.app112.database.room.DatabaseApp
-import kotlinx.coroutines.*
 import timber.log.Timber
 import java.lang.Exception
 import java.lang.ref.WeakReference
@@ -76,58 +66,16 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedList
 
         configureLateralMenu()
         configureNavigationObservers()
-
-        trySendNotification()
-    }
-
-    private fun trySendNotification() {
-        val viewModelJob = Job()
-        val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
-
-        uiScope.launch {
-            trySendNotificationIO()
-        }
-    }
-
-    private suspend fun trySendNotificationIO() {
-        withContext(Dispatchers.IO) {
-            val configurations = DatabaseApp.getInstance(this@MainActivity).configurationsDao
-            if (configurations != null) {
-                val arguments = Bundle()
-                val idChat = "52748f41-fc1a-437f-8ad9-ceb99c5c178d"
-                arguments.putString("idChat", idChat)
-                arguments.putString("idUserRoom", configurations.get().id_rethink)
-
-                val pendingIntent: PendingIntent = NavDeepLinkBuilder(this@MainActivity)
-                    .setComponentName(MainActivity::class.java)
-                    .setGraph(R.navigation.navigation)
-                    .setDestination(R.id.chatFragment)
-                    .setArguments(arguments)
-                    .createPendingIntent()
-
-                val builder = NotificationCompat.Builder(this@MainActivity, "icChannel")
-                    .setSmallIcon(R.drawable.ic_notification_logo)
-                    .setContentTitle(getString(R.string.notification_new_message))
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                    .setContentIntent(pendingIntent)
-                    .setAutoCancel(true)
-//
-                with(NotificationManagerCompat.from(this@MainActivity)) {
-                    // notificationId is a unique int for each notification that you must define
-                    notify(0, builder.build())
-                }
-            }
-        }
     }
 
     private fun createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = "Canal xyz"
-            val descriptionText = "Descripción del canal"
+            val name = "Notifications 112 Channel"
+            val descriptionText = "Messages"
             val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel("icChannel", name, importance).apply {
+            val channel = NotificationChannel("idChannel", name, importance).apply {
                 description = descriptionText
             }
             // Register the channel with the system
@@ -479,12 +427,6 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedList
                 IntCodes.CODE_REQUEST_GOOGLE_AUTH_EDIT_PROFILE.code -> { //Al loguearse después de dar click en el perfil de usuario
                     viewModel.navigateToUserProfile() //Ir a la pantalla de user profile
                 }
-
-                //Descomentar si se quiere que pase algo después de loguearse por primera vez (por ejemplo guardar los datos de la cuenta de google en alguna base de datos)
-//                IntCodes.CODE_REQUEST_GOOGLE_AUTH_MAIN.code -> { //Al loguearse por primera vez (sin dar click a nada previamente)
-//                }
-//                IntCodes.CODE_REQUEST_GOOGLE_AUTH_FRAGMENT_PROFILE.code -> { //Al loguearse por primera vez (sin dar click a nada previamente)
-
             }
 
             //Si está autenticado obtener el id de rethinkDB

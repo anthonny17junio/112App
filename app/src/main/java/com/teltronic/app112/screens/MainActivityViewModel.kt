@@ -1,5 +1,6 @@
 package com.teltronic.app112.screens
 
+import android.content.Intent
 import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,6 +12,7 @@ import com.rethinkdb.gen.ast.ReqlExpr
 import com.rethinkdb.model.OptArgs
 import com.rethinkdb.net.Cursor
 import com.teltronic.app112.classes.GoogleApiPeopleHelper
+import com.teltronic.app112.classes.ListenNewMessagesService
 import com.teltronic.app112.classes.enums.NamesRethinkdb
 import com.teltronic.app112.database.rethink.DatabaseRethink
 import com.teltronic.app112.database.room.DatabaseApp
@@ -108,19 +110,30 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
         configurationsObserver()
     }
 
+    //Observer que se dispara al existir un usuario en room
     private fun configurationsObserver() {
         //Cuando existe un id logueado en la base de datos se
         //escucha de Rethinkdb los cambios a las tablas de los chats
         configurations.observe(_activity, Observer { configurations ->
             if (configurations != null) {
                 val idUser = configurations.id_rethink
+                //Listener para escuchar los cambios de los chats
                 uiScope.launch {
-                    //Aquí se debe configurar un listener para escuchar los cambios de los chats
                     subscribeToChangesTbChatsIO(idUser)
                 }
+                //Listener para escuchar los cambios de los mensajes
                 uiScope.launch {
                     subscribeToChangesTbMessagesIO(idUser)
                 }
+                //Inicia el servicio para notficar nuevos mensajes
+                uiScope.launch {
+                    val contextActivity = this@MainActivityViewModel._activity
+                    Intent(contextActivity, ListenNewMessagesService::class.java).also { intent ->
+                        intent.putExtra("idUser", idUser)
+                        contextActivity.startService(intent)
+                    }
+                }
+
             }
         })
     }
@@ -365,13 +378,13 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
                     DatabaseApp.getInstance(_activity.application).configurationsDao
                 val configurations = dataSourceConfigurations.get()
 
-                val idSync = DatabaseRoomHelper.getOrInsertSynchronizedRethinkId(con, _activity)
+                val idUser = DatabaseRoomHelper.getOrInsertSynchronizedRethinkId(con, _activity)
 
                 if (configurations != null) {
                     val idRoom = configurations.id_rethink
                     //Se asegura que estén sincronizados los id de usuario de google con room y con rethinkdb
 
-                    if (idRoom != idSync) {
+                    if (idRoom != idUser) {
                         //Si el id que estaba en room no es igual con el id sincronizado, eliminar lo que había antes en tb_chats
                         val dataSourceChats =
                             DatabaseApp.getInstance(_activity.application).chatsDao

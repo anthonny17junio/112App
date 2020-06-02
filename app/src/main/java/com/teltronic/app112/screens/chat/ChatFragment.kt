@@ -227,6 +227,9 @@ class ChatFragment : Fragment() {
                 uiScope.launch {
                     if (chatWithMessages != null) {
                         updateScreenIO(chatWithMessages)
+                    } else {
+                        //El chat aún no existe en room (pasa si se eliminan los datos de la app y llega una notificación y se le da tap)
+                        activity?.supportFragmentManager?.popBackStack()
                     }
                 }
             }

@@ -12,14 +12,16 @@ import com.teltronic.app112.database.room.medicalInfo.MedicalInfoDao
 import com.teltronic.app112.database.room.medicalInfo.MedicalInfoEntity
 import com.teltronic.app112.database.room.messages.MessageEntity
 import com.teltronic.app112.database.room.messages.MessagesDao
+import com.teltronic.app112.database.room.notices.NoticeEntity
+import com.teltronic.app112.database.room.notices.NoticesDao
 
 /*
 En entities van todas las tablas (entities)  de la base de datos
 exportSchema es true por defecto
  */
 @Database(
-    entities = [MedicalInfoEntity::class, ConfigurationsEntity::class, ChatEntity::class, MessageEntity::class],
-    version = 9,
+    entities = [MedicalInfoEntity::class, ConfigurationsEntity::class, ChatEntity::class, MessageEntity::class, NoticeEntity::class],
+    version = 11,
     exportSchema = false
 )
 abstract class DatabaseApp : RoomDatabase() {
@@ -27,6 +29,7 @@ abstract class DatabaseApp : RoomDatabase() {
     abstract val configurationsDao: ConfigurationsDao
     abstract val chatsDao: ChatsDao
     abstract val messagesDao: MessagesDao
+    abstract val noticesDao: NoticesDao
 
     //Permite acceder a los métodos para crear u obtener la base de datos sin instanciar la clase
     companion object {

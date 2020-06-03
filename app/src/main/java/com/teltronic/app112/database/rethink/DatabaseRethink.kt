@@ -42,11 +42,13 @@ abstract class DatabaseRethink {
 //            r.db(NamesRethinkdb.DATABASE.text).table(NamesRethinkdb.TB_CHATS.text).delete().run<Any>(con) //Elimina la tabla chats
 //            r.db(NamesRethinkdb.DATABASE.text).table(NamesRethinkdb.TB_USERS.text).delete().run<Any>(con) //Elimina la tabla users
 //            r.db(NamesRethinkdb.DATABASE.text).table(NamesRethinkdb.TB_MESSAGES.text).delete().run<Any>(con) //Elimina la tabla users
+//            r.db(NamesRethinkdb.DATABASE.text).table(NamesRethinkdb.TB_NOTICES.text).delete().run<Any>(con) //Elimina la tabla users
 //            r.dbDrop(NamesRethinkdb.DATABASE.text).run<Any>(con) //Elimina la base de datos
             verifyDatabase(r, con)
             verifyTbUsers(r, con)
             verifyTbChats(r, con)
             verifyTbMessages(r,con)
+            verifyTbNotices(r,con)
         }
 
         private fun verifyDatabase(r: RethinkDB, con: Connection) {
@@ -64,6 +66,7 @@ abstract class DatabaseRethink {
                 r.dbCreate(NamesRethinkdb.DATABASE.text).run<Any>(con)
             }
         }
+
         private fun verifyTbMessages(r: RethinkDB, con: Connection) {
             val tables =
                 r.db(NamesRethinkdb.DATABASE.text).tableList().run(con) as ArrayList<String>
@@ -97,6 +100,30 @@ abstract class DatabaseRethink {
                 //Espera a que el índice esté creado para ser usado
                 r.db(NamesRethinkdb.DATABASE.text).table(NamesRethinkdb.TB_MESSAGES.text)
                     .indexWait("id_chat").run(con) as Any
+            }
+        }
+
+        private fun verifyTbNotices(r: RethinkDB, con: Connection) {
+            val tables =
+                r.db(NamesRethinkdb.DATABASE.text).tableList().run(con) as ArrayList<String>
+
+            var existe = false
+            for (table in tables) {
+                if (table == NamesRethinkdb.TB_NOTICES.text) {
+                    existe = true
+                    break
+                }
+            }
+
+            if (!existe) {
+                r.db(NamesRethinkdb.DATABASE.text).tableCreate(NamesRethinkdb.TB_NOTICES.text)
+                    .run(con) as Any
+                //Crea el índice
+                r.db(NamesRethinkdb.DATABASE.text).table(NamesRethinkdb.TB_NOTICES.text)
+                    .indexCreate("creation_time").run(con) as Any
+                //Espera a que el índice esté creado para ser usado
+                r.db(NamesRethinkdb.DATABASE.text).table(NamesRethinkdb.TB_NOTICES.text)
+                    .indexWait("creation_time").run(con) as Any
             }
         }
 

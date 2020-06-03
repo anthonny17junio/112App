@@ -85,8 +85,9 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
     private val uiScope = CoroutineScope(Dispatchers.Main + job)
     private lateinit var cursorChangesTbChats: Cursor<*>
     private lateinit var cursorChangesTbMessages: Cursor<*>
-    private val dataSourceChats = DatabaseApp.getInstance(activityParam.application).chatsDao
-    private val dataSourceMessages = DatabaseApp.getInstance(activityParam.application).messagesDao
+    private val databaseApp = DatabaseApp.getInstance(activityParam.application)
+    private val dataSourceChats = databaseApp.chatsDao
+    private val dataSourceMessages = databaseApp.messagesDao
 
     init {
         //Esto se inicia cuando se presiona el botón para ir a user profile
@@ -174,19 +175,10 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
                             if (chatRoom == null) {
                                 dataSourceChats.insert(newChat)
                             }
-//                            //Reload listener de cambios en tbMessages
-//                            if (::cursorChangesTbMessages.isInitialized) {
-//                                cursorChangesTbMessages.close()
-//                                subscribeToChangesTbMessagesIO(idUser)
-//                            }
                         } else if (oldChat != null && newChat == null) {
                             //DELETE
+                            dataSourceMessages.deleteAllByChat(oldChat.id)
                             dataSourceChats.delete(oldChat.id)
-//                            //Reload listener de cambios en tbMessages
-//                            if (::cursorChangesTbMessages.isInitialized) {
-//                                cursorChangesTbMessages.close()
-//                                subscribeToChangesTbMessagesIO(idUser)
-//                            }
                         } else if (oldChat != null && newChat != null) {
                             //UPDATE
                             val chatRoom = dataSourceChats.get(newChat.id)
@@ -385,9 +377,12 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
                     //Se asegura que estén sincronizados los id de usuario de google con room y con rethinkdb
 
                     if (idRoom != idUser) {
-                        //Si el id que estaba en room no es igual con el id sincronizado, eliminar lo que había antes en tb_chats
-                        val dataSourceChats =
-                            DatabaseApp.getInstance(_activity.application).chatsDao
+                        //Si el id que estaba en room no es igual con el id sincronizado, eliminar lo que había antes en tb_chats y en tb_messages
+                        val databaseApp = DatabaseApp.getInstance(_activity.application)
+                        val dataSourceMessages = databaseApp.messagesDao
+                        val dataSourceChats = databaseApp.chatsDao
+
+                        dataSourceMessages.deleteAll()
                         dataSourceChats.deleteAll()
                     }
                 }

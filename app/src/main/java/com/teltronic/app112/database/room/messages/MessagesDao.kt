@@ -16,6 +16,12 @@ interface MessagesDao {
     @Query("DELETE FROM tb_messages WHERE id= :idMessage")
     fun delete(idMessage: String)
 
+    @Query("DELETE FROM tb_messages")
+    fun deleteAll()
+
+    @Query("DELETE FROM tb_messages WHERE id_chat= :idChat")
+    fun deleteAllByChat(idChat: String)
+
     @Update
     fun update(chat: MessageEntity)
 }

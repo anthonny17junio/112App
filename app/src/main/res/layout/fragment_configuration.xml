@@ -29,7 +29,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="@dimen/default_double_margin_size"
                 app:layout_constraintBottom_toTopOf="@+id/btnSave"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -38,7 +37,6 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/default_double_margin_size"
                     android:text="@string/language"
                     android:textStyle="bold" />
 
@@ -53,10 +51,17 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="50dp"
+                    android:layout_marginTop="@dimen/default_double_margin_size"
                     android:text="@string/title_notices"
                     android:textStyle="bold"
                     android:visibility="visible" />
+
+                <com.google.android.gms.maps.MapView
+                    android:id="@+id/map"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:layout_marginStart="@dimen/default_margin_size"
+                    android:layout_marginTop="@dimen/default_margin_size" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -71,7 +76,6 @@
                     style="@style/Widget.AppCompat.SeekBar.Discrete"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/default_double_margin_size"
                     android:layout_marginTop="@dimen/default_margin_size"
                     android:max="7"
                     android:progress="6"

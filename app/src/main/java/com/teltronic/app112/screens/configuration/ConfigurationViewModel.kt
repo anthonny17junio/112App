@@ -2,15 +2,20 @@ package com.teltronic.app112.screens.configuration
 
 import android.app.Activity
 import android.content.Context
+import android.location.Location
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.model.LatLng
 import com.teltronic.app112.R
 import com.teltronic.app112.classes.Preferences
 
-class ConfigurationViewModel : ViewModel() {
+class ConfigurationViewModel(activity: FragmentActivity?) : ViewModel() {
+    private var _activity: FragmentActivity? = activity
     private var _boolSave = MutableLiveData<Boolean>()
     val boolSave: LiveData<Boolean>
         get() = _boolSave
@@ -27,6 +32,10 @@ class ConfigurationViewModel : ViewModel() {
     val strMessageDistance: LiveData<String>
         get() = _strMessageDistance
 
+    private var _coordinates = MutableLiveData<LatLng>()
+    val coordinates: LiveData<LatLng>
+        get() = _coordinates
+
     fun save() {
         _boolSave.value = true
     }
@@ -39,7 +48,20 @@ class ConfigurationViewModel : ViewModel() {
         _boolSave.value = false
         _posSelectedLanguage.value = -1
         _currentDistanceId.value= 6 // TODO borrar esto, debe traer de configuration dao
+        getLastLocation()
     }
+
+    private fun getLastLocation() {
+        val mFusedLocationClient: FusedLocationProviderClient =
+            LocationServices.getFusedLocationProviderClient(_activity as Activity)
+        mFusedLocationClient.lastLocation.addOnCompleteListener(_activity as Activity) { task ->
+            val location: Location? = task.result
+            if (location != null) {
+                _coordinates.value = LatLng(location.latitude, location.longitude)
+            }
+        }
+    }
+
 
     fun loadConfigurations(activity: FragmentActivity) {
         val resourcesActivity = activity.resources

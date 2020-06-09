@@ -1,6 +1,7 @@
 package com.teltronic.app112.screens.configuration
 
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import android.widget.SeekBar
@@ -10,6 +11,8 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.maps.*
+import com.google.android.gms.maps.model.*
 
 import com.teltronic.app112.R
 import com.teltronic.app112.classes.enums.DistanceValues
@@ -18,10 +21,14 @@ import com.teltronic.app112.databinding.FragmentConfigurationBinding
 /**
  * A simple [Fragment] subclass.
  */
-class ConfigurationFragment : Fragment() {
+class ConfigurationFragment : Fragment(), OnMapReadyCallback {
 
     lateinit var binding: FragmentConfigurationBinding
     private lateinit var viewModel: ConfigurationViewModel
+
+    private lateinit var mGoogleMap: GoogleMap
+    private lateinit var mMapView: MapView
+    private lateinit var circle: Circle
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,8 +42,12 @@ class ConfigurationFragment : Fragment() {
             false
         )
         //Inicializo el viewModel
-        viewModel = ViewModelProvider(this).get(ConfigurationViewModel::class.java)
+        val viewModelFactory = ConfigurationViewModelFactory(activity)
+        viewModel =
+            ViewModelProvider(this, viewModelFactory).get(ConfigurationViewModel::class.java)
         viewModel.loadConfigurations(this.requireActivity())
+
+        coordinatesObserver()
 
         //"Uno" el layout con esta clase por medio del binding
         binding.configurationViewModel = viewModel
@@ -90,6 +101,49 @@ class ConfigurationFragment : Fragment() {
             SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 viewModel._currentDistanceId.value = progress
+                val location = viewModel.coordinates.value
+                val radius: Double
+                if (location != null) {
+                    when (DistanceValues.getById(progress)) {
+                        DistanceValues.NONE_KM -> {
+                            radius = 0.0
+                        }
+                        DistanceValues.NO_LIMIT -> {
+                            moveCamera(location, mGoogleMap, 4f)
+                            radius = 0.0
+                        }
+                        DistanceValues.ONE_KM -> {
+                            moveCamera(location, mGoogleMap, 13f)
+                            radius = DistanceValues.getById(progress)!!.valueKm.toDouble()
+                        }
+                        DistanceValues.FIVE_KM -> {
+                            moveCamera(location, mGoogleMap, 11f)
+                            radius = DistanceValues.getById(progress)!!.valueKm.toDouble()
+                        }
+                        DistanceValues.TEN_KM -> {
+                            moveCamera(location, mGoogleMap, 10f)
+                            radius = DistanceValues.getById(progress)!!.valueKm.toDouble()
+                        }
+                        DistanceValues.THIRTY_KM -> {
+                            moveCamera(location, mGoogleMap, 8f)
+                            radius = DistanceValues.getById(progress)!!.valueKm.toDouble()
+                        }
+                        DistanceValues.FIFTY_KM -> {
+                            moveCamera(location, mGoogleMap, 7.5f)
+                            radius = DistanceValues.getById(progress)!!.valueKm.toDouble()
+                        }
+                        DistanceValues.ONE_HUNDRED_KM -> {
+                            moveCamera(location, mGoogleMap, 7f)
+                            radius = DistanceValues.getById(progress)!!.valueKm.toDouble()
+                        }
+                        else -> {
+                            radius = DistanceValues.getById(progress)!!.valueKm.toDouble()
+                        }
+                    }
+                    if (::circle.isInitialized)
+                        circle.remove()
+                    drawCircleOnMap(radius)
+                }
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -98,6 +152,18 @@ class ConfigurationFragment : Fragment() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
             }
         })
+    }
+
+    private fun drawCircleOnMap(radius: Double) {
+        val location = viewModel.coordinates.value
+        circle = mGoogleMap.addCircle(
+            CircleOptions()
+                .center(location)
+                .radius(radius * 1000)
+                .strokeColor(Color.TRANSPARENT)
+                .fillColor(0x220000FF)
+                .strokeWidth(2F)
+        )
     }
 
     private fun configureBtnSaveObserver() {
@@ -139,4 +205,47 @@ class ConfigurationFragment : Fragment() {
                 false
         }
     }
+
+    //**********************************************************************************************
+    //GOOGLE MAP
+    //**********************************************************************************************
+    override fun onMapReady(gMap: GoogleMap?) {
+        MapsInitializer.initialize(context)
+        if (gMap != null) {
+            mGoogleMap = gMap
+            gMap.mapType = GoogleMap.MAP_TYPE_NORMAL
+            val location = viewModel.coordinates.value
+            if (::mGoogleMap.isInitialized && location != null) {
+                moveCamera(location, mGoogleMap, 17f)
+            }
+        }
+    }
+
+    private fun coordinatesObserver() { //Observa el cambio de coordenadas
+        viewModel.coordinates.observe(this as LifecycleOwner, Observer { newCoordinates ->
+            if (::mGoogleMap.isInitialized)
+                moveCamera(newCoordinates, mGoogleMap, 17f)
+        })
+    }
+
+    private fun moveCamera(latLang: LatLng, gMap: GoogleMap?, zoom: Float) {
+        gMap?.addMarker(MarkerOptions().position(latLang))
+
+        val cameraPosition =
+            CameraPosition.builder().target(latLang).zoom(zoom).bearing(0f).tilt(45f).build()
+        gMap?.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        //Se inicializa el mapa
+        mMapView = binding.map
+        mMapView.onCreate(null)
+        mMapView.onResume()
+        mMapView.getMapAsync(this)
+    }
+
+    //**********************************************************************************************
+    //FIN GOOGLE MAP
+    //**********************************************************************************************
 }

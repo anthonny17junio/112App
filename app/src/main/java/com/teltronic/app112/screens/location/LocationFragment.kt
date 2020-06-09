@@ -93,7 +93,7 @@ class LocationFragment : Fragment(), OnMapReadyCallback {
 
         val cameraPosition =
             CameraPosition.builder().target(latLang).zoom(17f).bearing(0f).tilt(45f).build()
-        gMap?.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+        gMap?.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
     }
 
     private fun configNavigateToNewChatObserver() {

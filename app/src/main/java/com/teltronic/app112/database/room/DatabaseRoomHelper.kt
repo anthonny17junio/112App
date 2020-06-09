@@ -6,12 +6,12 @@ import android.app.Activity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.rethinkdb.net.Connection
 import com.teltronic.app112.database.rethink.tb_users.UsersRethink
-import com.teltronic.app112.database.room.configurations.ConfigurationsDao
-import com.teltronic.app112.database.room.configurations.ConfigurationsEntity
+import com.teltronic.app112.database.room.userRethink.UserRethinkDao
+import com.teltronic.app112.database.room.userRethink.UserRethinkEntity
 
 object DatabaseRoomHelper {
 
-    //Obtiene id_rethink que se encuentre en Room en tb_configurations
+    //Obtiene id_rethink que se encuentre en Room en tb_user_rethink
     //pero se asegura que este sea el correcto en Rethink, en tb_users y en googleSignIn
     //si es nulo, lo inserta tanto en rethink como en room y devuelve el id creado
     fun getOrInsertSynchronizedRethinkId(con: Connection, activity: Activity): String? {
@@ -27,7 +27,7 @@ object DatabaseRoomHelper {
         }
 
         //Inicializo el id de user en Room (puede ser null si nunca se ha iniciado sesión con google en la aplicación)
-        val dataSource = DatabaseApp.getInstance(activity.application).configurationsDao
+        val dataSource = DatabaseApp.getInstance(activity.application).userRethinkDao
         val configurations = dataSource.get()
         if (configurations != null) {
             //Verifico que este idUserRoom exista en RETHINKDB
@@ -39,10 +39,10 @@ object DatabaseRoomHelper {
         }
 
         /* EN ESTE PUNTO HAY 4 POSIBLES CASOS:
-        CASO 1: en room NO existe un id_rethink en tb_configurations y NO hay ninguna cuenta de google en el dispositivo asociada
-        CASO 2: en room NO existe un id_rethink en tb_configurations y SI hay una cuenta de google en el dispositivo asociada
-        CASO 3: en room SI existe un id_rethink en tb_configurations y NO hay ninguna cuenta de google en el dispositivo asociada
-        CASO 4: en room SI existe un id_rethink en tb_configurations y SI hay una cuenta de google en el dispositivo asociada
+        CASO 1: en room NO existe un id_rethink en tb_user_rethink y NO hay ninguna cuenta de google en el dispositivo asociada
+        CASO 2: en room NO existe un id_rethink en tb_user_rethink y SI hay una cuenta de google en el dispositivo asociada
+        CASO 3: en room SI existe un id_rethink en tb_user_rethink y NO hay ninguna cuenta de google en el dispositivo asociada
+        CASO 4: en room SI existe un id_rethink en tb_user_rethink y SI hay una cuenta de google en el dispositivo asociada
         */
 
         if (idUserRoom == null) {
@@ -66,41 +66,41 @@ object DatabaseRoomHelper {
         return idSynchronizedUser
     }
 
-    //CASO 1: en room NO existe un id_rethink en tb_configurations y NO hay ninguna cuenta de google en el dispositivo asociada
+    //CASO 1: en room NO existe un id_rethink en tb_user_rethink y NO hay ninguna cuenta de google en el dispositivo asociada
     //*************************************************************************************************************************
     //En este caso creo un nuevo registro en rethinkdb y lo guardo en room
-    private fun caso1(con: Connection, dataSource: ConfigurationsDao): String {
+    private fun caso1(con: Connection, dataSource: UserRethinkDao): String {
         val idRethink = UsersRethink.insertNewUserWithoutGoogleId(con)
-        val configurationsEntity = ConfigurationsEntity(1, idRethink)
+        val configurationsEntity = UserRethinkEntity(1, idRethink)
         dataSource.insert(configurationsEntity)
         return idRethink
     }
 
-    //CASO 2: en room NO existe un id_rethink en tb_configurations y SI hay una cuenta de google en el dispositivo asociada
+    //CASO 2: en room NO existe un id_rethink en tb_user_rethink y SI hay una cuenta de google en el dispositivo asociada
     //*********************************************************************************************************************
     //En este  caso compruebo si existe un registro en rethinkdb con dicho id de google
     //si no existe lo creo y lo guardo en room
     //si existe solo lo guardo en room
     private fun caso2(
         con: Connection,
-        dataSource: ConfigurationsDao,
+        dataSource: UserRethinkDao,
         googleIDLocal: String
     ): String {
         var idRethink = UsersRethink.getIdUserByGoogleId(con, googleIDLocal)
         if (idRethink == null) {
             idRethink = UsersRethink.insertNewUserWithGoogleId(con, googleIDLocal)
         }
-        val configurationsEntity = ConfigurationsEntity(1, idRethink)
+        val configurationsEntity = UserRethinkEntity(1, idRethink)
         dataSource.insert(configurationsEntity)
         return idRethink
     }
 
-    //CASO 3: en room SI existe un id_rethink en tb_configurations y NO hay ninguna cuenta de google en el dispositivo asociada
+    //CASO 3: en room SI existe un id_rethink en tb_user_rethink y NO hay ninguna cuenta de google en el dispositivo asociada
     //*************************************************************************************************************************
     //En este caso compruebo si existe alguna cuenta de google en rethinkdb asociada a dicho id
     //Si existe elimino el id_rethink de room y llamo a caso1 (este caso no debería pasar)
     //Si no existe no hago nada (significa que es una cuenta temporal)
-    private fun caso3(con: Connection, idUserRoom: String, dataSource: ConfigurationsDao): String {
+    private fun caso3(con: Connection, idUserRoom: String, dataSource: UserRethinkDao): String {
         val googleId = UsersRethink.getGoogleIdUserById(con, idUserRoom)
         return if (googleId != null) {
             dataSource.deleteAll()
@@ -110,7 +110,7 @@ object DatabaseRoomHelper {
         }
     }
 
-    //CASO 4: en room SI existe un id_rethink en tb_configurations y SI hay una cuenta de google en el dispositivo asociada
+    //CASO 4: en room SI existe un id_rethink en tb_user_rethink y SI hay una cuenta de google en el dispositivo asociada
     //*********************************************************************************************************************
     //En este caso verifico si coinciden estos id en rethinkdb
     //Si coinciden no hago nada
@@ -119,7 +119,7 @@ object DatabaseRoomHelper {
         con: Connection,
         idUserRoom: String,
         googleIDLocal: String,
-        dataSource: ConfigurationsDao
+        dataSource: UserRethinkDao
     ): String {
         val googleIdRethink = UsersRethink.getGoogleIdUserById(con, idUserRoom)
         return if (googleIdRethink == googleIDLocal) {

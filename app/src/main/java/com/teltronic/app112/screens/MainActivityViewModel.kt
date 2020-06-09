@@ -12,13 +12,13 @@ import com.rethinkdb.gen.ast.ReqlExpr
 import com.rethinkdb.model.OptArgs
 import com.rethinkdb.net.Cursor
 import com.teltronic.app112.classes.GoogleApiPeopleHelper
-import com.teltronic.app112.classes.ListenNewMessagesService
+import com.teltronic.app112.classes.services.ListenNewMessagesService
 import com.teltronic.app112.classes.enums.NamesRethinkdb
 import com.teltronic.app112.database.rethink.DatabaseRethink
 import com.teltronic.app112.database.room.DatabaseApp
 import com.teltronic.app112.database.room.DatabaseRoomHelper
 import com.teltronic.app112.database.room.chats.ChatEntityConverter
-import com.teltronic.app112.database.room.configurations.ConfigurationsEntity
+import com.teltronic.app112.database.room.userRethink.UserRethinkEntity
 import com.teltronic.app112.database.room.messages.MessageEntityConverter
 import kotlinx.coroutines.*
 
@@ -79,7 +79,7 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
     val shouldAskGoogleAuth: LiveData<Boolean>
         get() = _shouldAskGoogleAuth
 
-    private var configurations: LiveData<ConfigurationsEntity>
+    private var userRethink: LiveData<UserRethinkEntity>
 
     private val job = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + job)
@@ -106,8 +106,8 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
 
         GoogleApiPeopleHelper.initGoogleApiClient(_activity)
 
-        val dataSource = DatabaseApp.getInstance(_activity.application).configurationsDao
-        configurations = dataSource.getLiveData()
+        val dataSource = DatabaseApp.getInstance(_activity.application).userRethinkDao
+        userRethink = dataSource.getLiveData()
         configurationsObserver()
     }
 
@@ -115,7 +115,7 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
     private fun configurationsObserver() {
         //Cuando existe un id logueado en la base de datos se
         //escucha de Rethinkdb los cambios a las tablas de los chats
-        configurations.observe(_activity, Observer { configurations ->
+        userRethink.observe(_activity, Observer { configurations ->
             if (configurations != null) {
                 val idUser = configurations.id_rethink
                 //Listener para escuchar los cambios de los chats
@@ -346,7 +346,7 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
         _boolGoogleAuthenticated.value = true
     }
 
-    //Después de esta función, en tb_configurations (ROOM)
+    //Después de esta función, en tb_user_rethink (ROOM)
     //se encontrará el id que existe en rethinkDB correspondiente al usuario
     //que se acaba de loguear con la cuenta de google
     fun syncDatabasesAfterGoogleAuth() {
@@ -367,7 +367,7 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
             val con = DatabaseRethink.getConnection()
             if (con != null) {
                 val dataSourceConfigurations =
-                    DatabaseApp.getInstance(_activity.application).configurationsDao
+                    DatabaseApp.getInstance(_activity.application).userRethinkDao
                 val configurations = dataSourceConfigurations.get()
 
                 val idUser = DatabaseRoomHelper.getOrInsertSynchronizedRethinkId(con, _activity)

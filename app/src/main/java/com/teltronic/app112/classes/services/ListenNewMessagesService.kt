@@ -1,6 +1,6 @@
 @file:Suppress("KotlinDeprecation")
 
-package com.teltronic.app112.classes
+package com.teltronic.app112.classes.services
 
 import android.app.PendingIntent
 import android.app.Service
@@ -109,7 +109,7 @@ class ListenNewMessagesService : Service() {
     }
 
     private fun sendNotification(idChat: String, message: String) {
-        val configurations = DatabaseApp.getInstance(applicationContext).configurationsDao
+        val configurations = DatabaseApp.getInstance(applicationContext).userRethinkDao
         if (configurations != null) {
             val arguments = Bundle()
             arguments.putString("idChat", idChat)
@@ -130,10 +130,11 @@ class ListenNewMessagesService : Service() {
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
-//
+
+            val rnd = (0..10000).random()
             with(NotificationManagerCompat.from(applicationContext)) {
                 // notificationId is a unique int for each notification that you must define
-                notify(0, builder.build())
+                notify(rnd, builder.build())
             }
         }
     }

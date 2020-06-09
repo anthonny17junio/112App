@@ -19,6 +19,14 @@ class ConfigurationViewModel : ViewModel() {
     val posSelectedLanguage: LiveData<Int>
         get() = _posSelectedLanguage
 
+    var _currentDistanceId = MutableLiveData<Int>()
+    val currentDistanceId: LiveData<Int>
+        get() = _currentDistanceId
+
+    val _strMessageDistance = MutableLiveData<String>()
+    val strMessageDistance: LiveData<String>
+        get() = _strMessageDistance
+
     fun save() {
         _boolSave.value = true
     }
@@ -30,13 +38,15 @@ class ConfigurationViewModel : ViewModel() {
     init {
         _boolSave.value = false
         _posSelectedLanguage.value = -1
+        _currentDistanceId.value= 6 // TODO borrar esto, debe traer de configuration dao
     }
 
     fun loadConfigurations(activity: FragmentActivity) {
         val resourcesActivity = activity.resources
 
         val keyLanguage = resourcesActivity.getString(R.string.KEY_LANGUAGE)
-        val nameSettingsPreferences = resourcesActivity.getString(R.string.name_settings_preferences)
+        val nameSettingsPreferences =
+            resourcesActivity.getString(R.string.name_settings_preferences)
         val sharedPreferences =
             activity.getSharedPreferences(nameSettingsPreferences, Activity.MODE_PRIVATE)
         val language = sharedPreferences?.getString(keyLanguage, "")

@@ -113,6 +113,20 @@ object Phone {
                         .show()
                 }
             }
+
+            PermissionsApp.FINE_LOCATION_FROM_MAIN_ACTIVITY_TO_CONFIGURATION.code->{
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    //Si acepto los permisos navego a "configurations"
+                    val actionNavigate =
+                        MainFragmentDirections.actionMainFragmentToConfigurationFragment()
+
+                    //Ojo IMPORTANTE debo enviar myNavHostFragment debido a que en activity_main.xml es el navController
+                    activity.findNavController(R.id.myNavHostFragment).navigate(actionNavigate)
+                } else {
+                    Toast.makeText(activity, R.string.txt_permission_location, Toast.LENGTH_LONG)
+                        .show()
+                }
+            }
         }
     }
 

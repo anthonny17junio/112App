@@ -56,26 +56,26 @@
                     android:layout_marginTop="50dp"
                     android:text="@string/title_notices"
                     android:textStyle="bold"
-                    android:visibility="invisible" />
+                    android:visibility="visible" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/default_margin_size"
                     android:layout_marginTop="@dimen/default_margin_size"
-                    android:text="@string/txtRecieveNotices"
-                    android:visibility="invisible" />
+                    android:text="@{@string/string_format(configurationViewModel.strMessageDistance)}"
+                    android:visibility="visible" />
 
                 <SeekBar
                     android:id="@+id/seekBarDistance"
-                    style="@style/Widget.AppCompat.SeekBar"
+                    style="@style/Widget.AppCompat.SeekBar.Discrete"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/default_double_margin_size"
                     android:layout_marginTop="@dimen/default_margin_size"
-                    android:max="1000"
-                    android:visibility="invisible" />
-
+                    android:max="7"
+                    android:progress="6"
+                    android:visibility="visible" />
 
             </LinearLayout>
 

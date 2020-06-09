@@ -12,6 +12,7 @@
     <string name="device_no_secure">Configure una contraseña en el dispositivo para poder utilizar esta funcionalidad</string>
     <string name="loading">Cargando…</string>
     <string name="service_listen_messages_description">Servicio que notifica nuevos mensajes de los chats</string>
+    <string name="service_listen_notices_description">Servicio que notifica nuevos avisos</string>
     <string name="picture">[Foto]</string>
 
     <!--TÍTULOS DE LAS PANTALLAS-->
@@ -80,7 +81,9 @@
     <!--SCREEN CONFIG-->
     <string name="language">Idioma</string>
     <string name="title_notices">Avisos</string>
-    <string name="txtRecieveNotices">Recibir avisos en un radio de:</string>
+    <string name="txt_recieve_notices">Recibir avisos en un radio de</string>
+    <string name="txt_no_recieve_notices">Nunca recibir avisos</string>
+    <string name="txt_no_limits_recieve_notices">Recibir avisos sin límite de distancia</string>
 
     <!--LANGUAGES-->
     <string name="spanish">Español</string>

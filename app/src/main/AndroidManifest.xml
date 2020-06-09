@@ -22,11 +22,18 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+
+        <!--Services-->
         <service
-            android:name=".classes.ListenNewMessagesService"
+            android:name=".classes.services.ListenNewMessagesService"
             android:description="@string/service_listen_messages_description"
-            android:process=":processListenerNewMessages"
-            android:exported="false"/>
+            android:exported="false"
+            android:process=":processListenerNewMessages" />
+        <service
+            android:name=".classes.services.ListenNewNoticesService"
+            android:description="@string/service_listen_notices_description"
+            android:exported="false" />
+
         <activity android:name=".screens.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

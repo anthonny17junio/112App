@@ -24,6 +24,7 @@ import androidx.navigation.ui.NavigationUI
 import com.teltronic.app112.databinding.ActivityMainBinding
 import com.teltronic.app112.screens.mainScreen.MainFragmentDirections
 import android.widget.TextView
+import android.widget.Toast
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
@@ -32,6 +33,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.teltronic.app112.R
 import com.teltronic.app112.classes.*
 import com.teltronic.app112.classes.enums.IntCodes
+import com.teltronic.app112.classes.enums.PermissionsApp
 import timber.log.Timber
 import java.lang.Exception
 import java.lang.ref.WeakReference
@@ -314,9 +316,32 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedList
                 if (shouldNavigate) {
                     val navCont = findNavController(R.id.myNavHostFragment)
                     if (navCont.currentDestination?.id == navCont.graph.startDestination) {
-                        val actionNavigate =
-                            MainFragmentDirections.actionMainFragmentToConfigurationFragment()
-                        navCont.navigate(actionNavigate)
+
+                        if (!Phone.isLocationEnabled(this)) {
+                            Toast.makeText(
+                                this,
+                                R.string.location_no_enabled,
+                                Toast.LENGTH_LONG
+                            ).show()
+                        } else if (Phone.existPermission(
+                                this,
+                                PermissionsApp.FINE_LOCATION_FROM_MAIN_ACTIVITY_TO_CONFIGURATION
+                            )
+                        ) {
+                            //Si tienes permisos de localización navegas a location screen
+                            val actionNavigate =
+                                MainFragmentDirections.actionMainFragmentToConfigurationFragment()
+                            navCont.navigate(actionNavigate)
+                        } else {
+                            //Si no tienes permisos de localización los pides
+                            Phone.askPermission(
+                                this,
+                                PermissionsApp.FINE_LOCATION_FROM_MAIN_ACTIVITY_TO_CONFIGURATION
+                            )
+                        }
+
+
+
                     }
                     viewModel.navigateToConfigurationComplete()
                 }

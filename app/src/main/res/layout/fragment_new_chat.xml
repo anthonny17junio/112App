@@ -43,7 +43,7 @@
                     app:layout_constraintGuide_percent="0.50" />
 
                 <ImageButton
-                    android:id="@+id/btnCrime"
+                    android:id="@+id/btnNotices"
                     style="@style/btnMainIconButtons"
                     imageResource="@{newChatViewModel.idCrimeIcon}"
                     android:layout_marginTop="50dp"
@@ -63,9 +63,9 @@
                     android:text="@{category.CRIME.idTitle}"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="@+id/btnCrime"
-                    app:layout_constraintStart_toStartOf="@+id/btnCrime"
-                    app:layout_constraintTop_toBottomOf="@+id/btnCrime"
+                    app:layout_constraintEnd_toEndOf="@+id/btnNotices"
+                    app:layout_constraintStart_toStartOf="@+id/btnNotices"
+                    app:layout_constraintTop_toBottomOf="@+id/btnNotices"
                     tools:text="@string/txt_crime" />
 
                 <ImageButton
@@ -76,7 +76,7 @@
                     android:onClick="@{()->newChatViewModel.navigateToCategory(category.ACCIDENT)}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/guideline3"
-                    app:layout_constraintTop_toTopOf="@+id/btnCrime"
+                    app:layout_constraintTop_toTopOf="@+id/btnNotices"
                     tools:src="@drawable/ic_accident_white" />
 
                 <TextView
@@ -100,8 +100,8 @@
                     android:layout_marginTop="@dimen/default_double_margin_size"
                     android:contentDescription="@string/content_description_btn_medical_urgency"
                     android:onClick="@{()->newChatViewModel.navigateToCategory(category.MEDICAL_URGENCY)}"
-                    app:layout_constraintEnd_toEndOf="@+id/btnCrime"
-                    app:layout_constraintStart_toStartOf="@+id/btnCrime"
+                    app:layout_constraintEnd_toEndOf="@+id/btnNotices"
+                    app:layout_constraintStart_toStartOf="@+id/btnNotices"
                     app:layout_constraintTop_toBottomOf="@+id/txtBtnCrime"
                     tools:src="@drawable/ic_hospital_white" />
 

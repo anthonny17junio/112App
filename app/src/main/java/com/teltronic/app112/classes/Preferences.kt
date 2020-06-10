@@ -6,7 +6,6 @@ import android.content.res.Configuration
 import com.teltronic.app112.R
 import java.util.*
 
-
 object Preferences {
     private const val idKeyLanguage = R.string.KEY_LANGUAGE
     private const val idNameSettingsPreferences = R.string.name_settings_preferences

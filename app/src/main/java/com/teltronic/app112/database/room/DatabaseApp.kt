@@ -6,6 +6,8 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.teltronic.app112.database.room.chats.ChatEntity
 import com.teltronic.app112.database.room.chats.ChatsDao
+import com.teltronic.app112.database.room.configurations.ConfigurationsDao
+import com.teltronic.app112.database.room.configurations.ConfigurationsEntity
 import com.teltronic.app112.database.room.userRethink.UserRethinkDao
 import com.teltronic.app112.database.room.userRethink.UserRethinkEntity
 import com.teltronic.app112.database.room.medicalInfo.MedicalInfoDao
@@ -20,8 +22,14 @@ En entities van todas las tablas (entities)  de la base de datos
 exportSchema es true por defecto
  */
 @Database(
-    entities = [MedicalInfoEntity::class, UserRethinkEntity::class, ChatEntity::class, MessageEntity::class, NoticeEntity::class],
-    version = 12,
+    entities = [MedicalInfoEntity::class,
+        UserRethinkEntity::class,
+        ChatEntity::class,
+        MessageEntity::class,
+        NoticeEntity::class,
+        ConfigurationsEntity::class
+    ],
+    version = 13,
     exportSchema = false
 )
 abstract class DatabaseApp : RoomDatabase() {
@@ -30,6 +38,7 @@ abstract class DatabaseApp : RoomDatabase() {
     abstract val chatsDao: ChatsDao
     abstract val messagesDao: MessagesDao
     abstract val noticesDao: NoticesDao
+    abstract val configurationsDao: ConfigurationsDao
 
     //Permite acceder a los métodos para crear u obtener la base de datos sin instanciar la clase
     companion object {

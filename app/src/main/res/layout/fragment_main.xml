@@ -46,9 +46,9 @@
                     android:text="@string/txt_btn_main_notices"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="@+id/btnCrime"
-                    app:layout_constraintStart_toStartOf="@+id/btnCrime"
-                    app:layout_constraintTop_toBottomOf="@+id/btnCrime" />
+                    app:layout_constraintEnd_toEndOf="@+id/btnNotices"
+                    app:layout_constraintStart_toStartOf="@+id/btnNotices"
+                    app:layout_constraintTop_toBottomOf="@+id/btnNotices" />
 
                 <TextView
                     android:id="@+id/txtBtnMedicalUrgency"
@@ -63,11 +63,10 @@
                     app:layout_constraintTop_toBottomOf="@+id/btnMedicalUrgency" />
 
                 <ImageButton
-                    android:id="@+id/btnCrime"
+                    android:id="@+id/btnNotices"
                     style="@style/btnMainIconButtons"
                     android:layout_marginTop="50dp"
                     android:contentDescription="@string/location_title"
-                    android:onClick="@{()->mainViewModel.navigateToNotices()}"
                     android:src="@drawable/ic_notices_white"
                     app:layout_constraintEnd_toStartOf="@+id/guideline3"
                     app:layout_constraintStart_toStartOf="parent"
@@ -93,7 +92,7 @@
                     android:src="@drawable/ic_location_on_white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/guideline3"
-                    app:layout_constraintTop_toTopOf="@+id/btnCrime" />
+                    app:layout_constraintTop_toTopOf="@+id/btnNotices" />
 
                 <ImageButton
                     android:id="@+id/btnMedicalUrgency"
@@ -102,8 +101,8 @@
                     android:contentDescription="@string/location_title"
                     android:onClick="@{()->mainViewModel.navigateToChats()}"
                     android:src="@drawable/ic_chats_white"
-                    app:layout_constraintEnd_toEndOf="@+id/btnCrime"
-                    app:layout_constraintStart_toStartOf="@+id/btnCrime"
+                    app:layout_constraintEnd_toEndOf="@+id/btnNotices"
+                    app:layout_constraintStart_toStartOf="@+id/btnNotices"
                     app:layout_constraintTop_toBottomOf="@+id/txtBtnCrime" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

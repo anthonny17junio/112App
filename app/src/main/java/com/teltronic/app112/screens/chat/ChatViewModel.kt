@@ -160,7 +160,6 @@ class ChatViewModel(
                     if ((hshMessage["id_type"] as Long).toInt() == MessageType.IMAGE.id) { //Si es de tipo imagen
                         //Guardo la imagen en room
                         val image64 = (hshMessage["content"] as ByteArray)
-//                        val imageBytes = Base64.decode(image64, Base64.DEFAULT)
                         val decodedImage =
                             BitmapFactory.decodeByteArray(image64, 0, image64.size)
                         // Get the context wrapper

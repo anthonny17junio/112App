@@ -40,6 +40,8 @@
     <string name="txt_btn_main_notices">Avisos</string>
     <string name="txt_btn_main_location">Ubicación</string>
     <string name="txt_btn_main_chats">Chats</string>
+    <string name="notices_alert_no_config">Área de avisos no configurada</string>
+    <string name="go_to_settings">Se recomienda establecer un área de avisos en configuración, caso contrario, recibirá todos los avisos sin límite de área.</string>
 
     <!--MENSAJES DE PERMISOS-->
     <string name="txt_permission">Por favor, acepta los permisos</string>

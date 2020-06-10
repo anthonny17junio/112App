@@ -1,10 +1,14 @@
 package com.teltronic.app112.screens.mainScreen
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.teltronic.app112.database.room.DatabaseApp
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
-class MainViewModel : ViewModel() {
+class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     //PUBLIC AND PRIVATE VARIABLES
     //****************************************************
@@ -28,9 +32,16 @@ class MainViewModel : ViewModel() {
     val boolNavigateToNewChat: LiveData<Boolean>
         get() = _boolNavigateToNewChat
 
+    //Show alert notices
+    private var _boolShowAlertNotices = MutableLiveData<Boolean>()
+    val boolShowAlertNotices: LiveData<Boolean>
+        get() = _boolShowAlertNotices
+
     private var _boolMakeCall = MutableLiveData<Boolean>()
     val boolMakeCall: LiveData<Boolean>
         get() = _boolMakeCall
+
+    private val dataSourceConfigurations = DatabaseApp.getInstance(application).configurationsDao
 
     //INIT
     //****************************************************
@@ -40,6 +51,23 @@ class MainViewModel : ViewModel() {
         _boolNavigateToChats.value = false
         _boolNavigateToNewChat.value = false
         _boolMakeCall.value = false
+        _boolShowAlertNotices.value=false
+    }
+
+
+    suspend fun checkConfigurationsBeforeNavigateToNotices() {
+        withContext(Dispatchers.IO) {
+            val configurations = dataSourceConfigurations.get()
+            if (configurations == null) {
+                _boolShowAlertNotices.postValue(true)
+            } else {
+                _boolNavigateToNotices.postValue(true)
+            }
+        }
+    }
+
+    fun alertNoticesShown(){
+        _boolShowAlertNotices.value = false
     }
 
     //FUNCTIONS

@@ -17,6 +17,10 @@ import com.google.android.gms.maps.model.*
 import com.teltronic.app112.R
 import com.teltronic.app112.classes.enums.DistanceValues
 import com.teltronic.app112.databinding.FragmentConfigurationBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 /**
  * A simple [Fragment] subclass.
@@ -29,6 +33,8 @@ class ConfigurationFragment : Fragment(), OnMapReadyCallback {
     private lateinit var mGoogleMap: GoogleMap
     private lateinit var mMapView: MapView
     private lateinit var circle: Circle
+    private var job = Job()
+    private var uiScope = CoroutineScope(Dispatchers.Main + job)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,7 +51,6 @@ class ConfigurationFragment : Fragment(), OnMapReadyCallback {
         val viewModelFactory = ConfigurationViewModelFactory(activity)
         viewModel =
             ViewModelProvider(this, viewModelFactory).get(ConfigurationViewModel::class.java)
-        viewModel.loadConfigurations(this.requireActivity())
 
         coordinatesObserver()
 
@@ -60,9 +65,17 @@ class ConfigurationFragment : Fragment(), OnMapReadyCallback {
         configureBtnSaveObserver()
         configureBackButton()
         configurePosSelectedLanguageObserver()
-        configureDistanceBarChange()
         configureDistanceIdObserver()
+        getConfigurationsRoom()
+        configurationsObserver()
+        configureDistanceBarChange()
         return binding.root
+    }
+
+    private fun getConfigurationsRoom() {
+        uiScope.launch {
+            viewModel.getConfigurationsRoom()
+        }
     }
 
     private fun configurePosSelectedLanguageObserver() {
@@ -80,18 +93,31 @@ class ConfigurationFragment : Fragment(), OnMapReadyCallback {
         viewModel.currentDistanceId.observe(
             this as LifecycleOwner,
             Observer { distanceId ->
+                binding.seekBarDistance.progress = distanceId
                 when (DistanceValues.getById(distanceId)) {
-                    DistanceValues.NONE_KM ->
-                        viewModel._strMessageDistance.value =
+                    DistanceValues.NONE_KM -> {
+                        viewModel.strMessageDistanceLiveData.value =
                             getString(R.string.txt_no_recieve_notices)
-                    DistanceValues.NO_LIMIT ->
-                        viewModel._strMessageDistance.value =
+                    }
+                    DistanceValues.NO_LIMIT -> {
+                        viewModel.strMessageDistanceLiveData.value =
                             getString(R.string.txt_no_limits_recieve_notices)
-                    else ->
-                        viewModel._strMessageDistance.value =
+                    }
+                    else -> {
+                        viewModel.strMessageDistanceLiveData.value =
                             getString(R.string.txt_recieve_notices) + " " +
                                     DistanceValues.getById(distanceId)!!.valueKm.toString() + " km"
+                    }
                 }
+            }
+        )
+    }
+
+    private fun configurationsObserver() {
+        viewModel.configurations.observe(
+            this as LifecycleOwner,
+            Observer { configurationsRoom ->
+                viewModel.setConfigurations()
             }
         )
     }
@@ -100,49 +126,10 @@ class ConfigurationFragment : Fragment(), OnMapReadyCallback {
         binding.seekBarDistance.setOnSeekBarChangeListener(object :
             SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                viewModel._currentDistanceId.value = progress
+                viewModel.currentDistanceIdLiveData.value = progress
                 val location = viewModel.coordinates.value
-                val radius: Double
                 if (location != null) {
-                    when (DistanceValues.getById(progress)) {
-                        DistanceValues.NONE_KM -> {
-                            radius = 0.0
-                        }
-                        DistanceValues.NO_LIMIT -> {
-                            moveCamera(location, mGoogleMap, 4f)
-                            radius = 0.0
-                        }
-                        DistanceValues.ONE_KM -> {
-                            moveCamera(location, mGoogleMap, 13f)
-                            radius = DistanceValues.getById(progress)!!.valueKm.toDouble()
-                        }
-                        DistanceValues.FIVE_KM -> {
-                            moveCamera(location, mGoogleMap, 11f)
-                            radius = DistanceValues.getById(progress)!!.valueKm.toDouble()
-                        }
-                        DistanceValues.TEN_KM -> {
-                            moveCamera(location, mGoogleMap, 10f)
-                            radius = DistanceValues.getById(progress)!!.valueKm.toDouble()
-                        }
-                        DistanceValues.THIRTY_KM -> {
-                            moveCamera(location, mGoogleMap, 8f)
-                            radius = DistanceValues.getById(progress)!!.valueKm.toDouble()
-                        }
-                        DistanceValues.FIFTY_KM -> {
-                            moveCamera(location, mGoogleMap, 7.5f)
-                            radius = DistanceValues.getById(progress)!!.valueKm.toDouble()
-                        }
-                        DistanceValues.ONE_HUNDRED_KM -> {
-                            moveCamera(location, mGoogleMap, 7f)
-                            radius = DistanceValues.getById(progress)!!.valueKm.toDouble()
-                        }
-                        else -> {
-                            radius = DistanceValues.getById(progress)!!.valueKm.toDouble()
-                        }
-                    }
-                    if (::circle.isInitialized)
-                        circle.remove()
-                    drawCircleOnMap(radius)
+                    moveCameraAndDrawCircleMap(progress, location)
                 }
             }
 
@@ -152,6 +139,53 @@ class ConfigurationFragment : Fragment(), OnMapReadyCallback {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
             }
         })
+    }
+
+    private fun moveCameraAndDrawCircleMap(distanceId: Int, location: LatLng) {
+        val radius: Double
+        if (::mGoogleMap.isInitialized) {
+            viewModel.mapInitializedCamera = true
+            when (DistanceValues.getById(distanceId)) {
+                DistanceValues.NONE_KM -> {
+                    moveCamera(location, mGoogleMap, 4f)
+                    radius = 0.0
+                }
+                DistanceValues.NO_LIMIT -> {
+                    moveCamera(location, mGoogleMap, 4f)
+                    radius = 0.0
+                }
+                DistanceValues.ONE_KM -> {
+                    moveCamera(location, mGoogleMap, 13f)
+                    radius = DistanceValues.getById(distanceId)!!.valueKm.toDouble()
+                }
+                DistanceValues.FIVE_KM -> {
+                    moveCamera(location, mGoogleMap, 11f)
+                    radius = DistanceValues.getById(distanceId)!!.valueKm.toDouble()
+                }
+                DistanceValues.TEN_KM -> {
+                    moveCamera(location, mGoogleMap, 10f)
+                    radius = DistanceValues.getById(distanceId)!!.valueKm.toDouble()
+                }
+                DistanceValues.THIRTY_KM -> {
+                    moveCamera(location, mGoogleMap, 8f)
+                    radius = DistanceValues.getById(distanceId)!!.valueKm.toDouble()
+                }
+                DistanceValues.ONE_HUNDRED_KM -> {
+                    moveCamera(location, mGoogleMap, 7f)
+                    radius = DistanceValues.getById(distanceId)!!.valueKm.toDouble()
+                }
+                DistanceValues.THREE_HUNDRED_KM -> {
+                    moveCamera(location, mGoogleMap, 5f)
+                    radius = DistanceValues.getById(distanceId)!!.valueKm.toDouble()
+                }
+                else -> {
+                    radius = DistanceValues.getById(distanceId)!!.valueKm.toDouble()
+                }
+            }
+            if (::circle.isInitialized)
+                circle.remove()
+            drawCircleOnMap(radius)
+        }
     }
 
     private fun drawCircleOnMap(radius: Double) {
@@ -171,7 +205,15 @@ class ConfigurationFragment : Fragment(), OnMapReadyCallback {
             this as LifecycleOwner,
             Observer { shouldSave ->
                 if (shouldSave) {
-                    viewModel.saveConfigurations(this)
+                    uiScope.launch {
+                        val positionNewLanguage = binding.spinnerLanguage.selectedItemPosition
+                        val distanceId = binding.seekBarDistance.progress
+                        val langCode =
+                            requireActivity().resources.getStringArray(R.array.languages_values)[positionNewLanguage]
+                        viewModel.saveComplete()
+                        viewModel.saveConfigurations(langCode, distanceId)
+
+                    }
                 }
             }
         )
@@ -214,23 +256,37 @@ class ConfigurationFragment : Fragment(), OnMapReadyCallback {
         if (gMap != null) {
             mGoogleMap = gMap
             gMap.mapType = GoogleMap.MAP_TYPE_NORMAL
-            val location = viewModel.coordinates.value
-            if (::mGoogleMap.isInitialized && location != null) {
-                moveCamera(location, mGoogleMap, 17f)
+            if (!viewModel.mapInitializedCamera) {
+                val progress = binding.seekBarDistance.progress
+                val location = viewModel.coordinates.value
+                if (location != null) {
+                    moveCameraAndDrawCircleMap(progress, location)
+                }
             }
         }
     }
 
     private fun coordinatesObserver() { //Observa el cambio de coordenadas
         viewModel.coordinates.observe(this as LifecycleOwner, Observer { newCoordinates ->
-            if (::mGoogleMap.isInitialized)
-                moveCamera(newCoordinates, mGoogleMap, 17f)
+            Thread.sleep(100) //Para asegurarse que el mapa esté listo
+            val configurations = viewModel.configurations.value
+            if (configurations == null) {
+                //Si no existe nada en room sobre configuraciones inicia mostrando el país
+                if (::mGoogleMap.isInitialized)
+                    moveCamera(newCoordinates, mGoogleMap, 4f)
+            } else {
+                //Si existe un valor en room mover la cámara como corresponda
+                val latRoom = configurations.lat_notices
+                val longRoom = configurations.long_notices
+                moveCameraAndDrawCircleMap(
+                    configurations.distance_code_notices,
+                    LatLng(latRoom, longRoom)
+                )
+            }
         })
     }
 
     private fun moveCamera(latLang: LatLng, gMap: GoogleMap?, zoom: Float) {
-        gMap?.addMarker(MarkerOptions().position(latLang))
-
         val cameraPosition =
             CameraPosition.builder().target(latLang).zoom(zoom).bearing(0f).tilt(45f).build()
         gMap?.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))

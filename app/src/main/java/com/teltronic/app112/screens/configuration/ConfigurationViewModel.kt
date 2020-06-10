@@ -13,6 +13,11 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 import com.teltronic.app112.R
 import com.teltronic.app112.classes.Preferences
+import com.teltronic.app112.classes.enums.DistanceValues
+import com.teltronic.app112.database.room.DatabaseApp
+import com.teltronic.app112.database.room.configurations.ConfigurationsEntity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class ConfigurationViewModel(activity: FragmentActivity?) : ViewModel() {
     private var _activity: FragmentActivity? = activity
@@ -24,30 +29,36 @@ class ConfigurationViewModel(activity: FragmentActivity?) : ViewModel() {
     val posSelectedLanguage: LiveData<Int>
         get() = _posSelectedLanguage
 
-    var _currentDistanceId = MutableLiveData<Int>()
+    var currentDistanceIdLiveData = MutableLiveData<Int>()
     val currentDistanceId: LiveData<Int>
-        get() = _currentDistanceId
+        get() = currentDistanceIdLiveData
 
-    val _strMessageDistance = MutableLiveData<String>()
+    val strMessageDistanceLiveData = MutableLiveData<String>()
     val strMessageDistance: LiveData<String>
-        get() = _strMessageDistance
+        get() = strMessageDistanceLiveData
 
     private var _coordinates = MutableLiveData<LatLng>()
     val coordinates: LiveData<LatLng>
         get() = _coordinates
 
+    var mapInitializedCamera = false
+
+    private val dataSourceConfigurations =
+        DatabaseApp.getInstance(_activity!!.application).configurationsDao
+
+    var configurations: LiveData<ConfigurationsEntity?> = dataSourceConfigurations.getLiveData()
+
     fun save() {
         _boolSave.value = true
     }
 
-    private fun saveComplete() {
+    fun saveComplete() {
         _boolSave.value = false
     }
 
     init {
         _boolSave.value = false
         _posSelectedLanguage.value = -1
-        _currentDistanceId.value= 6 // TODO borrar esto, debe traer de configuration dao
         getLastLocation()
     }
 
@@ -62,43 +73,57 @@ class ConfigurationViewModel(activity: FragmentActivity?) : ViewModel() {
         }
     }
 
+    fun setConfigurations() {
+        val configurationsValue = configurations.value
+        if (configurationsValue == null)
+            currentDistanceIdLiveData.value = DistanceValues.NO_LIMIT.id
+        else {
+            currentDistanceIdLiveData.value = configurationsValue.distance_code_notices
+            _activity?.let { setLangPosition(it, configurationsValue.lang_code) }
+        }
+    }
 
-    fun loadConfigurations(activity: FragmentActivity) {
+    private fun setLangPosition(activity: FragmentActivity, language: String) {
         val resourcesActivity = activity.resources
-
-        val keyLanguage = resourcesActivity.getString(R.string.KEY_LANGUAGE)
-        val nameSettingsPreferences =
-            resourcesActivity.getString(R.string.name_settings_preferences)
-        val sharedPreferences =
-            activity.getSharedPreferences(nameSettingsPreferences, Activity.MODE_PRIVATE)
-        val language = sharedPreferences?.getString(keyLanguage, "")
-
-        if (language != "") {
-            val langCodes = resourcesActivity.getStringArray(R.array.languages_values)
-            for ((index, langCode) in langCodes.withIndex()) {
-                if (langCode == language) {
-                    _posSelectedLanguage.value = index
-                    break
-                }
+        val langCodes = resourcesActivity.getStringArray(R.array.languages_values)
+        for ((index, langCode) in langCodes.withIndex()) {
+            if (langCode == language) {
+                _posSelectedLanguage.value = index
+                break
             }
         }
     }
 
-    fun saveConfigurations(fragment: ConfigurationFragment) {
-        val binding = fragment.binding
-        val activity = fragment.activity
-        val positionNewLanguage = binding.spinnerLanguage.selectedItemPosition
-        val langCode =
-            activity!!.resources.getStringArray(R.array.languages_values)[positionNewLanguage]
 
-        Preferences.setLocate(langCode, activity as Context)
-        saveComplete()
-        activity.recreate()
-        Toast.makeText(
-            activity,
-            activity.resources.getString(R.string.changes_saved),
-            Toast.LENGTH_LONG
-        ).show()
+    suspend fun getConfigurationsRoom() {
+        withContext(Dispatchers.IO) {
+            configurations = dataSourceConfigurations.getLiveData()
+        }
     }
 
+    suspend fun saveConfigurations(strLangCode: String, distanceIdCode: Int) {
+        val coordinates = _coordinates.value
+        if (coordinates != null) {
+            val lat = coordinates.latitude
+            val long = coordinates.longitude
+
+            val configurationsEntity =
+                ConfigurationsEntity(1, strLangCode, lat, long, distanceIdCode)
+
+            withContext(Dispatchers.IO) {
+                if (configurations.value == null)
+                    dataSourceConfigurations.insert(configurationsEntity)
+                else
+                    dataSourceConfigurations.update(configurationsEntity)
+
+                Preferences.setLocate(strLangCode, _activity as Context)
+                _activity?.runOnUiThread {
+                    _activity?.recreate()
+                    Toast.makeText(_activity, R.string.changes_saved, Toast.LENGTH_LONG).show()
+                    mapInitializedCamera = false
+                }
+            }
+        }
+
+    }
 }

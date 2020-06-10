@@ -1,6 +1,5 @@
 package com.teltronic.app112.screens.configuration
 
-import android.app.Application
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

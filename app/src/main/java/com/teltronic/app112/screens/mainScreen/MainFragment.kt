@@ -1,6 +1,7 @@
 package com.teltronic.app112.screens.mainScreen
 
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
@@ -15,6 +16,10 @@ import com.teltronic.app112.R
 import com.teltronic.app112.classes.enums.PermissionsApp
 import com.teltronic.app112.classes.Phone
 import com.teltronic.app112.databinding.FragmentMainBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 /**
  * A simple [Fragment] subclass.
@@ -26,6 +31,8 @@ class MainFragment : Fragment() {
 
     private lateinit var binding: FragmentMainBinding
     private lateinit var viewModel: MainViewModel
+    private var job = Job()
+    private var uiScope = CoroutineScope(Dispatchers.Main + job)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,12 +50,44 @@ class MainFragment : Fragment() {
 
         configNavigationsObservers()
         configCallButtonObserver()
+        configShowAlertNoticesObserver()
+        configOnclickNotices()
         //"Uno" el layout con esta clase por medio del binding
         binding.mainViewModel = viewModel
         //Para que el ciclo de vida del binding sea consistente y funcione bien con LiveData
         binding.lifecycleOwner = this
 
         return binding.root
+    }
+
+    private fun configShowAlertNoticesObserver() {
+        viewModel.boolShowAlertNotices.observe(
+            this as LifecycleOwner,
+            Observer { shouldShow ->
+                if (shouldShow) {
+                    val builder = AlertDialog.Builder(activity)
+                    builder.setTitle(getString(R.string.notices_alert_no_config))
+                    builder.setMessage(getString(R.string.go_to_settings))
+
+                    builder.setPositiveButton(android.R.string.yes) { _, _ ->
+                        val actionNavigate =
+                            MainFragmentDirections.actionMainFragmentToNoticesFragment()
+                        findNavController().navigate(actionNavigate)
+                    }
+
+                    builder.show()
+                    viewModel.alertNoticesShown()
+                }
+            }
+        )
+    }
+
+    private fun configOnclickNotices() {
+        binding.btnNotices.setOnClickListener {
+            uiScope.launch {
+                viewModel.checkConfigurationsBeforeNavigateToNotices()
+            }
+        }
     }
 
     private fun configCallButtonObserver() {
@@ -76,10 +115,12 @@ class MainFragment : Fragment() {
             this as LifecycleOwner,
             Observer { shouldNavigate ->
                 if (shouldNavigate) {
-                    val actionNavigate =
-                        MainFragmentDirections.actionMainFragmentToNoticesFragment()
-                    findNavController().navigate(actionNavigate)
-                    viewModel.onNavigateToNoticesComplete()
+                    uiScope.launch {
+                        val actionNavigate =
+                            MainFragmentDirections.actionMainFragmentToNoticesFragment()
+                        findNavController().navigate(actionNavigate)
+                        viewModel.onNavigateToNoticesComplete()
+                    }
                 }
             })
     }

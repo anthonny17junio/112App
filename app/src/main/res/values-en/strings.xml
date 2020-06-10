@@ -38,6 +38,8 @@
     <string name="txt_btn_main_notices">Notices</string>
     <string name="txt_btn_main_location">Location</string>
     <string name="txt_btn_main_chats">Chats</string>
+    <string name="notices_alert_no_config">Notices area not configured</string>
+    <string name="go_to_settings">It is recommended to set a warning area in configuration, otherwise, you will receive all warnings with no area limit.</string>
 
     <!--MENSAJES DE PERMISOS-->
     <string name="txt_permission">Please, accept the permissions</string>

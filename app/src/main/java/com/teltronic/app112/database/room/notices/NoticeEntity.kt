@@ -11,6 +11,6 @@ data class NoticeEntity(
     val creation_epoch_time: Double,
     val creation_timezone: String,
     val message: String,
-    val urlPhoto: String?,
+    val photo: String?,
     val read: Boolean
 )

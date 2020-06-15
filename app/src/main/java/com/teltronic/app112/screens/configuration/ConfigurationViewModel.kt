@@ -1,7 +1,9 @@
 package com.teltronic.app112.screens.configuration
 
 import android.app.Activity
+import android.app.ActivityManager
 import android.content.Context
+import android.content.Intent
 import android.location.Location
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
@@ -14,6 +16,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.teltronic.app112.R
 import com.teltronic.app112.classes.Preferences
 import com.teltronic.app112.classes.enums.DistanceValues
+import com.teltronic.app112.classes.services.ListenNewNoticesService
 import com.teltronic.app112.database.room.DatabaseApp
 import com.teltronic.app112.database.room.configurations.ConfigurationsEntity
 import kotlinx.coroutines.Dispatchers
@@ -40,8 +43,6 @@ class ConfigurationViewModel(activity: FragmentActivity?) : ViewModel() {
     private var _coordinates = MutableLiveData<LatLng>()
     val coordinates: LiveData<LatLng>
         get() = _coordinates
-
-    var mapInitializedCamera = false
 
     private val dataSourceConfigurations =
         DatabaseApp.getInstance(_activity!!.application).configurationsDao
@@ -73,13 +74,12 @@ class ConfigurationViewModel(activity: FragmentActivity?) : ViewModel() {
         }
     }
 
-    fun setConfigurations() {
-        val configurationsValue = configurations.value
-        if (configurationsValue == null)
+    fun setConfigurations(confRoom: ConfigurationsEntity?) {
+        if (confRoom == null)
             currentDistanceIdLiveData.value = DistanceValues.NO_LIMIT.id
         else {
-            currentDistanceIdLiveData.value = configurationsValue.distance_code_notices
-            _activity?.let { setLangPosition(it, configurationsValue.lang_code) }
+            currentDistanceIdLiveData.value = confRoom.distance_code_notices
+            _activity?.let { setLangPosition(it, confRoom.lang_code) }
         }
     }
 
@@ -101,29 +101,47 @@ class ConfigurationViewModel(activity: FragmentActivity?) : ViewModel() {
         }
     }
 
-    suspend fun saveConfigurations(strLangCode: String, distanceIdCode: Int) {
+    suspend fun saveConfigurations(newLang: String, distanceIdCode: Int) {
         val coordinates = _coordinates.value
         if (coordinates != null) {
             val lat = coordinates.latitude
             val long = coordinates.longitude
 
             val configurationsEntity =
-                ConfigurationsEntity(1, strLangCode, lat, long, distanceIdCode)
+                ConfigurationsEntity(1, newLang, lat, long, distanceIdCode)
 
             withContext(Dispatchers.IO) {
-                if (configurations.value == null)
+                val confTemp = dataSourceConfigurations.get()
+                if (confTemp == null)
                     dataSourceConfigurations.insert(configurationsEntity)
                 else
                     dataSourceConfigurations.update(configurationsEntity)
 
-                Preferences.setLocate(strLangCode, _activity as Context)
+                Preferences.setLocate(newLang, _activity as Context)
                 _activity?.runOnUiThread {
                     _activity?.recreate()
                     Toast.makeText(_activity, R.string.changes_saved, Toast.LENGTH_LONG).show()
-                    mapInitializedCamera = false
+                    //Inicia el servicio para notficar avisos
+                    _activity!!.stopService(Intent(_activity!!, ListenNewNoticesService::class.java))
+                    _activity!!.startService(Intent(_activity!!, ListenNewNoticesService::class.java))
+//                    if (_activity != null) { todo descomentar esto
+//                        _activity!!.stopService(
+//                            Intent(
+//                                _activity!!,
+//                                ListenNewNoticesService::class.java
+//                            )
+//                        )
+//                        Intent(_activity!!, ListenNewNoticesService::class.java).also { intent ->
+//                            intent.putExtra("distanceId", distanceIdCode)
+//                            intent.putExtra("latNotices", lat)
+//                            intent.putExtra("longNotices", long)
+//                            _activity!!.startService(intent)
+//                        }
+//                    }
                 }
             }
         }
 
     }
+
 }

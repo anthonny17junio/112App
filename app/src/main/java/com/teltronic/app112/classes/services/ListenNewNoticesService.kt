@@ -9,11 +9,21 @@ import android.os.*
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.navigation.NavDeepLinkBuilder
+import com.rethinkdb.RethinkDB
+import com.rethinkdb.model.OptArgs
 import com.rethinkdb.net.Cursor
 import com.teltronic.app112.R
+import com.teltronic.app112.classes.enums.DistanceValues
+import com.teltronic.app112.classes.enums.NamesRethinkdb
+import com.teltronic.app112.database.rethink.DatabaseRethink
 import com.teltronic.app112.database.room.DatabaseApp
+import com.teltronic.app112.database.room.notices.NoticeEntityConverter
 import com.teltronic.app112.screens.MainActivity
 import kotlinx.coroutines.*
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 @Suppress("UNCHECKED_CAST", "SENSELESS_COMPARISON")
 class ListenNewNoticesService : Service() {
@@ -23,9 +33,12 @@ class ListenNewNoticesService : Service() {
     private val job = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + job)
 
-    private var currentLat: Double = 0.0
-    private var currentLong: Double = 0.0
-    private var distance: Int = 0
+    private var currentLat: Double? = null
+    private var currentLong: Double? = null
+    private var distanceId: Int? = null
+
+    private val databaseApp = DatabaseApp.getInstance(this)
+    private val dataSourceNotices = databaseApp.noticesDao
 
     // Handler that receives messages from the thread
     private inner class ServiceHandler(looper: Looper) : Handler(looper) {
@@ -44,13 +57,19 @@ class ListenNewNoticesService : Service() {
         }
     }
 
+    override fun onBind(intent: Intent?): IBinder? {
+        return null
+    }
+
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         uiScope.launch {
             val extras = intent.extras
-            currentLat = extras!!.get("currentLat") as Double
-            currentLong = extras.get("currentLong") as Double
-            distance = extras.get("distance") as Int
-            listenNewMessagesIO()
+            if (extras != null) {
+                currentLat = extras.get("latNotices") as Double?
+                currentLong = extras.get("longNotices") as Double?
+                distanceId = extras.get("distanceId") as Int?
+            }
+            listenNewNoticesIO()
         }
         serviceHandler?.obtainMessage()?.also { msg ->
             msg.arg1 = startId
@@ -61,56 +80,110 @@ class ListenNewNoticesService : Service() {
         return START_STICKY
     }
 
-    override fun onBind(intent: Intent): IBinder? {
-        return null
-    }
+//    override fun onBind(intent: Intent): IBinder? {
+//        return null
+//    }
 
-    private lateinit var cursorChangesTbMessages: Cursor<*>
-    private suspend fun listenNewMessagesIO() {
+    private lateinit var cursorChangesTbNotices: Cursor<*>
+    private suspend fun listenNewNoticesIO() {
         withContext(Dispatchers.IO) {
-//            val con = DatabaseRethink.getConnection()
-//            val r = RethinkDB.r
-//            val tableChats = r.db(NamesRethinkdb.DATABASE.text).table(NamesRethinkdb.TB_CHATS.text)
-//                .getAll(idUser).optArg("index", "id_user")
-//            val tableMessages =
-//                r.db(NamesRethinkdb.DATABASE.text).table(NamesRethinkdb.TB_MESSAGES.text)
-//
-//            if (con != null) {
-//                cursorChangesTbMessages = tableMessages.changes().filter { change: ReqlExpr ->
-//                    (r.expr(tableChats.g("id").coerceTo("array")))
-//                        .contains(change.g("new_val").g("id_chat"))
-//                }.filter { change: ReqlExpr -> (change.g("new_val").g("id_user").ne(idUser)) }
-//                    .run(con, OptArgs.of("time_format", "raw")) as Cursor<*>
-//                for (change in cursorChangesTbMessages) { //Esto se ejecutará cada vez que haya un cambio en la tabla "tb_chats"
-//                    if (job.isActive) {
-//                        val cambio = change as HashMap<String, HashMap<String, *>>
-//
-//                        val newMessage = MessageEntityConverter.fromHashMap(
-//                            cambio["new_val"]
-//                        )
-//                        val idChat = newMessage?.id_chat
-//                        val idType = newMessage?.id_message_type
-//                        val strMessage = if (idType == MessageType.TEXT.id) {
-//                            newMessage.content
-//                        } else {
-//                            getString(R.string.picture)
-//                        }
-//                        if (idChat != null)
-//                            sendNotification(idChat, strMessage)
-//                    } else {
-//                        cursorChangesTbMessages.close()
-//                    }
-//                }
+
+//            var i = 0
+//            while (true) {
+//                Thread.sleep(500)
+//                Log.e("Service notices", i.toString())
+//                i++
 //            }
+
+            val con = DatabaseRethink.getConnection()
+            val r = RethinkDB.r
+            val tableNotices =
+                r.db(NamesRethinkdb.DATABASE.text).table(NamesRethinkdb.TB_NOTICES.text)
+
+            if (con != null) {
+                cursorChangesTbNotices = tableNotices.changes()
+                    .run(con, OptArgs.of("time_format", "raw")) as Cursor<*>
+
+                for (change in cursorChangesTbNotices) { //Esto se ejecutará cada vez que haya un cambio en la tabla "tb_chats"
+                    if (job.isActive) {
+                        val cambio = change as HashMap<String, HashMap<String, *>>
+
+                        var isMyNotification = true
+                        if (distanceId != null) {
+                            when (val distance = DistanceValues.getById(distanceId!!)) {
+                                DistanceValues.NONE_KM ->
+                                    isMyNotification = false
+                                else -> {
+                                    if (distance != DistanceValues.NO_LIMIT) {
+                                        //ROOM LOCATION = (currentLat, currentLong)
+                                        val latNotice = (cambio["new_val"])?.get("lat") as Double
+                                        val longNotice = (cambio["new_val"])?.get("long") as Double
+                                        val distanceRequired = distance!!.valueKm
+
+                                        val distanceBetweenTwoPoints = getDistanceBetweenTwoPoints(
+                                            currentLat!!,
+                                            currentLong!!,
+                                            latNotice,
+                                            longNotice
+                                        )
+                                        if (distanceBetweenTwoPoints > distanceRequired)
+                                            isMyNotification = false
+                                    }
+                                }
+
+                            }
+                        }
+
+                        if (isMyNotification) {
+                            val newNotice = NoticeEntityConverter.fromHashMap(cambio["new_val"])
+
+                            val idNotice = newNotice?.id
+                            val strTitle = newNotice?.title
+                            val strText = newNotice?.message
+                            //aquí se debería extraer la imagen
+                            if (idNotice != null) {
+                                //Store notice in room
+                                sendNotification(idNotice, strTitle!!, strText!!)
+                                dataSourceNotices.insert(newNotice)
+                            }
+                        }
+                    } else {
+                        cursorChangesTbNotices.close()
+                    }
+                }
+            }
         }
     }
 
-    private fun sendNotification(idChat: String, message: String) {
+    private fun getDistanceBetweenTwoPoints(
+        lat1: Double,
+        long1: Double,
+        lat2: Double,
+        long2: Double
+    ): Int {
+        val earthRadiusKm = 6371
+
+        val dLat = degreesToRadians(lat2 - lat1)
+        val dLon = degreesToRadians(long2 - long1)
+
+        val radLat1 = degreesToRadians(lat1)
+        val radLat2 = degreesToRadians(lat2)
+
+        val a = sin(dLat / 2) * sin(dLat / 2) +
+                sin(dLon / 2) * sin(dLon / 2) * cos(radLat1) * cos(radLat2)
+        val c = 2 * atan2(sqrt(a), sqrt(1 - a))
+        return (earthRadiusKm * c).toInt()
+    }
+
+    private fun degreesToRadians(degrees: Double): Double {
+        return degrees * Math.PI / 180
+    }
+
+    private fun sendNotification(idNotice: String, titleNotice: String, textNotice: String) {
         val configurations = DatabaseApp.getInstance(applicationContext).userRethinkDao
         if (configurations != null) {
             val arguments = Bundle()
-            arguments.putString("idChat", idChat)
-            arguments.putString("idUserRoom", configurations.get().id_rethink)
+            arguments.putString("idNotice", idNotice)
 
             val pendingIntent: PendingIntent = NavDeepLinkBuilder(applicationContext)
                 .setComponentName(MainActivity::class.java)
@@ -121,8 +194,8 @@ class ListenNewNoticesService : Service() {
 
             val builder = NotificationCompat.Builder(applicationContext, "idChannel")
                 .setSmallIcon(R.drawable.ic_notification_logo)
-                .setContentTitle(getString(R.string.notification_new_message))
-                .setContentText(message)
+                .setContentTitle(titleNotice)
+                .setContentText(textNotice)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                 .setContentIntent(pendingIntent)

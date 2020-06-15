@@ -164,6 +164,9 @@
     <string name="content_description_btn_medical_urgency">Medical urgency button</string>
     <string name="content_description_other">Other button</string>
 
+    <!--SCREEN SUBCATEGORIES-->
+    <string name="content_description_notice_state_icon">Notice state icon</string>
+
     <!--SUBCATEGORIES CHAT-->
     <string name="content_description_subcategory_icon">Subcategory icon</string>
 

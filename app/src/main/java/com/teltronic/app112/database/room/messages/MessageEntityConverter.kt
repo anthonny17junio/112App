@@ -37,19 +37,7 @@ object MessageEntityConverter {
 
                 MessageType.IMAGE.id -> {
                     val content = hshMap["content"] as String
-//                    content = try {
-//                        //Si solo llega la url
-//                        hshMap["content"] as String
-//                    } catch (e: ClassCastException) {
-//                        //Si llega la imagen
-//                        val image64 = (hshMap["content"] as JSONObject)["data"] as String
-//                        val imageBytes = Base64.decode(image64, Base64.DEFAULT)
-//                        val decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-//                        //Guardar image
-//                        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-//                        val wrapper = ContextWrapper(applicationContext)
-//                        "url"
-//                    }
+
                     MessageEntity(
                         id,
                         idUser,

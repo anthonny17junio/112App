@@ -12,12 +12,15 @@ import com.rethinkdb.gen.ast.ReqlExpr
 import com.rethinkdb.model.OptArgs
 import com.rethinkdb.net.Cursor
 import com.teltronic.app112.classes.GoogleApiPeopleHelper
+import com.teltronic.app112.classes.enums.DistanceValues
 import com.teltronic.app112.classes.services.ListenNewMessagesService
 import com.teltronic.app112.classes.enums.NamesRethinkdb
+import com.teltronic.app112.classes.services.ListenNewNoticesService
 import com.teltronic.app112.database.rethink.DatabaseRethink
 import com.teltronic.app112.database.room.DatabaseApp
 import com.teltronic.app112.database.room.DatabaseRoomHelper
 import com.teltronic.app112.database.room.chats.ChatEntityConverter
+import com.teltronic.app112.database.room.configurations.ConfigurationsEntity
 import com.teltronic.app112.database.room.userRethink.UserRethinkEntity
 import com.teltronic.app112.database.room.messages.MessageEntityConverter
 import kotlinx.coroutines.*
@@ -80,6 +83,7 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
         get() = _shouldAskGoogleAuth
 
     private var userRethink: LiveData<UserRethinkEntity>
+    private var configurationsRoom: LiveData<ConfigurationsEntity?>
 
     private val job = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + job)
@@ -106,18 +110,22 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
 
         GoogleApiPeopleHelper.initGoogleApiClient(_activity)
 
-        val dataSource = DatabaseApp.getInstance(_activity.application).userRethinkDao
-        userRethink = dataSource.getLiveData()
+        val dataSourceUserRethink = DatabaseApp.getInstance(_activity.application).userRethinkDao
+        val dataSourceConfigurations =
+            DatabaseApp.getInstance(_activity.application).configurationsDao
+        userRethink = dataSourceUserRethink.getLiveData()
+        configurationsRoom = dataSourceConfigurations.getLiveData()
         configurationsObserver()
+        userIdRethinkObserver()
     }
 
     //Observer que se dispara al existir un usuario en room
-    private fun configurationsObserver() {
+    private fun userIdRethinkObserver() {
         //Cuando existe un id logueado en la base de datos se
         //escucha de Rethinkdb los cambios a las tablas de los chats
-        userRethink.observe(_activity, Observer { configurations ->
-            if (configurations != null) {
-                val idUser = configurations.id_rethink
+        userRethink.observe(_activity, Observer { userRethinkInRoom ->
+            if (userRethinkInRoom != null) {
+                val idUser = userRethinkInRoom.id_rethink
                 //Listener para escuchar los cambios de los chats
                 uiScope.launch {
                     subscribeToChangesTbChatsIO(idUser)
@@ -134,8 +142,36 @@ class MainActivityViewModel(activityParam: MainActivity) : ViewModel() {
                         contextActivity.startService(intent)
                     }
                 }
-
             }
+        })
+    }
+
+    //Observer que se dispara al existir (o no) configuraciones en room
+    private fun configurationsObserver() {
+        //Cuando existe configuraciones en room (en el caso de no existir se deben escuchar todos los avisos)
+        //escucha de Rethinkdb los cambios a las tablas de los avisos dependiendo de la distancia
+        configurationsRoom.observe(_activity, Observer { configurations ->
+
+            var distanceId: Int? = null
+            var latNotices: Double? = null
+            var longNotices: Double? = null
+
+            if (configurations != null) {
+                distanceId = configurations.distance_code_notices
+                latNotices = configurations.lat_notices
+                longNotices = configurations.long_notices
+            }
+            //Inicia el servicio para notficar avisos
+            uiScope.launch {
+                val contextActivity = this@MainActivityViewModel._activity
+                Intent(contextActivity, ListenNewNoticesService::class.java).also { intent ->
+                    intent.putExtra("distanceId", distanceId)
+                    intent.putExtra("latNotices", latNotices)
+                    intent.putExtra("longNotices", longNotices)
+                    contextActivity.startService(intent)
+                }
+            }
+
         })
     }
 

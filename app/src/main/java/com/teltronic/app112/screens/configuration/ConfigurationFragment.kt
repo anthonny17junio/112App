@@ -52,7 +52,6 @@ class ConfigurationFragment : Fragment(), OnMapReadyCallback {
         viewModel =
             ViewModelProvider(this, viewModelFactory).get(ConfigurationViewModel::class.java)
 
-        coordinatesObserver()
 
         //"Uno" el layout con esta clase por medio del binding
         binding.configurationViewModel = viewModel
@@ -67,7 +66,7 @@ class ConfigurationFragment : Fragment(), OnMapReadyCallback {
         configurePosSelectedLanguageObserver()
         configureDistanceIdObserver()
         getConfigurationsRoom()
-        configurationsObserver()
+        coordinatesObserver()
         configureDistanceBarChange()
         return binding.root
     }
@@ -117,7 +116,7 @@ class ConfigurationFragment : Fragment(), OnMapReadyCallback {
         viewModel.configurations.observe(
             this as LifecycleOwner,
             Observer { configurationsRoom ->
-                viewModel.setConfigurations()
+                viewModel.setConfigurations(configurationsRoom)
             }
         )
     }
@@ -144,7 +143,6 @@ class ConfigurationFragment : Fragment(), OnMapReadyCallback {
     private fun moveCameraAndDrawCircleMap(distanceId: Int, location: LatLng) {
         val radius: Double
         if (::mGoogleMap.isInitialized) {
-            viewModel.mapInitializedCamera = true
             when (DistanceValues.getById(distanceId)) {
                 DistanceValues.NONE_KM -> {
                     moveCamera(location, mGoogleMap, 4f)
@@ -254,14 +252,13 @@ class ConfigurationFragment : Fragment(), OnMapReadyCallback {
     override fun onMapReady(gMap: GoogleMap?) {
         MapsInitializer.initialize(context)
         if (gMap != null) {
+            configurationsObserver()
             mGoogleMap = gMap
             gMap.mapType = GoogleMap.MAP_TYPE_NORMAL
-            if (!viewModel.mapInitializedCamera) {
-                val progress = binding.seekBarDistance.progress
-                val location = viewModel.coordinates.value
-                if (location != null) {
-                    moveCameraAndDrawCircleMap(progress, location)
-                }
+            val progress = binding.seekBarDistance.progress
+            val location = viewModel.coordinates.value
+            if (location != null) {
+                moveCameraAndDrawCircleMap(progress, location)
             }
         }
     }

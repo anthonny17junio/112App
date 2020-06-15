@@ -20,10 +20,10 @@ interface ChatsDao {
 //    @Query("SELECT * FROM tb_chats WHERE id= :idChat")
 //    fun getLiveData(idChat: String): LiveData<ChatEntity?>
 
-    @Query("DELETE FROM tb_chats") //todo comprobar que al eliminar el chat se eliminan los mensajes
+    @Query("DELETE FROM tb_chats")
     fun deleteAll()
 
-    @Query("DELETE FROM tb_chats WHERE id= :idChat") //todo comprobar que al eliminar el chat se eliminan los mensajes
+    @Query("DELETE FROM tb_chats WHERE id= :idChat")
     fun delete(idChat: String)
 
     @Transaction

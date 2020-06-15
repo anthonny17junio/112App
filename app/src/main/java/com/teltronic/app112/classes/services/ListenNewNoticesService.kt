@@ -135,7 +135,8 @@ class ListenNewNoticesService : Service() {
                         }
 
                         if (isMyNotification) {
-                            val newNotice = NoticeEntityConverter.fromHashMap(cambio["new_val"])
+                            val newNotice =
+                                NoticeEntityConverter.fromHashMap(cambio["new_val"], this@ListenNewNoticesService)
 
                             val idNotice = newNotice?.id
                             val strTitle = newNotice?.title

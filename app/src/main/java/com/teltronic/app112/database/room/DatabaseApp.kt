@@ -29,7 +29,7 @@ exportSchema es true por defecto
         NoticeEntity::class,
         ConfigurationsEntity::class
     ],
-    version = 14,
+    version = 15,
     exportSchema = false
 )
 abstract class DatabaseApp : RoomDatabase() {

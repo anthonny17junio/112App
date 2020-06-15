@@ -119,6 +119,7 @@
       <w>datos</w>
       <w>daño</w>
       <w>debe</w>
+      <w>deben</w>
       <w>debería</w>
       <w>debido</w>
       <w>debo</w>
@@ -126,8 +127,11 @@
       <w>dejar</w>
       <w>delito</w>
       <w>demás</w>
+      <w>dependiendo</w>
       <w>derecha</w>
       <w>desaparece</w>
+      <w>desaparecida</w>
+      <w>desaparecido</w>
       <w>descarga</w>
       <w>descargar</w>
       <w>descomentar</w>
@@ -140,6 +144,7 @@
       <w>desmayo</w>
       <w>después</w>
       <w>destruya</w>
+      <w>detener</w>
       <w>determina</w>
       <w>determinado</w>
       <w>devuelve</w>
@@ -149,6 +154,7 @@
       <w>directamente</w>
       <w>dispara</w>
       <w>dispositivo</w>
+      <w>distancia</w>
       <w>documentos</w>
       <w>dolore</w>
       <w>donde</w>
@@ -206,6 +212,7 @@
       <w>existe</w>
       <w>existentes</w>
       <w>existir</w>
+      <w>extraer</w>
       <w>extraviado</w>
       <w>falla</w>
       <w>falta</w>
@@ -446,6 +453,7 @@
       <w>snackbar</w>
       <w>sobre</w>
       <w>solicita</w>
+      <w>solucionarlo</w>
       <w>subcat</w>
       <w>subcategory_</w>
       <w>subcategoría</w>
@@ -493,6 +501,7 @@
       <w>vuelva</w>
       <w>válido</w>
       <w>zaragoza</w>
+      <w>zona</w>
       <w>índice</w>
     </words>
   </dictionary>

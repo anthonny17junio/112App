@@ -1,7 +1,6 @@
 package com.teltronic.app112.screens.configuration
 
 import android.app.Activity
-import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
 import android.location.Location
@@ -124,7 +123,7 @@ class ConfigurationViewModel(activity: FragmentActivity?) : ViewModel() {
                     //Inicia el servicio para notficar avisos
                     _activity!!.stopService(Intent(_activity!!, ListenNewNoticesService::class.java))
                     _activity!!.startService(Intent(_activity!!, ListenNewNoticesService::class.java))
-//                    if (_activity != null) { todo descomentar esto
+//                    if (_activity != null) { todo esto no funciona, cuando se cambia la distancia se debería detener el servicio anterior de listener notifications (solucionarlo)
 //                        _activity!!.stopService(
 //                            Intent(
 //                                _activity!!,

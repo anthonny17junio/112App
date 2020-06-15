@@ -166,7 +166,6 @@ class MainFragment : Fragment() {
                 if (shouldNavigate) {
                     val actionNavigate = MainFragmentDirections.actionMainFragmentToChatsFragment()
                     findNavController().navigate(actionNavigate) //Si se desea ir directamente
-//                    Phone.biometricAuth(activity!!, findNavController(), actionNavigate) //Si se desea que pida la huella para ir
                     viewModel.navigateToChatsComplete()
                 }
             })

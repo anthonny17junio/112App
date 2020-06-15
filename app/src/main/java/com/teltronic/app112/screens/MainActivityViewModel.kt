@@ -12,7 +12,6 @@ import com.rethinkdb.gen.ast.ReqlExpr
 import com.rethinkdb.model.OptArgs
 import com.rethinkdb.net.Cursor
 import com.teltronic.app112.classes.GoogleApiPeopleHelper
-import com.teltronic.app112.classes.enums.DistanceValues
 import com.teltronic.app112.classes.services.ListenNewMessagesService
 import com.teltronic.app112.classes.enums.NamesRethinkdb
 import com.teltronic.app112.classes.services.ListenNewNoticesService

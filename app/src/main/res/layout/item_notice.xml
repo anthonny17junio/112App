@@ -1,0 +1,148 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="notice"
+            type="com.teltronic.app112.database.room.notices.NoticeEntity" />
+
+        <variable
+            name="clickListener"
+            type="com.teltronic.app112.adapters.NoticeListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/stateNoticeParent"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_marginBottom="@dimen/default_half_margin_size"
+        android:onClick="@{() -> clickListener.onClick(notice)}"
+        app:backgroundState="@{notice}">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/stateNotice"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="@dimen/default_half_margin_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="h,1.3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/ivNoticeState"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:contentDescription="@string/content_description_notice_state_icon"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:noticeState="@{notice}"
+                app:tint="@color/colorPrimaryDark"
+                tools:src="@drawable/ic_notice_read" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/infoNotice"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="@dimen/default_half_margin_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/stateNotice"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:title="@{notice}"
+                tools:text="PERSONA DESAPARECIDA" />
+
+            <TextView
+                android:id="@+id/tvMessage"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_half_margin_size"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textSize="12sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/tvTitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvTitle"
+                app:message="@{notice}"
+                tools:text="Una persona ha desaparecido en la zona de..." />
+
+            <ImageView
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginStart="@dimen/default_margin_size"
+                android:contentDescription="@string/content_description_location_icon"
+                android:src="@drawable/ic_location_on_white"
+                android:tint="@color/colorTitleChat"
+                app:layout_constraintBottom_toBottomOf="@+id/tvLocation"
+                app:layout_constraintStart_toStartOf="@+id/tvTitle"
+                app:layout_constraintTop_toTopOf="@+id/tvLocation" />
+
+            <TextView
+                android:id="@+id/tvLocation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/colorTitleChat"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toTopOf="@+id/tvDate"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/tvDate"
+                app:location="@{notice}"
+                tools:text="Zaragoza, 50014" />
+
+            <ImageView
+                android:id="@+id/ivDateHour"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginStart="@dimen/default_margin_size"
+                android:contentDescription="@string/content_description_date_time_icon"
+                android:src="@drawable/ic_calendar_time"
+                android:tint="@color/colorTitleChat"
+                app:layout_constraintBottom_toBottomOf="@+id/tvDate"
+                app:layout_constraintStart_toStartOf="@+id/tvTitle"
+                app:layout_constraintTop_toBottomOf="@+id/tvLocation" />
+
+            <TextView
+                android:id="@+id/tvDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_half_margin_size"
+                android:textColor="@color/colorTitleChat"
+                android:textSize="12sp"
+                app:date="@{notice}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ivDateHour"
+                tools:text="16/03/2020" />
+
+            <TextView
+                android:id="@+id/tvHour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_half_margin_size"
+                android:textColor="@color/colorTitleChat"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvDate"
+                app:time="@{notice}"
+                tools:text="15:55" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

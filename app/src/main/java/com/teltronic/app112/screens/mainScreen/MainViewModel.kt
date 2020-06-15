@@ -73,9 +73,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     //FUNCTIONS
     //****************************************************
     //Navigate to notices
-    fun navigateToNotices() {
-        _boolNavigateToNotices.value = true
-    }
+//    fun navigateToNotices() {
+//        _boolNavigateToNotices.value = true
+//    }
 
     fun onNavigateToNoticesComplete() {
         _boolNavigateToNotices.value = false

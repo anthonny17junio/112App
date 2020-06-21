@@ -5,7 +5,10 @@ package com.teltronic.app112.classes.services
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.*
+import android.util.Base64
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.navigation.NavDeepLinkBuilder
@@ -20,6 +23,11 @@ import com.teltronic.app112.database.room.DatabaseApp
 import com.teltronic.app112.database.room.notices.NoticeEntityConverter
 import com.teltronic.app112.screens.MainActivity
 import kotlinx.coroutines.*
+import java.io.File
+import java.io.FileOutputStream
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.HashMap
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
@@ -88,13 +96,6 @@ class ListenNewNoticesService : Service() {
     private suspend fun listenNewNoticesIO() {
         withContext(Dispatchers.IO) {
 
-//            var i = 0
-//            while (true) {
-//                Thread.sleep(500)
-//                Log.e("Service notices", i.toString())
-//                i++
-//            }
-
             val con = DatabaseRethink.getConnection()
             val r = RethinkDB.r
             val tableNotices =
@@ -136,12 +137,36 @@ class ListenNewNoticesService : Service() {
 
                         if (isMyNotification) {
                             val newNotice =
-                                NoticeEntityConverter.fromHashMap(cambio["new_val"], this@ListenNewNoticesService)
+                                NoticeEntityConverter.fromHashMap(
+                                    cambio["new_val"],
+                                    this@ListenNewNoticesService
+                                )
+                            if (newNotice?.photo != null) {
+                                //Si existe una foto se guarda la imagen
+                                val imageBytes = Base64.decode(newNotice?.photo, 0)
+                                val decodedImage =
+                                    BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes!!.size)
+                                // Get the context wrapper
+                                val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(
+                                    Date()
+                                )
+                                val storageDir: File? =
+                                    (this@ListenNewNoticesService).getExternalFilesDir((Environment.DIRECTORY_PICTURES))
+                                val fileCreated = File(storageDir, "JPEG_${timeStamp}_n.jpg")
+
+                                val fOut = FileOutputStream(fileCreated)
+                                decodedImage.compress(Bitmap.CompressFormat.PNG, 90, fOut)
+                                fOut.flush()
+                                fOut.close()
+
+                                val path = fileCreated.absolutePath
+
+                                newNotice.photo = path
+                            }
 
                             val idNotice = newNotice?.id
                             val strTitle = newNotice?.title
                             val strText = newNotice?.message
-                            //aquí se debería extraer la imagen
                             if (idNotice != null) {
                                 //Store notice in room
                                 sendNotification(idNotice, strTitle!!, strText!!)
@@ -189,7 +214,7 @@ class ListenNewNoticesService : Service() {
             val pendingIntent: PendingIntent = NavDeepLinkBuilder(applicationContext)
                 .setComponentName(MainActivity::class.java)
                 .setGraph(R.navigation.navigation)
-                .setDestination(R.id.chatFragment)
+                .setDestination(R.id.noticesFragment)
                 .setArguments(arguments)
                 .createPendingIntent()
 

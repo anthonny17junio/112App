@@ -1,8 +1,12 @@
 package com.teltronic.app112.screens.notices
 
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
@@ -13,10 +17,9 @@ import androidx.navigation.fragment.findNavController
 import com.teltronic.app112.R
 import com.teltronic.app112.adapters.NoticeListener
 import com.teltronic.app112.adapters.NoticesAdapter
+import com.teltronic.app112.database.room.notices.NoticeEntity
 import com.teltronic.app112.databinding.FragmentNoticesBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
 
 /**
  * A simple [Fragment] subclass.
@@ -48,8 +51,12 @@ class NoticesFragment : Fragment() {
 
         //RecyclerView adapter
         val adapter = NoticesAdapter(NoticeListener { noticeId ->
-            //Click en lista de avisos
+            uiScope.launch {
+                viewModel.readNotice(noticeId)
+                viewModel.getModalNotice(noticeId)
+            }
         })
+
         binding.rvNotices.adapter = adapter
         viewModel.notices.observe(this as LifecycleOwner,
             Observer { listNotices ->
@@ -64,6 +71,7 @@ class NoticesFragment : Fragment() {
         setHasOptionsMenu(true) //Habilita el icono de la derecha
         //Retorno el binding root (no el inflater)
 
+        configureNoticeModalObserver()
 
         return binding.root
     }
@@ -90,4 +98,45 @@ class NoticesFragment : Fragment() {
         }
     }
 
+    private fun configureNoticeModalObserver() {
+        viewModel.noticeModal.observe(
+            this as LifecycleOwner,
+            Observer { notice ->
+                if (notice != null) {
+                    uiScope.launch {
+                        showDialogNotice(notice)
+                        viewModel.clearNoticeModal()
+                    }
+                }
+            }
+        )
+
+    }
+
+    private suspend fun showDialogNotice(notice: NoticeEntity) {
+        val dialog = AlertDialog.Builder(activity)
+        val dialogView = View.inflate(activity, R.layout.dialog_notice, null)
+
+        val tvTitle = dialogView.findViewById<TextView>(R.id.tvTitle)
+        val tvMessage = dialogView.findViewById<TextView>(R.id.tvMessage)
+
+        tvTitle.text = notice.title
+        tvMessage.text = notice.message
+
+        if (notice.photo != null) {
+            withContext(Dispatchers.IO) {
+                val bitmapImage = viewModel.getBitmapImage(notice.id)
+                val ivDialog = dialogView.findViewById<ImageView>(R.id.ivImageNotice)
+                if (bitmapImage != null) {
+                    ivDialog.setImageBitmap(bitmapImage)
+                }
+            }
+        }
+
+        dialog.setView(dialogView)
+        dialog.setCancelable(true)
+        activity?.runOnUiThread {
+            dialog.show()
+        }
+    }
 }

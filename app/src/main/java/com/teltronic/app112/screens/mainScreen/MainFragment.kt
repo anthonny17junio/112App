@@ -3,6 +3,7 @@ package com.teltronic.app112.screens.mainScreen
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -20,6 +21,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.lang.IllegalArgumentException
 
 /**
  * A simple [Fragment] subclass.
@@ -118,8 +120,10 @@ class MainFragment : Fragment() {
                     uiScope.launch {
                         val actionNavigate =
                             MainFragmentDirections.actionMainFragmentToNoticesFragment()
-                        findNavController().navigate(actionNavigate)
-                        viewModel.onNavigateToNoticesComplete()
+                        try {
+                            findNavController().navigate(actionNavigate)
+                            viewModel.onNavigateToNoticesComplete()
+                        } catch (ex: IllegalArgumentException) {}
                     }
                 }
             })
@@ -164,9 +168,14 @@ class MainFragment : Fragment() {
             this as LifecycleOwner,
             Observer { shouldNavigate ->
                 if (shouldNavigate) {
-                    val actionNavigate = MainFragmentDirections.actionMainFragmentToChatsFragment()
-                    findNavController().navigate(actionNavigate) //Si se desea ir directamente
-                    viewModel.navigateToChatsComplete()
+                    try {
+                        val actionNavigate =
+                            MainFragmentDirections.actionMainFragmentToChatsFragment()
+                        findNavController().navigate(actionNavigate) //Si se desea ir directamente
+                        viewModel.navigateToChatsComplete()
+                    }catch(e: Exception){
+                        Log.e("MainFragment.kt","Error al navegar actionMainFragmentToChatsFragment()")
+                    }
                 }
             })
     }

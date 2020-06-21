@@ -2,12 +2,14 @@
 
 package com.teltronic.app112.database.rethink.tb_messages
 
+import android.util.Base64
 import com.rethinkdb.RethinkDB
 import com.rethinkdb.model.OptArgs
 import com.rethinkdb.net.Connection
 import com.teltronic.app112.classes.enums.NamesRethinkdb
 import com.teltronic.app112.database.rethink.tb_chats.ChatsRethink
 import java.lang.Exception
+import java.net.URLEncoder
 
 object MessagesRethink {
     private val r = RethinkDB.r
@@ -50,13 +52,15 @@ object MessagesRethink {
         idChat: String,
         idMessageType: Int
     ): String? {
+        var strImage = Base64.encodeToString(imageByteArray, Base64.DEFAULT) //Para solucionar problema simulador web encodign
         val chat = ChatsRethink.getChatById(con, idChat)
         if (chat != null) {
             val messageToInsert = r.hashMap("creation_time", r.now())
                 .with("id_user", idUser)
                 .with("id_chat", idChat)
                 .with("id_type", idMessageType)
-                .with("content", r.binary(imageByteArray))
+//                .with("content", r.binary(imageByteArray))
+                .with("content", strImage) //Para solucionar problema simulador web encodign
 
             val itemInserted = table.insert(
                 messageToInsert

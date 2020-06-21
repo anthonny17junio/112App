@@ -159,11 +159,14 @@ class ChatViewModel(
                     val hshMessage = messageRethink as HashMap<String, Any>
                     if ((hshMessage["id_type"] as Long).toInt() == MessageType.IMAGE.id) { //Si es de tipo imagen
                         //Guardo la imagen en room
-                        val image64 = (hshMessage["content"] as ByteArray)
-                        val decodedImage =
-                            BitmapFactory.decodeByteArray(image64, 0, image64.size)
+                        val image64 = (hshMessage["content"] as String)//Para solucionar problema simulador web encodign
+//                        val image64 = (hshMessage["content"] as ByteArray) //antes
                         // Get the context wrapper
                         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+                        val imageByteArray = image64.toByteArray()
+                        val decodedImage =
+                            BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.size)
+//                            BitmapFactory.decodeByteArray(image64, 0, image64.size) //antes
                         val storageDir: File? =
                             activity.getExternalFilesDir((Environment.DIRECTORY_PICTURES))
                         val fileCreated = File(storageDir, "JPEG_${timeStamp}_.jpg")
@@ -358,6 +361,9 @@ class ChatViewModel(
         //Tener conexión con rethinkDB
         val con = DatabaseRethink.getConnection()
         if (con != null) {
+            if(!::currentPhotoPath.isInitialized){
+                Thread.sleep(2000L); //OJO SOLUCIONAR ESTO
+            }
             val idSentMessage = sendImageMessage(currentPhotoPath)
             if (idSentMessage == null) {
                 _strErrorSendMessage.postValue(
